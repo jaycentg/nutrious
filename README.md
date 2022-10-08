@@ -14,7 +14,8 @@ TBA
 TBA
 
 ## Daftar Modul yang Diimplementasikan
-TBA
+1. Modul Utama (Halaman Utama)
+2. TBA ...
 
 ## Daftar Role dan Deskripsinya
 TBA
