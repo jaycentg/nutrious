@@ -1,1 +1,3 @@
 Johannes bisa pull dan push
+
+faris update dummy.txt
