@@ -15,7 +15,12 @@ Kesehatan global adalah salah satu topik yang menjadi perhatian dari berbagai pe
 
 ## Daftar Modul yang Diimplementasikan
 1. Modul Utama (Halaman Utama)
-2. TBA ...
+2. Penggalangan Dana untuk Orang Kelaparan
+3. Informasi Pembagian Makanan
+4. Calorie Tracker
+5. Resep Makanan Sehat
+6. Trivia terkait Gizi
 
 ## Daftar Role dan Deskripsinya
-TBA
+1. User: harus diverifikasi oleh `admin` agar dapat membuka penggalangan dana dan memberikan informasi pembagian makanan.
+2. Admin: memverifikasi *user* dan penggalangan dana.
