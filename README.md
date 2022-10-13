@@ -2,10 +2,10 @@
 ## Nama-Nama Anggota Kelompok
 1. Stelline Claudia - 2106700933
 2. Dhafin Raditya Juliawan
-3. Johannes Setiawan
+3. Johannes Setiawan - 2106750345
 4. Muhammad Faris Umar Rahman
 5. Jaycent Gunawan Ongris
-6. Annava Wisha Sikoko
+6. Annava Wisha Sikoko - 2106635493
 
 ## Tautan Aplikasi Heroku
 [Dapat diklik di sini](https://nutrious.herokuapp.com/)
@@ -17,7 +17,7 @@ Kesehatan global adalah salah satu topik yang menjadi perhatian dari berbagai pe
 1. Modul Utama (Halaman Utama)<br>
 Terdiri dari halaman utama (*landing page*), *login page*, *registration page*, serta *authorization* dan *authentication* untuk *app*. 
 2. Penggalangan Dana untuk Orang Kelaparan<br>
-*User* yang sudah terverifikasi dapat membuka penggalangan dana. Yang bisa melakukan donasi tidak hanya berupa *user* yang sudah terverifikasi. Penggalangan dana harus diverifikasi oleh *user* 
+*User* yang sudah terverifikasi dapat membuka penggalangan dana. Yang bisa melakukan donasi tidak hanya berupa *user* yang sudah terverifikasi. Penggalangan dana harus diverifikasi oleh *admin* 
 3. Informasi Pembagian Makanan<br>
 *User* yang sudah terverifikasi dapat memberikan informasi lokasi jika ada makanan yang lebih dan ingin diberikan kepada orang yang membutuhkan.
 4. Calorie Tracker<br>
