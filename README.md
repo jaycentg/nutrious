@@ -4,7 +4,7 @@
 2. Dhafin Raditya Juliawan
 3. Johannes Setiawan
 4. Muhammad Faris Umar Rahman
-5. Jaycent Gunawan Ongris
+5. Jaycent Gunawan Ongris - 2106750231
 6. Annava Wisha Sikoko
 
 ## Tautan Aplikasi Heroku
