@@ -3,7 +3,7 @@
 1. Stelline Claudia
 2. Dhafin Raditya Juliawan
 3. Johannes Setiawan
-4. Muhammad Faris Umar Rahman
+4. Muhammad Faris Umar Rahman - 2106702402
 5. Jaycent Gunawan Ongris
 6. Annava Wisha Sikoko
 
