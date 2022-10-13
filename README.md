@@ -1,11 +1,12 @@
 # Nutrious
 ## Nama-Nama Anggota Kelompok
-1. Stelline Claudia
-2. Dhafin Raditya Juliawan
-3. Johannes Setiawan
+
+1. Stelline Claudia - 2106700933
+2. Dhafin Raditya Juliawan - 2106650304
+3. Johannes Setiawan - 2106750345
 4. Muhammad Faris Umar Rahman - 2106702402
-5. Jaycent Gunawan Ongris
-6. Annava Wisha Sikoko
+5. Jaycent Gunawan Ongris - 2106750231
+6. Annava Wisha Sikoko - 2106635493
 
 ## Tautan Aplikasi Heroku
 [Dapat diklik di sini](https://nutrious.herokuapp.com/)
