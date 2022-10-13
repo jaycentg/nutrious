@@ -1,9 +1,10 @@
 # Nutrious
 ## Nama-Nama Anggota Kelompok
+
 1. Stelline Claudia - 2106700933
 2. Dhafin Raditya Juliawan - 2106650304
 3. Johannes Setiawan - 2106750345
-4. Muhammad Faris Umar Rahman
+4. Muhammad Faris Umar Rahman - 2106702402
 5. Jaycent Gunawan Ongris - 2106750231
 6. Annava Wisha Sikoko - 2106635493
 
@@ -30,3 +31,4 @@ Semua *user* dapat memberikan info singkat (trivia) atau *post* terkait gizi, ya
 ## Daftar Role dan Deskripsinya
 1. User: harus diverifikasi oleh `admin` agar dapat membuka penggalangan dana dan memberikan informasi pembagian makanan.
 2. Admin: memverifikasi *user* dan penggalangan dana.
+
