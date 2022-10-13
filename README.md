@@ -5,7 +5,7 @@
 3. Johannes Setiawan
 4. Muhammad Faris Umar Rahman
 5. Jaycent Gunawan Ongris
-6. Annava Wisha Sikoko
+6. Annava Wisha Sikoko - 2106635493
 
 ## Tautan Aplikasi Heroku
 [Dapat diklik di sini](https://nutrious.herokuapp.com/)
