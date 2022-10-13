@@ -1,7 +1,7 @@
 # Nutrious
 ## Nama-Nama Anggota Kelompok
 1. Stelline Claudia
-2. Dhafin Raditya Juliawan
+2. Dhafin Raditya Juliawan - 2106650304
 3. Johannes Setiawan
 4. Muhammad Faris Umar Rahman
 5. Jaycent Gunawan Ongris
