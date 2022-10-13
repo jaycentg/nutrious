@@ -1,9 +1,8 @@
 from django.urls import path
-from matplotlib.pyplot import show
 from home.views import show_index
 
 app_name = 'index'
 
 urlpatterns = [
-    path('', show_index, name="show_index")
+    path('', show_index, name='show_index')
 ]
