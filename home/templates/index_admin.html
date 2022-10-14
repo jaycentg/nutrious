@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Nutrious</title>
+<style>
+    .avatar{
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+{% endblock meta %}
+
+{% block content %}
+<body>
+    <nav class="navbar shadow navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+          </a>
+          <div class="d-flex flex-row">
+            <div class="dropdown m-auto mx-3">
+              <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Profile
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Change Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+              </ul>
+            </div>
+            <img src="{{profile_url}}" class="rounded-circle shadow avatar m-auto mx-3">
+          </div>
+        </div>
+    </nav>
+    <div class="h1 m-3 fw-bold text-center">Admin Dashboard</div>
+    <table class="table text-center">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Verified</th>
+                <th scope="col">Change</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <th scope="row" class="fw-normal m-auto">{{user.id}}</th>
+                <th class="fw-normal m-auto">{{user.username}}</th>
+                <th class="fw-normal m-auto">{{user.is_verified_user}}</th>
+                <th><a class="btn btn-success" role="button" href="/change/{{user.id}}">Change Status</a></th>
+                <th><a class="btn btn-danger" role="button" href="/delete/{{user.id}}">Delete User</a></th>    
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock content %}
