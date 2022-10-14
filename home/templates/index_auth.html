@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Nutrious</title>
+<style>
+  .nutrious-intro{
+    background-image: url("{% static 'bg-header.png' %}");
+    transition: transform .2s;
+  }
+  .nutrious-intro:hover{
+    transform: scale(1.02);
+  }
+  .feature{
+    transition: transform .2s;
+  }
+  .feature:hover{
+    transform: scale(1.04);
+  }
+  .avatar{
+    width: 50px;
+    height: 50px;
+  }
+</style>
+{% endblock meta %}
+
+{% block content %}
+<body>
+  <nav class="navbar shadow navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+      </a>
+      <div class="d-flex flex-row">
+        <div class="dropdown m-auto mx-3">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Profile
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Change Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+          </ul>
+        </div>
+        <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+        {% if is_verified %}
+          <img src="{{profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+        {% else %}
+          <img src="{{profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  <div class="h1 text-center mt-3">Hello, <span class="fw-bold">{{nickname}}</span>!</div>
+  <div class="h5 text-center mt-0">Glad to see you back :D</div>
+  <div class="card m-3 p-5 nutrious-intro text-light">
+    <div class="text-center fw-bold h1 m-2">Welcome to Nutrious!</div>
+    <div class="text-center m-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+  </div>
+  <div class="d-flex m-3">
+    <div class="card flex-fill my-1 mr-1 feature" style="width: 18rem;">
+      <img src="{% static 'fundraising.jpg' %}" class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title fw-bold text-center">Fundraising</h5>
+        <p class="card-text text-center">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="stretched-link"></a>
+      </div>
+    </div>
+    <div class="card flex-fill m-1 feature" style="width: 18rem;">
+      <img src="{% static 'foodsharing.jpg' %}" class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title fw-bold text-center">Food-Sharing</h5>
+        <p class="card-text text-center">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="stretched-link"></a>
+      </div>
+    </div>
+    <div class="card flex-fill m-1 feature" style="width: 18rem;">
+      <img src="{% static 'calorie.jpg' %}" class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title fw-bold text-center">Calorie Tracker</h5>
+        <p class="card-text text-center">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="stretched-link"></a>
+      </div>
+    </div>
+    <div class="card flex-fill m-1 feature" style="width: 18rem;">
+      <img src="{% static 'recipe.jpg' %}" class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title fw-bold text-center">Food Recipes</h5>
+        <p class="card-text text-center">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="stretched-link"></a>
+      </div>
+    </div>
+    <div class="card flex-fill my-1 ml-1 feature" style="width: 18rem;">
+      <img src="{% static 'trivia.jpg' %}" class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title fw-bold text-center">Trivia</h5>
+        <p class="card-text text-center">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+  <!-- Bisa buat fitur seperti trivia of the day, latest fundraising -->
+</body>
+<footer class="bg-secondary text-center text-lg-start shadow text-light">
+  <div class="text-center p-3">2022: Platform-Based Programming F02</div>
+</footer>
+{% endblock content %}
