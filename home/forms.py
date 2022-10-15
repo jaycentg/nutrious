@@ -5,11 +5,11 @@ from .models import AppUser
 
 class AppUserCreationForm(UserCreationForm):
     nickname = forms.CharField(required=True)
-    is_admin = forms.BooleanField()
+    # is_admin = forms.BooleanField()
 
     class Meta(UserCreationForm):
         model = AppUser
-        fields = ('username', 'nickname', 'description', 'profile_pict_url', 'is_admin')
+        fields = ('username', 'nickname', 'description', 'profile_pict_url')
 
 
 class AppUserChangeForm(UserChangeForm):
