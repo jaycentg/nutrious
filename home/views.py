@@ -1,19 +1,27 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
 from .forms import AppUserCreationForm
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from .models import AppUser
 
+DEF_PICT_URL = 'https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png'
+
 # Create your views here.
-class Register(CreateView):
-    form_class = AppUserCreationForm
-    success_url = reverse_lazy('home:login')
-    template_name = 'registration.html'
+def register(request):
+    form = AppUserCreationForm()
+    if request.method == 'POST':
+        form = AppUserCreationForm(request.POST)
+        if form.is_valid():
+            if not form.instance.profile_pict_url:
+                form.instance.profile_pict_url = DEF_PICT_URL
+            form.save()
+            return redirect('home:login')
+    
+    context = {'form': form}
+    return render(request, 'registration.html', context)
 
 def show_index(request):
     if request.user.is_authenticated:
@@ -34,6 +42,19 @@ def show_index(request):
             return render(request, 'index_auth.html', context)
     else:
         return render(request, 'index.html')
+
+@login_required(login_url='/login/')
+def show_profile(request):
+    context = {}
+    context['username'] = request.user.username
+    context['nickname'] = request.user.nickname
+    context['profile_url'] = request.user.profile_pict_url
+    context['description'] = request.user.description
+    if request.user.is_verified_user:
+        context['status'] = 'Verified'
+    else:
+        context['status'] = 'Not Verified'
+    return render(request, 'profile.html', context)
 
 def login_user(request):
     if request.method == 'POST':
@@ -66,7 +87,7 @@ def change_status_user(request, id):
     else:
         return HttpResponse("Not allowed", status=403)
     return redirect('home:show_index')
-
+'''
 @login_required(login_url='/login/')
 def delete_user(request, id):
     if request.user.is_admin:
@@ -75,3 +96,12 @@ def delete_user(request, id):
     else:
         return HttpResponse("Not allowed", status=403)
     return redirect('home:show_index')
+'''
+@login_required(login_url='/login/')
+def delete_ajax(request, id):
+    if request.user.is_admin:
+        user = AppUser.objects.get(id=id)
+        user.delete()
+        return JsonResponse({'status': 'User is deleted successfully'})
+    else:
+        return JsonResponse({'status': 'Invalid deletion'}, status=403)
