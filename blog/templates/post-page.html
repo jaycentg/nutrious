@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    body {
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+
+    .head_text {
+        color: white;
+    }
+
+    #card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+</style>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        const card = (data) =>  
+            `<div class="container">
+                <div class="row">
+                    <div class="mt-3">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div>
+                                    <span>
+                                        ${data.fields.title}
+                                    </span>
+                                </div>
+                                <div>
+                                    <p>
+                                        ${data.fields.content}
+                                    </p>
+                                </div>
+                                <div>
+                                    <span>
+                                        ${data.fields.author}
+                                    </span>
+                                    <span>
+                                        ${data.fields.created_on}
+                                    </span>
+                                    
+                                </div>
+                                <div>
+                                    <div>
+                                    date
+                                    </div>
+                                    <div>
+                                        <a href="/blog/details/" class="btn btn-primary">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+                
+        const addCard = (data) => {
+            return $('#post').append(card(data))
+        }
+
+        $.get('/blog/json', function (blog) {
+            blog.map((data) => {
+                addCard(data)
+            })
+        })
+
+        $(`#add-todolist`).click(function(){
+        if ($('#title').val() && $('#description').val()){
+            $.post('/blog/add-post', {
+                title: $('#title').val(),
+                description: $('#description').val(),
+            },
+            function(res, status){
+                if(status == 'success'){
+                    addCard(res)
+                }
+            },
+            )
+            return false
+        }
+        })
+
+    //     deleteCard = (idCard) => {
+    //     $.ajax({
+    //         url: `/todolist/delete/${idCard}`,
+    //         type: 'DELETE',
+    //         success: function(result) {
+    //           $(`#${idCard}-card`).remove()
+    //         }
+    //       });  
+    //   }
+
+    
+        
+    });
+    </script>
+</head>
+
+
+<body>
+    <div>
+        <a href="/blog/add-post/" class="btn btn-primary">Add post</a>
+    </div>
+    <div class="grid lg:grid-cols-5 md:grid-cols-2 gap-5 mt-8 sm:mt-5 px-4 py-4" id="post"></div>
+</body>
+
+
+{%endblock%}
