@@ -4,8 +4,6 @@
 <title>Donation</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
     .nutrious-intro{
         background-image: url("{% static 'bg-header.png' %}");
@@ -109,6 +107,8 @@
     </div>
 
     <a class="m-3 btn btn-primary" href="{% url 'donation:create_donation' %}">Add Donatee</a>
+
+    <a class="m-1 btn btn-primary" href="{% url 'home:show_index' %}">Home</a>
 
 {% else %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
