@@ -19,7 +19,7 @@ def show_donation(request):
 @login_required(login_url='/home/login/')
 def create_donation(request):
     if request.method == 'POST':
-            title = request.POST.get('name')
+            name = request.POST.get('name')
             description = request.POST.get('description')
             amountNeeded = request.POST.get('amountNeeded')
 
