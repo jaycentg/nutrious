@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Donation</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    th, td {
+        padding-top: 10px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 40px;
+    }
+    .avatar{
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+    body{
+        background-color: azure;
+    }
+</style>
+{% endblock meta %}
+
+{% block content %}
+<body>
+<nav class="navbar shadow navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+        </a>
+        <div class="d-flex flex-row">
+            <div class="dropdown m-auto mx-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Profile
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+                </ul>
+            </div>
+            <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+            {% if user.is_verified_user %}
+            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+            {% else %}
+            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+            {% endif %}
+        </div>
+    </div>
+</nav>
+<form method="POST" action="">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td class="h5 m-3">Donatee Title: </td>
+            <td class="m-3"><input type="text" name="title" placeholder="Title" class="form-control"></td>
+        </tr>
+        <tr>
+            <td class="h5 m-3">Description: </td>
+            <td class="m-3"><textarea class="form-control" name="description" placeholder="Description" rows="3"></textarea></td>
+        </tr>
+        <tr>
+            <td class="h5 m-3">Amount Needed: </td>
+            <td class="m-3"><input type="text" name="amountNeeded" placeholder="Amount Needed" class="form-control"></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td class="h3 m-3"><button class="btn btn-warning" type="submit" value="Add Donatee">Add Donatee</button></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+<footer class="bg-secondary text-center text-lg-start shadow text-light">
+    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
+</footer>
+{% endblock content %}
