@@ -6,34 +6,38 @@
 
 {% block content %}  
 
-<div class="flex flex-col h-screen justify-center bg-gradient-to-r from-indigo-700 via-purple-900 to-blue-900 backdrop-blur-xl bg-white/30">
-    <div class="flex justify-center">
-        <div class="flex flex-col gap-2">
-            <div class="font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-[#FDD023] to-[#E9B200] text-5xl">
-                ADD TASK
-            </div>
-        <div>
-            <form action="" method="post">
-                {% csrf_token %}
-                    <div class="flex gap-10">
-                        <div class="flex flex-col justify-around gap-2 w-full">
-                            <div class="flex flex-col text-sm font-medium block justify-around text-gray-200">
-                                <p class="text-black">Title:</p>
-                                <input type="text" name="title" id="title" class="form-control rounded-lg text-black" placeholder="Title" required>
-                            </div>
-                            <div class="flex flex-col text-sm font-medium block mb-2 justify-around text-gray-200">
-                                <p class="text-black">Content:</p>
-                                <input type="text" name="content" id="description" class="form-control rounded-lg text-black" placeholder="Description" required>
-                            </div>
-                            <div class="flex justify-center gap-2">
-                                <button type="submit" id="add-todolist" name="submit" value="Tambah" class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >Tambah</button> 
-                                <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-bs-dismiss="modal">Close</button>
+<body>
+    
+
+    <div class="flex flex-col h-screen justify-center bg-gradient-to-r from-indigo-700 via-purple-900 to-blue-900 backdrop-blur-xl bg-white/30">
+        <div class="flex justify-center">
+            <div class="flex flex-col gap-2">
+                <div class="font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-[#FDD023] to-[#E9B200] text-5xl">
+                    ADD BLOG
+                </div>
+            <div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                        <div class="flex gap-10">
+                            <div class="flex flex-col justify-around gap-2 w-full">
+                                <div class="flex flex-col text-sm font-medium block justify-around text-gray-200">
+                                    <p class="text-black">Title:</p>
+                                    <input type="text" name="title" id="title" class="form-control rounded-lg text-black" placeholder="Title" required>
+                                </div>
+                                <div class="flex flex-col text-sm font-medium block mb-2 justify-around text-gray-200">
+                                    <p class="text-black">Content:</p>
+                                    <input type="text" name="content" id="description" class="form-control rounded-lg text-black" placeholder="Description" required>
+                                </div>
+                                <div class="flex justify-center gap-2">
+                                    <button type="submit" id="add-todolist" name="submit" value="Tambah" class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >Tambah</button> 
+                                    <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-bs-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+</body>
 
 {% endblock content %}
