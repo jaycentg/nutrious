@@ -8,7 +8,11 @@
       height: 50px;
       object-fit: cover;
     }
-  </style>
+    body{
+      background-color: azure;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 {% endblock meta %}
 
 {% block content %}
@@ -24,7 +28,7 @@
                 Profile
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Change Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
                 <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
               </ul>
             </div>
@@ -33,7 +37,9 @@
         </div>
     </nav>
     <div class="h1 m-3 fw-bold text-center">Admin Dashboard</div>
-    <table class="table text-center">
+    <div class="card p-3 m-2 my-3">
+      <div class="h3 text-center fw-bold">User Verification</div>
+      <table class="table text-center table-hover">
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -43,17 +49,69 @@
                 <th scope="col">Delete</th>
             </tr>
         </thead>
-        <tbody>
-            {% for user in users %}
+        <tbody id="user-verif"></tbody>
+      </table>
+    </div>
+    <div class="card p-3 m-2 my-3">
+      <div class="h3 text-center fw-bold">Fundraising Verification</div>
+      <table class="table text-center table-hover">
+        <thead>
             <tr>
-                <th scope="row" class="fw-normal m-auto">{{user.id}}</th>
-                <th class="fw-normal m-auto">{{user.username}}</th>
-                <th class="fw-normal m-auto">{{user.is_verified_user}}</th>
-                <th><a class="btn btn-success" role="button" href="/change/{{user.id}}">Change Status</a></th>
-                <th><a class="btn btn-danger" role="button" href="/delete/{{user.id}}">Delete User</a></th>    
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Opener</th>
+                <th scope="col">Verified</th>
+                <th scope="col">Change</th>
+                <th scope="col">Delete</th>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        </thead>
+        <tbody id="fundraising-verif"></tbody>
+      </table>
+    </div>
 </body>
+<script>
+  function getAllUser(){
+    $.get('/json-user/', function(data){
+      showAllUser(data);
+    })
+  };
+
+  function showAllUser(data){
+    let card = '';
+    for (let user of data){
+      if (!user.fields.is_admin){
+        card += `<tr>
+                <th scope="row" class="fw-normal m-auto">${user.pk}</th>
+                <th class="fw-normal m-auto">${user.fields.username}</th>
+                <th class="fw-normal m-auto">${user.fields.is_verified_user}</th>
+                <th><a class="btn btn-success" role="button" href="/change/${user.pk}">Change Status</a></th>
+                <th><a class="btn btn-danger" role="button" onclick="deleteUser(${user.pk})">Delete User</a></th>    
+               </tr>`
+      }
+    };
+    $("#user-verif").html(card);
+  };
+
+  function deleteUser(id){
+    $.ajax({
+      type: 'DELETE',
+      url: '/delete/' + id,
+      dataType: 'json',
+      headers: {
+        "X-CSRFTOKEN": "{{ csrf_token }}"
+      },
+      success: function(data){
+        console.log("User is deleted successfully");
+        getAllUser();
+      }
+    })
+  };
+
+  $(document).ready(function(){
+    getAllUser();
+    $(".btn").click(function (){
+      getAllUser();
+    });
+  });
+</script>
 {% endblock content %}

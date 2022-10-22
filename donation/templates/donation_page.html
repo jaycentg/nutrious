@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Donation</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+<style>
+    .nutrious-intro{
+        background-image: url("{% static 'bg-header.png' %}");
+        transition: transform .2s;
+    }
+    .nutrious-intro:hover{
+        transform: scale(1.02);
+    }
+    .feature{
+        transition: transform .2s;
+    }
+    .feature:hover{
+        transform: scale(1.04);
+    }
+    .avatar{
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+    body{
+        background-color: azure;
+    }
+</style>
+<script>
+
+    function loadData(){
+        $('#card').empty();
+        let data_card ="";
+        $.ajax({
+            url: "{% url 'donation:show_json' %}",
+            type: "GET",
+            dataType: "json",
+            success: function(resp){
+                for (let i of resp){
+                    let is_Collected = i.fields.amountNeeded <= i.fields.collectedFunds ? "Collected, but you can still donate if your want" : "Still need more donation"
+                    let needed_left = i.fields.amountNeeded - i.fields.collectedFunds
+                    needed_left = needed_left < 0 ? 0 : needed_left
+                    data_card +=`
+                    <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
+                        <div class="card-header">
+                        <h5 class="card-title">${i.fields.name}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Amount Needed: ${i.fields.amountNeeded}</p>
+                            <p class="card-text">Collected Funds: ${i.fields.collectedFunds}</p>
+                            <p class="card-text">Amount left: ${needed_left}</p>
+                            <p class="card-text">Status: ${is_Collected}</p>
+                            <a href="details/${i.pk}" class="btn btn-primary stretched-link">View Donatee</a>
+                        </div>
+                    </div>
+                    `
+                    ;
+                }
+                $('#card').append(data_card);
+            },
+            error: function(resp){
+                console.log('Error?');
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        loadData();
+    });
+</script>
+{% endblock meta %}
+
+{% block content %}
+<body>
+{% if user.is_user %}
+    <nav class="navbar shadow navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+        </a>
+        <div class="d-flex flex-row">
+            <div class="dropdown m-auto mx-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Profile
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+                </ul>
+            </div>
+            <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+            {% if user.is_verified_user %}
+            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+            {% else %}
+            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+            {% endif %}
+        </div>
+    </div>
+    </nav>
+    <div class="h3 text-center m-3">Hello, <span class="fw-bold">{{user.nickname}}</span>!</div>
+    <div class="h3 text-center m-3">Please donate by clicking the card containing the information
+    of the donatee you want to donate.</div>
+
+    <!-- Card berisi Donatee -->
+    <div class="container">
+        <div class="row no-gutters">
+                <div class="card" id ="card">
+
+                </div>
+        </div>
+    </div>
+
+    <a class="m-3 btn btn-primary" href="{% url 'donation:create_donation' %}">Add Donatee</a>
+
+    <a class="m-1 btn btn-primary" href="{% url 'home:show_index' %}">Home</a>
+
+
+{% else %}
+<nav class="navbar shadow navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+        </a>
+        <div class="d-flex flex-row">
+            <div class="dropdown m-auto mx-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Profile
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+                </ul>
+            </div>
+
+            {% if is_verified %}
+            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+            {% else %}
+            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+            {% endif %}
+        </div>
+    </div>
+</nav>
+<div class="h3 text-center m-3">Hello, <span class="fw-bold">{{user.nickname}}</span>!</div>
+<div class="h3 text-center m-3">Sorry, <span class="fw-bold">{{user.nickname}}</span>. It seems that
+    you are not a verified user. You can't view this page until you are verified.</div>
+
+{% endif %}
+
+</body>
+<footer class="bg-secondary text-center text-lg-start shadow text-light">
+    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
+</footer>
+{% endblock content %}

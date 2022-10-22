@@ -31,5 +31,6 @@ def add_calorie(request):
     else:
         return redirect('calorietracker:show_caloriepage')
 def show_json(request):
+    data =CalorieTracker.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")   
 
