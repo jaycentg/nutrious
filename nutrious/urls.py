@@ -19,11 +19,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('blog/', include('blog.urls')),
-    path('donation/', include('donation.urls', namespace='donation')),
-<<<<<<< HEAD
     path('calorietracker/', include('calorietracker.urls')),
-
+    
 ]
-=======
-]
->>>>>>> 886900e4e198344fef5fd7aa72dc41b332aed69e
