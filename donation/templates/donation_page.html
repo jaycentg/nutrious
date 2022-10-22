@@ -38,6 +38,9 @@
             dataType: "json",
             success: function(resp){
                 for (let i of resp){
+                    let is_Collected = i.fields.amountNeeded <= i.fields.collectedFunds ? "Collected, but you can still donate if your want" : "Still need more donation"
+                    let needed_left = i.fields.amountNeeded - i.fields.collectedFunds
+                    needed_left = needed_left < 0 ? 0 : needed_left
                     data_card +=`
                     <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
                         <div class="card-header">
@@ -46,6 +49,8 @@
                         <div class="card-body">
                             <p class="card-text">Amount Needed: ${i.fields.amountNeeded}</p>
                             <p class="card-text">Collected Funds: ${i.fields.collectedFunds}</p>
+                            <p class="card-text">Amount left: ${needed_left}</p>
+                            <p class="card-text">Status: ${is_Collected}</p>
                             <a href="details/${i.pk}" class="btn btn-primary stretched-link">View Donatee</a>
                         </div>
                     </div>
@@ -68,7 +73,7 @@
 
 {% block content %}
 <body>
-{% if user.is_verified_user %}
+{% if user.is_user %}
     <nav class="navbar shadow navbar-expand-lg bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -110,6 +115,7 @@
 
     <a class="m-1 btn btn-primary" href="{% url 'home:show_index' %}">Home</a>
 
+
 {% else %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
     <div class="container-fluid">
@@ -126,7 +132,7 @@
                     <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                 </ul>
             </div>
-            <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+
             {% if is_verified %}
             <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
             {% else %}
