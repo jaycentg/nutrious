@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block meta %}
 <title>Donatee Details</title>
+
+<script>
+    function myFunction() {
+        alert("Thank you for your donation! we hope that you keep donating to help others in need.");
+    }
+</script>
 {% endblock meta %}
 
 {% block content %}
@@ -19,7 +25,7 @@
                     <p class="card-text">Donate: </p>
                     <input type="number" name="amount" placeholder="Amount" class="form-control">
                     <br>
-                    <button class="btn btn-warning" type="submit" value="Donate">Donate</button>
+                    <button onclick="myFunction()" class="btn btn-warning" type="submit" value="Donate">Donate</button>
                 </form>
             </div>
         </div>
