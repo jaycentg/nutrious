@@ -65,9 +65,10 @@
 
        
             $.get("json/", function(data) {
+                console.log("test4")
                 for(var i = 0; i < data.length; i++){
                     var tr = document.createElement("tr");
-                    var calorie = document.createElement("td");
+                    var calorie_td = document.createElement("td");
                     calorie_td.append(data[i].fields.calorie);
                     var deskripsi_td = document.createElement("td");
                     deskripsi_td.append(data[i].fields.description);
@@ -82,25 +83,19 @@
         }
 
         $(document).ready(function(){
-            createTask();
-            function validate(){
-                if ($('#input_calorie').val().length > 0 &&
-                    $('#input_deskripsi').val().length > 0) {
-                    $("#Send-footer").prop("disabled", false);
-                }
-                else {
-                    $("#Send-footer]").prop("disabled", true);
-                }
-            }
+            console.log("test")
+            createTable();
+           
         $("#create_table").click(function(e){
+            console.log("test1")
             var calorie = $("#input_calorie").val();
             var description = $("#input_deskripsi").val();
-            validate();
-            $.post("add/",
+            $.post("add_calorie/",
             {
                 calorie,
                 description,
             },
+            
             function(data, status){
                 createTable();
                 $("#input_deskripsi").val("");
@@ -111,6 +106,7 @@
             });
         });
         $('#Test').click(function(e){
+            console.log("test2")
             e.preventDefault();
             $('#Modal').modal();
         });
