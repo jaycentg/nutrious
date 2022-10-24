@@ -8,7 +8,7 @@ from donation.models import Donatee
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
-@login_required(login_url='/home/login/')
+@login_required(login_url='/login/')
 def show_donation(request):
     data_post = Donatee.objects.filter(is_verified = True)
     context = {
@@ -17,7 +17,7 @@ def show_donation(request):
     }
     return render(request, "donation_page.html", context)
 
-@login_required(login_url='/home/login/')
+@login_required(login_url='/login/')
 def show_donation_user(request):
     data_post = Donatee.objects.filter(opener = request.user)
     context = {
@@ -26,7 +26,7 @@ def show_donation_user(request):
     }
     return render(request, "donation_page_user.html", context)
 
-@login_required(login_url='/home/login/')
+@login_required(login_url='/login/')
 def create_donation(request):
     if request.method == 'POST':
             name = request.POST.get('name')
@@ -42,7 +42,7 @@ def create_donation(request):
     }
     return render(request, 'add_donation.html', context)
 
-@login_required(login_url='/home/login/')
+@login_required(login_url='/login/')
 def create_donation_user(request):
     if request.method == 'POST':
             name = request.POST.get('name')
