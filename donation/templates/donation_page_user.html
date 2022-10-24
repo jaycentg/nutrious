@@ -27,48 +27,6 @@
         background-color: azure;
     }
 </style>
-<script>
-
-    function loadData(){
-        $('#card').empty();
-        let data_card ="";
-        $.ajax({
-            url: "{% url 'donation:show_json' %}",
-            type: "GET",
-            dataType: "json",
-            success: function(resp){
-                for (let i of resp){
-                    let is_Collected = i.fields.amountNeeded <= i.fields.collectedFunds ? "Collected, but you can still donate if your want" : "Still need more donation"
-                    let needed_left = i.fields.amountNeeded - i.fields.collectedFunds
-                    needed_left = needed_left < 0 ? 0 : needed_left
-                    data_card +=`
-                    <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
-                        <div class="card-header">
-                        <h5 class="card-title">${i.fields.name}</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">Amount Needed: ${i.fields.amountNeeded}</p>
-                            <p class="card-text">Collected Funds: ${i.fields.collectedFunds}</p>
-                            <p class="card-text">Amount left: ${needed_left}</p>
-                            <p class="card-text">Donation Status: ${is_Collected}</p>
-                            <a href="details/${i.pk}" class="btn btn-primary stretched-link">View Donatee</a>
-                        </div>
-                    </div>
-                    `
-                    ;
-                }
-                $('#card').append(data_card);
-            },
-            error: function(resp){
-                console.log('Error?');
-            }
-        })
-    }
-
-    $(document).ready(function(){
-        loadData();
-    });
-</script>
 {% endblock meta %}
 
 {% block content %}
@@ -86,11 +44,6 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
-
-                    {% if user.is_verified_user %}
-                    <li><a class="dropdown-item" href="{% url 'donation:show_donation_user' %}">See Opened Donation</a></li>
-                    {% endif %}
-
                     <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                 </ul>
             </div>
@@ -104,23 +57,37 @@
     </div>
     </nav>
     <div class="h3 text-center m-3">Hello, <span class="fw-bold">{{user.nickname}}</span>!</div>
-    <div class="h3 text-center m-3">Please donate by clicking the card containing the information
-    of the donatee you want to donate.</div>
+    <div class="h3 text-center m-3">This is the donation page that you have opened.</div>
 
     <!-- Card berisi Donatee -->
     <div class="container">
         <div class="row no-gutters">
                 <div class="card" id ="card">
-
+                    {% for donatee in data_post %}
+                    <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
+                        <div class="card-header">
+                            <h5 class="card-title">{{donatee.name}}</h5>
+                            {% if donatee.is_verified %}
+                            <h5 class="card-text" style="color:#25f314;">Verified</h5>
+                            {% else %}
+                            <h5 class="card-text" style="color:red;">Not Verified</h5>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text ">Description: {{donatee.description}}</p>
+                            <p class="card-text">Amount Needed: {{donatee.amountNeeded}}</p>
+                            <p class="card-text">Collected Funds: {{donatee.collectedFunds}}</p>
+                            <a href="delete/{{donatee.pk}}" class="btn btn-danger">Close Donatee</a>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
         </div>
     </div>
 
-    {% if user.is_verified_user %}
-    <a class="m-3 btn btn-primary" href="{% url 'donation:create_donation' %}">Add Donatee</a>
-    {% endif %}
+    <a class="m-3 btn btn-primary" href="{% url 'donation:create_donation_user' %}">Add Donatee</a>
 
-    <a class="m-1 btn btn-primary" href="{% url 'home:show_index' %}">Home</a>
+    <a class="m-1 btn btn-primary" href="{% url 'donation:show_donation' %}">Back to Donation Page</a>
 
 
 {% else %}
