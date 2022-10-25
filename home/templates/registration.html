@@ -109,7 +109,7 @@
                   <span class="invalid-feedback">{{ error }}</span>
                 {% endfor %}
               </div>
-              <input class="btn btn-primary w-100" type="submit" value="Register" name="submit">
+              <input class="btn btn-primary w-100" type="submit" value="Register" name="submit" onclick=showAlert()>
             </form>
           </div>
         </div>
@@ -117,4 +117,9 @@
     </div>
   </div>
 </body>
+<script>
+  function showAlert(){
+    alert('Thank you for registering. Please wait for our admin to verify your account to use full features of our app.')
+  };
+</script>
 {% endblock %}

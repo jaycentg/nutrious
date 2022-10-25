@@ -4,6 +4,14 @@
 <title>Donation</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+<script>
+    const rupiah = (number)=>{
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR"
+        }).format(number);
+    };
+</script>
 <style>
     .nutrious-intro{
         background-image: url("{% static 'bg-header.png' %}");
@@ -49,15 +57,14 @@
             </div>
             <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
             {% if user.is_verified_user %}
-            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+            <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
             {% else %}
-            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+            <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
             {% endif %}
         </div>
     </div>
     </nav>
-    <div class="h3 text-center m-3">Hello, <span class="fw-bold">{{user.nickname}}</span>!</div>
-    <div class="h3 text-center m-3">This is the donation page that you have opened.</div>
+    <div class="h5 text-center m-3">Donations opened by <span class="fw-bold">{{user}}</span></div>
 
     <!-- Card berisi Donatee -->
     <div class="container">
