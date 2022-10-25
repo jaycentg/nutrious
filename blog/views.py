@@ -1,11 +1,13 @@
 import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from blog.models import Post
+from home.models import AppUser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
+@csrf_exempt
 def show_post(request):
     data_post = Post.objects.order_by('-created_on')
     context = {
@@ -15,33 +17,37 @@ def show_post(request):
 
 def post_detail(request, id):
     post_detail = Post.objects.get(pk = id)
+    post_tag = Post.objects.all()
     context = {
-        'postdetail' : post_detail
+        'postdetail' : post_detail,
+        'posttag' : post_tag
     }
     return render(request, "post-detail.html", context)
 
-# @csrf_exempt
-# # @login_required(login_url='/login/')
-# # dia login tapi balik ke homepage, gimana caranya biar dia abis login langsung di route lagi ke page
-# def add_post(request):
-#     if request.method == 'POST':
-#         title = request.POST.get('title')
-#         author = request.POST.get('author')
-#         content = request.POST.get('content')
+@csrf_exempt
+# @login_required(login_url='/login/')
+# dia login tapi balik ke homepage, gimana caranya biar dia abis login langsung di route lagi ke page
+def add_post(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        content = request.POST.get('content')
 
-#         post = Post.objects.create(title=title, author=author, content=content, created_on=datetime.datetime.now())
+        post = Post.objects.create(title=title, author=author, content=content, created_on=datetime.datetime.now(), upvote=0, downvote=0)
 
-#         result = {
-#             'fields':{
-#                 'title':post.title,
-#                 'author':post.author,
-#                 'content':post.content,
-#                 'created_on':post.created_on,
-#             },
-#             'pk':post.pk
-#         }
+        result = {
+            'fields':{
+                'title':post.title,
+                'author':post.author,
+                'content':post.content,
+                'created_on':post.created_on,
+                'upvote': post.upvote,
+                'downvote': post.downvote,
+            },
+            'pk':post.pk
+        }
 
-#         return JsonResponse(result)
+        return JsonResponse(result)
 
 # ini harus login juga
 def upload(request):
@@ -49,8 +55,9 @@ def upload(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
+        tag = request.POST.get('tag')
 
-        Post.objects.create(title=title, author=request.user, content=content, created_on=datetime.datetime.now(), upvote=0, downvote=0)
+        post = Post.objects.create(title=title, author=request.user.nickname, content=content, created_on=datetime.datetime.now(), upvote=0, downvote=0, vote_state=2, tag=tag)
 
         return redirect('blog:show_post')
 
@@ -61,8 +68,153 @@ def show_json(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 # login dulu
+@csrf_exempt
 def addUpvote(request, id):
-    post_detail = Post.objects.get(pk = id)
-    post_detail.upvote = post_detail.upvote + 1
-    post_detail.save()
-    return redirect('blog:show_post')
+    if request.method == 'PATCH':
+
+        post_detail = get_object_or_404(Post, pk = id)
+        voted = False
+        downvoted = False
+        upvoted = False
+
+        for post in request.user.post.all():         
+            # cari dia udah pernah vote atau belum post tersebut
+            if (post.pk == post_detail.pk):
+                voted = True
+                # kalo user udah downvoted postnya sebelumnya
+                if(post.vote_state == 1):
+                    downvoted = True
+                    upvoted = False
+                    break
+                # kalo user udah upvoted postnya sebelumnya
+                elif(post.vote_state == 0):
+                    upvoted = True
+                    downvoted = False
+                    break
+                # kalau state nya 2 berarti belum di vote lagi walaupun udah ada
+                else:
+                    voted = False
+                    break
+            # kalo belum pernah vote post tersebut
+            else:
+                voted = False
+
+        # jika pernah vote
+        if (voted):
+            # pernah downvote terus mencet upvote
+            if (downvoted):
+                post_detail.downvote = post_detail.downvote - 1
+                post_detail.upvote = post_detail.upvote + 1
+                post_detail.vote_state = 0 #nyimpen kalo dia jadi upvote
+                post_detail.save()
+
+            # pernah upvote terus upvote lagi
+            elif (upvoted):
+                post_detail.upvote = post_detail.upvote - 1
+                post_detail.vote_state = 2
+                post_detail.save()
+                request.user.post.remove(post_detail)
+                request.user.save()
+
+        else:
+            post_detail.upvote = post_detail.upvote + 1
+            post_detail.vote_state = 0
+            post_detail.save()
+            request.user.post.add(post_detail)
+            request.user.save()
+
+        result = {
+            'pk': post_detail.pk,
+            'fields':{
+                'title': post_detail.title,
+                'author': post_detail.author,
+                'content': post_detail.content,
+                'created_on': post_detail.created_on,
+                'upvote': post_detail.upvote,
+                'downvote': post_detail.downvote,
+                'tag': post_detail.tag,
+                }
+        }
+        
+    return JsonResponse(result)
+
+@csrf_exempt
+def addDownvote(request, id):
+    if request.method == 'PATCH':
+
+        post_detail = get_object_or_404(Post, pk = id)
+        voted = False
+        downvoted = False
+        upvoted = False
+
+        for post in request.user.post.all():
+            # cari dia udah pernah vote atau belum post tersebut
+            if (post.pk == post_detail.pk):
+                voted = True
+                # kalo user udah downvoted postnya sebelumnya
+                if(post.vote_state == 1):
+                    downvoted = True
+                    upvoted = False
+                    break
+                # kalo user udah upvoted postnya sebelumnya
+                elif(post.vote_state == 0):
+                    upvoted = True
+                    downvoted = False
+                    break
+                # kalau state nya 2 berarti belum di vote lagi walaupun udah ada
+                else:
+                    voted = False
+                    break
+            # kalo belum pernah vote post tersebut
+            else:
+                voted = False
+
+        # jika pernah vote
+        if (voted):
+            # pernah downvote terus mencet downvote
+            if (downvoted):
+                request.user.post.remove(post_detail)
+                post_detail.downvote = post_detail.downvote - 1
+                post_detail.vote_state = 2
+                post_detail.save()
+                request.user.post.add(post_detail)
+                request.user.save()
+                
+            # pernah upvote terus downvote
+            elif (upvoted):
+                request.user.post.remove(post_detail)
+                post_detail.upvote = post_detail.upvote - 1
+                post_detail.downvote = post_detail.downvote + 1
+                post_detail.vote_state = 1 #nyimpen kalo dia jadi downvote
+                post_detail.save()
+                request.user.post.add(post_detail)
+                request.user.save()
+                
+        else:
+            post_detail.downvote = post_detail.downvote + 1
+            post_detail.vote_state = 1
+            post_detail.save()
+            request.user.post.add(post_detail)
+            request.user.save()
+
+        result = {
+            'pk': post_detail.pk,
+            'fields':{
+                'title': post_detail.title,
+                'author': post_detail.author,
+                'content': post_detail.content,
+                'created_on': post_detail.created_on,
+                'upvote': post_detail.upvote,
+                'downvote': post_detail.downvote,
+                'tag': post_detail.tag,
+                }
+        }
+        
+    return JsonResponse(result)
+
+def getTags(request, tag):
+    data = Post.objects.filter(tag=tag)
+    context = {
+        'postlist' : data
+    }
+    return render(request, "post-page.html", context)
