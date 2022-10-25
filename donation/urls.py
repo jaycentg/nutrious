@@ -12,6 +12,7 @@ urlpatterns = [
     path('add-donation-user/', create_donation_user, name='create_donation_user'),
     path('json/', show_json, name='show_json'),
     path('json-admin/', show_json_admin, name='show_json_admin'),
+    path('json-user/', show_json_user, name='show_json_user'),
     path('details/donate/<int:id>', donate, name='donate'),
     path('delete-admin/<int:id>', delete_by_admin, name='delete_by_admin'),
     path('change-status/<int:id>', change_status_donatee, name='change_status_donatee'),

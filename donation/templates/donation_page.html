@@ -19,6 +19,11 @@
     body{
         background-color: azure;
     }
+    /* Dim and disable the button while the form is invalid */
+    form:invalid button {
+        opacity: 0.3;
+        pointer-events: none;
+    }
 </style>
 <script>
     function getPercentage(needed, collected){
@@ -79,6 +84,8 @@
         loadData();
     });
 
+
+
     const rupiah = (number)=>{
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -97,6 +104,7 @@
             <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
         </a>
         <div class="d-flex flex-row">
+            <a class="m-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Open Donations</a>
             <div class="dropdown m-auto mx-3">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Profile
@@ -109,6 +117,7 @@
                     <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                 </ul>
             </div>
+
             <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
             {% if user.is_verified_user %}
             <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
@@ -126,9 +135,43 @@
         </div>
     </div>
 
-    {% if user.is_verified_user %}
-    <a class="m-3 btn btn-primary" href="{% url 'donation:create_donation' %}">Open Donatee</a>
-    {% endif %}
+    <!-- Modal -->
+    <div id="modal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Open Donations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="" id="form_modal">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        <table>
+                            <tr class="fieldWrapper">
+                                {{ form.name.errors }}
+                                <td class="p m-3">Donatee Name: </td>
+                                <td class="m-3">{{ form.name }}</td>
+                            </tr>
+                            <tr class="fieldWrapper">
+                                {{ form.description.errors }}
+                                <td class="p m-3">Description: </td>
+                                <td class="m-3">{{ form.description }}</td>
+                            </tr>
+                            <tr class="fieldWrapper">
+                                {{ form.amountNeeded.errors }}
+                                <td class="p m-3">Amount Needed: </td>
+                                <td class="m-3">{{ form.amountNeeded }}</td>
+                            </tr>
+                            <tr>
+                                <td class="p m-3"><button onclick="myFunction()" class="btn btn-warning" type="submit" value="Open Donatee">Open Donatee</button></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% else %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
