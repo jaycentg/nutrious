@@ -21,4 +21,5 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('calorietracker/', include('calorietracker.urls')),
     path('donation/', include('donation.urls', namespace='donation')),
+    path('foodsharing/', include('foodsharing.urls')),
 ]
