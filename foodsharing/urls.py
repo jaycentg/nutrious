@@ -1,5 +1,5 @@
 from django.urls import path
-from blog.views import show_location, post_detail, add_location, show_json
+from foodsharing.views import show_location, post_detail, add_location, show_json
 
 app_name = 'foodsharing'
 
