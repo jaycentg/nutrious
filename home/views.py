@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from .models import AppUser
+from donation.models import Donatee
 
 DEF_PICT_URL = 'https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png'
 
@@ -29,6 +30,7 @@ def show_index(request):
         if request.user.is_admin:
             context = {}
             context['users'] = AppUser.objects.filter(is_admin=False)
+            context['donatees'] = Donatee.objects.all()
             context['username'] = request.user.username
             context['profile_url'] = request.user.profile_pict_url
             return render(request, 'index_admin.html', context)
