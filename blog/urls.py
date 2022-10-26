@@ -5,7 +5,7 @@ app_name = 'blog'
 
 urlpatterns = [
     path('', show_post, name='show_post'),
-    path('details/<int:id>', post_detail, name='post_detail'),
+    path('details/', post_detail, name='post_detail'),
     path('add-post/', upload, name='upload'),
     path('json/', show_json, name='show_json'),
     path('json/<str:tag>', show_json_by_tag, name='show_json_by_tag'),

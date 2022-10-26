@@ -104,7 +104,7 @@
                                     <div>
                                     </div>
                                     <div class="d-flex justify-content-between mt-3">
-                                        <a href="/blog/details/${data.pk}" class="btn btn-primary">Read More &rarr;</a>
+                                        <a href="/blog/details/?id=${data.pk}" class="btn btn-primary">Read More &rarr;</a>
                                         <div id="${data.pk}-vote" >   
                                             <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
                                             ${data.fields.upvote}
