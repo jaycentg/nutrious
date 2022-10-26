@@ -169,10 +169,12 @@
                         <tr class="fieldWrapper">
                             {{ form.amountNeeded.errors }}
                             <td class="p m-3">Amount Needed: </td>
-                            <td class="m-3">{{ form.amountNeeded }}</td>
+                            <td class="p m-3"><input type="number" id="{{form.amountNeeded.id_for_label}}" name="{{form.amountNeeded.html_name}}"
+                                       class="form-control{% if form.amountNeeded.errors %} is-invalid{% endif %}"
+                                       value="{% if form.amountNeeded.value %}{{form.amountNeeded.value}}{% endif %}" placeholder="Min: 100000" min="100000" required></td>
                         </tr>
                         <tr>
-                            <td class="p m-3"><button onclick="myFunction()" class="btn btn-warning" type="submit" value="Open Donatee">Open Donatee</button></td>
+                            <td class="p m-3"><button class="btn btn-warning" type="submit" value="Open Donatee">Open Donatee</button></td>
                         </tr>
                     </table>
 
