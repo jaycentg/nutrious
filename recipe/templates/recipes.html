@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+
+{% load static %}
+
+
+{% block meta %}
+<title>Food Recipes</title>
+<style>
+    .header-content {
+        background-image: url("{% static 'recipe-header.png' %}");
+        transition: transform .2s;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    .card:hover{
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+      opacity: 1.0;
+    }
+    .row{
+      margin-left: 75px;
+      margin-right: 75px;
+    }
+</style>
+{% endblock meta %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<nav class="navbar shadow navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home:show_index' %}">
+            <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+        </a>
+        <div class="d-flex flex-row">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg"
+                data-bs-whatever="@getbootstrap">Add recipe</button>
+            <div class="dropdown m-auto mx-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Profile
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+                </ul>
+            </div>
+            <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+            {% if user.is_verified_user %}
+            <img src="{{user.profile_url}}"
+                class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+            {% else %}
+            <img src="{{user.profile_url}}"
+                class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+            {% endif %}
+        </div>
+    </div>
+</nav>
+{% else %}
+<nav class="navbar shadow navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home:show_index' %}">
+            <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+        </a>
+        <div class="d-flex flex-row-reverse">
+            <a class="btn btn-outline-primary p-2 m-3" role="button" href="{% url 'home:register' %}">Sign Up</a>
+            <a class="btn btn-outline-success p-2 m-3" role="button" href="{% url 'home:login' %}">Log In</a>
+        </div>
+    </div>
+</nav>
+{% endif %}
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-white text-black">
+
+            <div class="modal-header">
+
+                <h3 class="modal-title w-100 text-center fw-bold pl-100">Create Recipe</h3>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form style="text-align:center" id="form" onsubmit="return false;">
+                {% csrf_token %}  
+                    <div class="col mx-3">
+
+                        <div class="form-group row my-2">
+                            <label for="formInput">Menu name</label>
+                            <input type="text" class="form-control" id="formInput" name="food_name" required>
+                        </div>
+
+                        <div class="form-group row my-2">
+                            <label for="formInput2">Ingredients</label>
+                            <textarea  type="text" class="form-control" id="formInput" name="ingredients" required></textarea>
+                        </div>
+
+                        <div class="form-group row my-2">
+                            <label for="formInput2">How to make it?</label>
+                            <textarea type="text" class="form-control" id="formInput" name="method" required></textarea>
+                        </div>
+
+                        <button class="btn btn-success btn-lg px-py-5 row my-2" id="button" type="submit"
+                            value="Submit">Add Recipe</button></td>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Header -->
+<div class="card m-3 p-5 header-content text-light">
+    <div class="text-center fw-bold h1 m-2">Food Recipes</div>
+    <div class="text-center m-2">Find your food inspirations and make your own food here. You can also help others by
+        posting your own recipes ;)</div>
+</div>
+
+
+<!-- Row -->
+<div class="row" id="card-row">
+</div>
+
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+async function getRecipe(){
+     return fetch("{% url 'recipe:show_json' %}").then((res) => res.json())
+}
+
+async function refreshRecipe() {
+    document.getElementById("card-row").innerHTML = ""
+    const recipes = await getRecipe()
+    let htmlString = ``
+    recipes.forEach((item) => {
+        htmlString += `\n<div class="col-3">
+        <div class="card border-success text-dark bg-white mb-3" style="max-width: 22rem;" id="card-task">
+            <div class="card-header">
+                <p>by ${item.fields.author}</p>
+                <footer class="blockquote-footer">Created on ${item.fields.created_on}</footer>
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title">${item.fields.food_name}</h5>
+                <p class="card-text"><u>Ingredients: </u></p>
+                <p class="card-text">${item.fields.ingredients}</p>
+                <p class="card-text"><u>Step by step:</u></p>
+                <p class="card-text">${item.fields.method}</p>
+            </div>
+        </div>
+        </div>` 
+    })
+    
+    document.getElementById("card-row").innerHTML = htmlString
+}
+
+async function addRecipe() {
+    fetch("{% url 'recipe:add_recipe' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshRecipe)
+        
+    return false
+}
+
+// const input = document.getElementById("formInput");
+// // const textarea = document.querySelector("#textarea");
+// let inp = input.value;
+// // let txt = textarea.value;
+// if (inp != "") {
+//     refreshRecipe()
+// }
+document.getElementById("button").onclick = addRecipe
+refreshRecipe()
+
+</script>
+
+
+{% endblock content %}

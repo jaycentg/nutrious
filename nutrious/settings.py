@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'blog',
     'calorietracker',
     'donation',
-    'foodsharing'
+    'foodsharing',
+    'recipe',
 ]
 
 MIDDLEWARE = [
