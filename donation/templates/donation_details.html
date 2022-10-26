@@ -1,4 +1,22 @@
 {% extends 'base.html' %}
+{% block meta %}
+<title>Donatee Details</title>
+
+<script>
+    function myFunction() {
+        alert("Thank you for your donation! We hope that you keep donating to help others in need.");
+    }
+</script>
+
+<style>
+    /* Dim and disable the button while the form is invalid */
+    form:invalid button {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+</style>
+{% endblock meta %}
+
 {% block content %}
 
 <div class="container">
@@ -10,12 +28,12 @@
                 <p class="card-text ">Description: {{ postdetail.description | safe }}</p>
                 <p class="card-text ">Amount Needed: {{ postdetail.amountNeeded | safe }}</p>
                 <p class="card-text ">Collected Funds: {{ postdetail.collectedFunds | safe }}</p>
-                <form method="POST" action="donate/{{ postdetail.pk }}">
+                <form id="form" method="POST" action="donate/{{ postdetail.pk }}">
                     {% csrf_token %}
                     <p class="card-text">Donate: </p>
-                    <input type="number" name="amount" placeholder="Amount" class="form-control">
+                    <input type="number" name="amount" min="1000" placeholder="Minimum amount of donation is 1000" class="form-control" required>
                     <br>
-                    <button class="btn btn-warning" type="submit" value="Donate">Donate</button>
+                    <button onclick="myFunction()" class="btn btn-warning" type="submit" value="Donate">Donate</button>
                 </form>
             </div>
         </div>

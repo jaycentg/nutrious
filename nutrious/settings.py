@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'blog',
+    'calorietracker',
     'donation',
+    'foodsharing'
 ]
 
 MIDDLEWARE = [

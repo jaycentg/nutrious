@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>CalorieTracker</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="todolist d-flex align-items-center justify-content-center">
+            <form class="todolist-form text-center" method="POST">
+                {% csrf_token %}
+                <h1 class="text-uppercase">Calorie Tracker</h1>
+                <p >Selamat datang {{user}}!</p>
+                <p >Silahkan masukkan calorie makanan yang telah anda konsumsi</p>
+                <p >Jumlah calorie yang telah anda konsumsi: {{totalCalories}}</p>
+                <div class="modal" tabindex="-1" id="Modal">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Add calorie</h5>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <td>Calorie</td>
+                            <td><input type="text" name="judul" placeholder="Judul" class="form-control" id="input_calorie"></td>
+                  
+                            <td>Deskripsi </td>
+                            <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
+                        </div>
+                        <div class="modal-footer">
+                          <button id="create_table" class="btn button-custom rounded-pill" data-dismiss="modal">Add Calorie</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th style>Deskripsi</th>
+                                    <th style>Calorie </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <p></p>
+                            </tbody>
+                        </table>
+                <button type="button"  class="btn button-custom rounded-pill" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
+                    Add Calorie
+                      </button>
+            </form>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script>
+            
+        function createTable(){
+            var taskAmount = $(".table > tbody").children().length;
+            for(var i = taskAmount; i >= 2; i--){
+                $(".table > tbody > tr:nth-child(" + i + ")").remove();
+            }
+
+       
+            $.get("json/", function(data) {
+                console.log("test4")
+                for(var i = 0; i < data.length; i++){
+                    var tr = document.createElement("tr");
+                    var calorie_td = document.createElement("td");
+                    calorie_td.append(data[i].fields.calorie);
+                    var deskripsi_td = document.createElement("td");
+                    deskripsi_td.append(data[i].fields.description);
+                   
+                    tr.append(deskripsi_td);
+                    tr.append(judul_td);
+                    
+
+                    $(".table").append(tr);
+                }
+                });
+        }
+
+        $(document).ready(function(){
+            console.log("test")
+            createTable();
+           
+        $("#create_table").click(function(e){
+            console.log("test1")
+            var calorie = $("#input_calorie").val();
+            var description = $("#input_deskripsi").val();
+            $.post("add_calorie/",
+            {
+                calorie,
+                description,
+            },
+            
+            function(data, status){
+                createTable();
+                $("#input_deskripsi").val("");
+                $("#input_calorie").val("");
+                
+                });
+            
+            });
+        });
+        $('#Test').click(function(e){
+            console.log("test2")
+            e.preventDefault();
+            $('#Modal').modal();
+        });
+        
+        </script>
+         
+      
+        
+    </body>
+    </html>
+
+<style>@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+   
+    .table{
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    background-color: rgba(255,255,255,0.2);
+    color: rgb(116, 89, 89);
+    }
+
+    tbody tr:hover  {
+    background:rgb(84, 73, 73);
+    color:#FFFFFF;
+    }
+
+    body{
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        background: rgb(185, 165, 165);
+        color:rgb(116, 89, 89);
+    }
+    thead {
+        background-color:rgb(116, 89, 89);
+        color:rgb(185, 161, 161);
+        
+    }
+    .todolist{
+        height: 100vh;
+        width: 100%;
+    }
+    .todolist-form{
+        margin: auto;
+        
+    }
+    .button-custom{
+        width: 320px;
+        padding: 10px;
+        background-color: rgb(143, 118, 118); 
+        margin: auto;
+        margin-top: 2em;
+        display: block;
+        color: rgb(0, 0, 0); 
+        text-align: center;
+    }
+    .button-custom:focus{
+        background-color: rgb(84, 73, 73); 
+        box-shadow: 0 0 0 0.2rem rgb(143, 118, 118); 
+    }
+    .button-custom:hover{
+        color:#dedae3;
+    }
+    
+</style>
