@@ -48,8 +48,9 @@ function createTable(){
                     </div>
                     <div class="card-body">
                         <p class="card-text">Calorie: ${i.fields.calorie}</p>
+                        <p class="card-text">Description: ${i.fields.description}</p>
                         <p class="card-text">Date: ${i.fields.date}</p>
-                        <a href="details/${i.pk}" class="btn btn-primary stretched-link">View Detail</a>
+                        <a href="details/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
                     </div>
                 </div>
                 `
@@ -58,14 +59,14 @@ function createTable(){
             `
             <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
                 <div class="card-header">
-                <h5 class="card-title">${i.fields.description}</h5>
+                <h5 class="card-title">${i.fields.category}</h5>
                 </div>
                 <div class="card-body">
                     <p class="card-text">Calorie: ${i.fields.calorie}</p>
+                    <p class="card-text">Description: ${i.fields.description}</p>
                     <p class="card-text">Date: ${i.fields.date}</p>
             
-                    <p class="card-text">Date: ${i.fields.category}</p>
-                    <a href="details/${i.pk}" class="btn btn-primary stretched-link">View Detail</a>
+                    <a href="edit/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
                 </div>
             </div>
             `
@@ -104,6 +105,7 @@ $(document).ready(function(){
             createTable();
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
+            document.getElementById("category1").value;
         });
     });
     $("#add").click(function(e){
@@ -148,6 +150,7 @@ $('#Test1').click(function(e){
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
     <body>
+        {% if user.is_user %}
         <nav class="navbar shadow navbar-expand-lg bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
@@ -171,7 +174,7 @@ $('#Test1').click(function(e){
                     </div>
                 </div>
             </div>
-            </nav>
+        </nav>
         <div class="align-items-center justify-content-center">
             <form class="text-center" method="POST">
                 {% csrf_token %}
@@ -196,12 +199,12 @@ $('#Test1').click(function(e){
                   
                             <td>Deskripsi </td>
                             <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
-                            <label for="category">Choose a car:</label>
+                            <label for="category">Choose a category:</label>
                             <select name="category" id="category">
-                                <option value="breakfast">Breakfast</option>
-                                <option value="lunch">Lunch</option>
-                                <option value="dinner">Dinner</option>
-                                <option value="snack">Snack</option>
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Dinner">Dinner</option>
+                                <option value="Snack">Snack</option>
                             </select>
                         </div>
                         <div class="modal-footer">
@@ -245,8 +248,22 @@ $('#Test1').click(function(e){
                 
             </form>
         </div>
+        {% else %}
+        <nav class="navbar shadow navbar-expand-lg bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+                </a>
+                <div class="d-flex flex-row-reverse">
+                    <a class="btn btn-outline-primary p-2 m-3" role="button" href="{% url 'home:register' %}">Sign Up</a>
+                    <a class="btn btn-outline-success p-2 m-3" role="button" href="{% url 'home:login' %}">Log In</a>
+                  </div>
+            </div>
+        </nav>
+        <alert>You have to log in to use calorie tracker features of NUTRIOUS </alert>
+        {% endif %}
     </body>
-    <footer class="bg-secondary text-center text-lg-start shadow text-light">
+    <footer style="position:fixed; bottom: 0;" class="bg-secondary text-center text-lg-start shadow text-light">
         <div class="text-center p-3">2022: Platform-Based Programming F02</div>
     </footer>
     {% endblock content %}

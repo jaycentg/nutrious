@@ -44,3 +44,9 @@ def show_json(request):
     data =Calorie.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")   
 
+def edit(request, id):
+    edit = Calorie.objects.get(pk = id)
+    context = {
+        'edit' : edit
+    }
+    return render(request, "edit.html", context)
