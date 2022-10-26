@@ -69,11 +69,24 @@
         <tbody id="fundraising-verif"></tbody>
       </table>
     </div>
+    <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
+      <div class="h3 text-center fw-bold">Messages</div>
+      <table class="table text-center table-hover table-responsive">
+        <thead>
+            <tr>
+                <th scope="col">User ID</th>
+                <th scope="col">Message</th>
+                <th scope="col">Time Sent</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody id="user-msg"></tbody>
+      </table>
+    </div>
 </body>
 <script>
   function getAllDonatee(){
     $.get('/donation/json-admin/', function(data){
-      console.log(data);
       showAllDonatee(data);
     })
   };
@@ -103,8 +116,40 @@
         "X-CSRFTOKEN": "{{ csrf_token }}"
       },
       success: function(data){
-        console.log("Donation is deleted successfully");
         getAllDonatee();
+      }
+    })
+  };
+
+  function getAllMessages(){
+    $.get('/json-message/', function(data){
+      showAllMessages(data);
+    })
+  };
+
+  function showAllMessages(data){
+    let row = '';
+    for (let message of data){
+      row += `<tr>
+                <th scope="row" class="fw-normal m-auto">${message.fields.user}</th>
+                <th class="fw-normal m-auto">${message.fields.message}</th>
+                <th class="fw-normal m-auto">${message.fields.time_sent}</th>
+                <th><a class="btn btn-danger" role="button" onclick="deleteMessage(${message.pk})">Delete Message</a></th>    
+               </tr>`
+    };
+    $("#user-msg").html(row);
+  };
+
+  function deleteMessage(id){
+    $.ajax({
+      type: 'DELETE',
+      url: '/delete-msg/' + id,
+      dataType: 'json',
+      headers: {
+        "X-CSRFTOKEN": "{{ csrf_token }}"
+      },
+      success: function(data){
+        getAllMessages();
       }
     })
   };
@@ -140,7 +185,6 @@
         "X-CSRFTOKEN": "{{ csrf_token }}"
       },
       success: function(data){
-        console.log("User is deleted successfully");
         getAllUser();
       }
     })
@@ -149,9 +193,11 @@
   $(document).ready(function(){
     getAllUser();
     getAllDonatee();
+    getAllMessages();
     $(".btn").click(function (){
       getAllUser();
       getAllDonatee();
+      getAllMessages();
     });
   });
 </script>
