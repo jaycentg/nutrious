@@ -51,9 +51,9 @@
             </div>
             <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
             {% if user.is_verified_user %}
-            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+            <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
             {% else %}
-            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+            <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
             {% endif %}
         </div>
     </div>
@@ -71,7 +71,7 @@
         </tr>
         <tr>
             <td class="h5 m-3">Amount Needed: </td>
-            <td class="m-3"><input type="number" min="100000" name="amountNeeded" placeholder="Min: 100000" class="form-control"></td>
+            <td class="m-3"><input type="number" min="100000" name="amountNeeded" placeholder="Min: 100000" class="form-control" required></td>
         </tr>
 
         <tr>

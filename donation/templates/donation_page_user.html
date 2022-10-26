@@ -4,19 +4,93 @@
 <title>Donation</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+<script>
+    const rupiah = (number)=>{
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR"
+        }).format(number);
+    };
+
+    function getPercentage(needed, collected){
+        if(needed <= collected){
+            return '100'
+        } else{
+            let percent = Math.ceil((collected/needed)*100)
+            return percent.toString()
+        };
+    };
+
+    function loadData(){
+        $('#card').empty();
+        let data_card ="";
+        $.ajax({
+            url: "{% url 'donation:show_json_user' %}",
+            type: "GET",
+            dataType: "json",
+            success: function(resp){
+                if (resp.length == 0){
+                    data_card += `
+                        <div class="text-center fw-bold">No Donation</div>
+                        <div class="text-center"> Donations that you create will appear here</div>
+                    `
+                } else{
+                    for (let i of resp){
+                        //let is_verified= i.fields.is_verified ? `<h5 class="card-text" style="color:#25f314;">Verified</h5>` : `<h5 class="card-text" style="color:red;">Not Verified</h5>`
+                        let needed_left = i.fields.amountNeeded - i.fields.collectedFunds
+                        needed_left = needed_left < 0 ? 0 : needed_left
+                        let amountNeeded = parseInt(i.fields.amountNeeded)
+                        let collectedFunds = parseInt(i.fields.collectedFunds)
+                        let percent = getPercentage(amountNeeded, collectedFunds)
+                        let is_Collected = i.fields.amountNeeded <= i.fields.collectedFunds ? "Collected" : "Not yet collected"
+                        let isVerified= i.fields.is_verified ? "Verified" : "Not Verified"
+                        data_card +=`
+                            <div class="card card-donatee p-2 m-2" id="donatee-${i.pk}">
+                                <div class="card-body m-2">
+                                    <div class="card-header">
+                                        <div class="card-title fw-bold h2">${i.fields.name}</div>
+                                        <div class="card-text m-1">Verification status: ${isVerified}</div>
+                                    </div>
+                                    <div class="card-text m-1">Description: ${i.fields.description}</div>
+                                    <div class="card-text m-1">Amount Needed: <span class="fw-bold">${rupiah(amountNeeded)}</span></div>
+                                    <div class="card-text m-1">Collected Funds: <span class="fw-bold">${rupiah(collectedFunds)}</span></div>
+                                    <div class="card-text m-1">Amount left: <span class="fw-bold">${rupiah(parseInt(needed_left))}</span></div>
+                                    <div class="card-text m-1">Donation Status: <span class="fw-bold">${is_Collected}</span></div>
+                                    <div class="progress mt-3 mx-1">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: ${percent}%" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <br>
+                                    <a href="delete/${i.pk}" class="btn btn-danger">Close Donatee</a>
+                                </div>
+                            </div>
+                        `
+                    }
+                }
+                $('#card').append(data_card);
+            },
+            error: function(resp){
+                console.log('Error?');
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        loadData();
+    });
+
+
+</script>
 <style>
-    .nutrious-intro{
-        background-image: url("{% static 'bg-header.png' %}");
-        transition: transform .2s;
+    /* Dim and disable the button while the form is invalid */
+    form:invalid button {
+        opacity: 0.3;
+        pointer-events: none;
     }
-    .nutrious-intro:hover{
-        transform: scale(1.02);
+    .card-donatee{
+        transition: 0.3s;
     }
-    .feature{
-        transition: transform .2s;
-    }
-    .feature:hover{
-        transform: scale(1.04);
+    .card-donatee:hover{
+        background-color: #BEBEBE;
     }
     .avatar{
         width: 50px;
@@ -37,7 +111,9 @@
         <a class="navbar-brand" href="#">
             <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
         </a>
+
         <div class="d-flex flex-row">
+            <a class="m-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Open Donations</a>
             <div class="dropdown m-auto mx-3">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Profile
@@ -49,43 +125,64 @@
             </div>
             <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
             {% if user.is_verified_user %}
-            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+            <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
             {% else %}
-            <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+            <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
             {% endif %}
         </div>
     </div>
     </nav>
-    <div class="h3 text-center m-3">Hello, <span class="fw-bold">{{user.nickname}}</span>!</div>
-    <div class="h3 text-center m-3">This is the donation page that you have opened.</div>
+    <div class="h5 text-center m-3">Donations opened by <span class="fw-bold">{{user}}</span></div>
 
     <!-- Card berisi Donatee -->
-    <div class="container">
-        <div class="row no-gutters">
-                <div class="card" id ="card">
-                    {% for donatee in data_post %}
-                    <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
-                        <div class="card-header">
-                            <h5 class="card-title">{{donatee.name}}</h5>
-                            {% if donatee.is_verified %}
-                            <h5 class="card-text" style="color:#25f314;">Verified</h5>
-                            {% else %}
-                            <h5 class="card-text" style="color:red;">Not Verified</h5>
-                            {% endif %}
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text ">Description: {{donatee.description}}</p>
-                            <p class="card-text">Amount Needed: {{donatee.amountNeeded}}</p>
-                            <p class="card-text">Collected Funds: {{donatee.collectedFunds}}</p>
-                            <a href="delete/{{donatee.pk}}" class="btn btn-danger">Close Donatee</a>
-                        </div>
-                    </div>
-                    {% endfor %}
+    <div class="container my-5">
+        <div class="row">
+                <div id ="card">
+
                 </div>
         </div>
     </div>
 
-    <a class="m-3 btn btn-primary" href="{% url 'donation:create_donation_user' %}">Open Donatee</a>
+<!-- Modal -->
+<div id="modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Open Donations</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="" id="form_modal">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <table>
+                        <tr class="fieldWrapper">
+                            {{ form.name.errors }}
+                            <td class="p m-3">Donatee Name: </td>
+                            <td class="m-3">{{ form.name }}</td>
+                        </tr>
+                        <tr class="fieldWrapper">
+                            {{ form.description.errors }}
+                            <td class="p m-3">Description: </td>
+                            <td class="m-3">{{ form.description }}</td>
+                        </tr>
+                        <tr class="fieldWrapper">
+                            {{ form.amountNeeded.errors }}
+                            <td class="p m-3">Amount Needed: </td>
+                            <td class="p m-3"><input type="number" id="{{form.amountNeeded.id_for_label}}" name="{{form.amountNeeded.html_name}}"
+                                       class="form-control{% if form.amountNeeded.errors %} is-invalid{% endif %}"
+                                       value="{% if form.amountNeeded.value %}{{form.amountNeeded.value}}{% endif %}" placeholder="Min: 100000" min="100000" required></td>
+                        </tr>
+                        <tr>
+                            <td class="p m-3"><button class="btn btn-warning" type="submit" value="Open Donatee">Open Donatee</button></td>
+                        </tr>
+                    </table>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
     <a class="m-1 btn btn-primary" href="{% url 'donation:show_donation' %}">Back to Donation Page</a>
 

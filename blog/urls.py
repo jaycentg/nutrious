@@ -1,5 +1,5 @@
 from django.urls import path
-from blog.views import show_post, post_detail, upload, show_json, addUpvote
+from blog.views import show_post, post_detail, upload, show_json, addUpvote, add_post, addDownvote
 
 app_name = 'blog'
 
@@ -9,4 +9,5 @@ urlpatterns = [
     path('add-post/', upload, name='upload'),
     path('json/', show_json, name='show_json'),
     path('updateUpvote/<int:id>', addUpvote, name='addUpvote'),
+    path('updateDownvote/<int:id>', addDownvote, name='addDownvote'),
 ]

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from blog.models import Post
 
 # Create your models here.
 class AppUser(AbstractUser):
@@ -9,3 +10,4 @@ class AppUser(AbstractUser):
     is_admin = models.BooleanField(default=False)
     is_verified_user = models.BooleanField(default=False)
     is_user = models.BooleanField(default=True)
+    post = models.ManyToManyField(Post)

@@ -37,9 +37,9 @@
         </div>
     </nav>
     <div class="h1 m-3 fw-bold text-center">Admin Dashboard</div>
-    <div class="card p-3 m-2 my-3">
+    <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
       <div class="h3 text-center fw-bold">User Verification</div>
-      <table class="table text-center table-hover">
+      <table class="table text-center table-hover table-responsive">
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -52,14 +52,15 @@
         <tbody id="user-verif"></tbody>
       </table>
     </div>
-    <div class="card p-3 m-2 my-3">
+    <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
       <div class="h3 text-center fw-bold">Fundraising Verification</div>
       <table class="table text-center table-hover">
         <thead>
             <tr>
-                <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Opener</th>
+                <th scope="col">Description</th>
+                <th scope="col">Amount</th>
                 <th scope="col">Verified</th>
                 <th scope="col">Change</th>
                 <th scope="col">Delete</th>
@@ -70,6 +71,44 @@
     </div>
 </body>
 <script>
+  function getAllDonatee(){
+    $.get('/donation/json-admin/', function(data){
+      console.log(data);
+      showAllDonatee(data);
+    })
+  };
+
+  function showAllDonatee(data){
+    let row = '';
+    for (let donatee of data){
+      row += `<tr>
+                <th scope="row" class="fw-normal m-auto">${donatee.fields.name}</th>
+                <th class="fw-normal m-auto">${donatee.fields.opener}</th>
+                <th class="fw-normal m-auto">${donatee.fields.description}</th>
+                <th class="fw-normal m-auto">${donatee.fields.amountNeeded}</th>
+                <th class="fw-normal m-auto">${donatee.fields.is_verified}</th>
+                <th><a class="btn btn-success" role="button" href="/donation/change-status/${donatee.pk}">Change Status</a></th>
+                <th><a class="btn btn-danger" role="button" onclick="deleteDonatee(${donatee.pk})">Delete Donatee</a></th>    
+               </tr>`
+    };
+    $("#fundraising-verif").html(row);
+  };
+
+  function deleteDonatee(id){
+    $.ajax({
+      type: 'DELETE',
+      url: '/donation/delete-admin/' + id,
+      dataType: 'json',
+      headers: {
+        "X-CSRFTOKEN": "{{ csrf_token }}"
+      },
+      success: function(data){
+        console.log("Donation is deleted successfully");
+        getAllDonatee();
+      }
+    })
+  };
+
   function getAllUser(){
     $.get('/json-user/', function(data){
       showAllUser(data);
@@ -77,10 +116,10 @@
   };
 
   function showAllUser(data){
-    let card = '';
+    let row = '';
     for (let user of data){
       if (!user.fields.is_admin){
-        card += `<tr>
+        row += `<tr>
                 <th scope="row" class="fw-normal m-auto">${user.pk}</th>
                 <th class="fw-normal m-auto">${user.fields.username}</th>
                 <th class="fw-normal m-auto">${user.fields.is_verified_user}</th>
@@ -89,7 +128,7 @@
                </tr>`
       }
     };
-    $("#user-verif").html(card);
+    $("#user-verif").html(row);
   };
 
   function deleteUser(id){
@@ -109,8 +148,10 @@
 
   $(document).ready(function(){
     getAllUser();
+    getAllDonatee();
     $(".btn").click(function (){
       getAllUser();
+      getAllDonatee();
     });
   });
 </script>
