@@ -44,9 +44,23 @@ def show_json(request):
     data =Calorie.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")   
 
-def edit(request, id):
+def edit_add(request, id):
     edit = Calorie.objects.get(pk = id)
     context = {
         'edit' : edit
     }
     return render(request, "edit.html", context)
+def edit_reduce(request, id):
+    edit = Calorie.objects.get(pk = id)
+    context = {
+        'edit' : edit
+    }
+    return render(request, "edit_reduce.html", context)
+def edit_reduce_save(request, id):
+	if request.method == "POST":
+		x = Calorie.objects.get(pk = id)
+		x.calorie = request.POST['calorie']
+		x.description = request.POST['description']
+		x.save()
+		
+		return redirect('calorietracker:show_caloriepage')
