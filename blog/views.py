@@ -9,45 +9,33 @@ from django.contrib.auth.decorators import login_required
 
 @csrf_exempt
 def show_post(request):
+    
     data_post = Post.objects.order_by('-created_on')
-    context = {
-        'postlist' : data_post
-    }
-    return render(request, "post-page.html", context)
+    postarr = []
+    for user in data_post:
+        if (user.tag not in postarr):
+            postarr.append(user.tag)
 
-def post_detail(request, id):
-    post_detail = Post.objects.get(pk = id)
-    post_tag = Post.objects.all()
+    postarr.remove("")
+    context = {
+        'postlist' : data_post,
+        'taglist' : postarr
+    }
+    if request.user.is_authenticated:
+        return render(request, "post-page-auth.html", context)
+    else:
+        return render(request, "post-page-unauth.html", context)
+
+
+    
+
+def post_detail(request):
+    post_detail = Post.objects.all()
     context = {
         'postdetail' : post_detail,
-        'posttag' : post_tag
     }
     return render(request, "post-detail.html", context)
 
-@csrf_exempt
-# @login_required(login_url='/login/')
-# dia login tapi balik ke homepage, gimana caranya biar dia abis login langsung di route lagi ke page
-def add_post(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        author = request.POST.get('author')
-        content = request.POST.get('content')
-
-        post = Post.objects.create(title=title, author=author, content=content, created_on=datetime.datetime.now(), upvote=0, downvote=0)
-
-        result = {
-            'fields':{
-                'title':post.title,
-                'author':post.author,
-                'content':post.content,
-                'created_on':post.created_on,
-                'upvote': post.upvote,
-                'downvote': post.downvote,
-            },
-            'pk':post.pk
-        }
-
-        return JsonResponse(result)
 
 # ini harus login juga
 def upload(request):
@@ -65,6 +53,14 @@ def upload(request):
 
 def show_json(request):
     data = Post.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_by_tag(request, tag):
+    data = Post.objects.filter(tag=tag)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_by_id(request, id):
+    data = Post.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 # login dulu
@@ -211,10 +207,3 @@ def addDownvote(request, id):
         }
         
     return JsonResponse(result)
-
-def getTags(request, tag):
-    data = Post.objects.filter(tag=tag)
-    context = {
-        'postlist' : data
-    }
-    return render(request, "post-page.html", context)

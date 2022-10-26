@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
-from .forms import AppUserCreationForm
+from home.forms import *
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
-from .models import AppUser
+from home.models import *
 from donation.models import Donatee
 
 DEF_PICT_URL = 'https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png'
@@ -36,14 +36,26 @@ def show_index(request):
             return render(request, 'index_admin.html', context)
         # Jika user cuma user biasa
         else:
+            form = MessageForm()
             context = {}
             context['username'] = request.user.username
             context['nickname'] = request.user.nickname
             context['profile_url'] = request.user.profile_pict_url
             context['is_verified'] = request.user.is_verified_user
+            context['form'] = form
             return render(request, 'index_auth.html', context)
     else:
         return render(request, 'index.html')
+
+@login_required(login_url='/login/')
+def add_message(request):
+    if request.POST.get('action') == 'post':
+        user = request.user
+        message = request.POST.get('message')
+        Message.objects.create(user=user, message=message)
+        return JsonResponse({'status':'Message is sent successfully'})
+    else:
+        return JsonResponse({'status': 'Invalid request'}, status=400)
 
 @login_required(login_url='/login/')
 def show_profile(request):
@@ -89,21 +101,26 @@ def change_status_user(request, id):
     else:
         return HttpResponse("Not allowed", status=403)
     return redirect('home:show_index')
-'''
+
 @login_required(login_url='/login/')
 def delete_user(request, id):
     if request.user.is_admin:
         user = AppUser.objects.get(id=id)
         user.delete()
-    else:
-        return HttpResponse("Not allowed", status=403)
-    return redirect('home:show_index')
-'''
-@login_required(login_url='/login/')
-def delete_ajax(request, id):
-    if request.user.is_admin:
-        user = AppUser.objects.get(id=id)
-        user.delete()
         return JsonResponse({'status': 'User is deleted successfully'})
+    else:
+        return JsonResponse({'status': 'Invalid deletion'}, status=403)
+
+@login_required(login_url='/login/')
+def show_json_message(request):
+    data = Message.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@login_required(login_url='/login/')
+def delete_message(request, id):
+    if request.user.is_admin:
+        msg = Message.objects.get(id=id)
+        msg.delete()
+        return JsonResponse({'status': 'Message is deleted successfully'})
     else:
         return JsonResponse({'status': 'Invalid deletion'}, status=403)
