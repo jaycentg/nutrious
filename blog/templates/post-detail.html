@@ -1,25 +1,124 @@
-{% extends 'base.html' %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+    <!-- <script>
+        $(document).ready(function(){
+            loadData();
+        });
 
+        function updateCardUpvote(id) {
+            console.log("halo")
+            $.ajax({
+                url: `/blog/updateUpvote/${id}`,
+                type: 'PATCH',
+                success: function (data) {
+                    $(`#${id}-vote`).empty()
+                    $(`#${id}-vote`).append(
+                    `
+                        <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
+                        ${data.fields.upvote}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 card mb-4  mt-3 left  top">
-            <div class="card-body">
-                <h1>{% block title %} {{ postdetail.title }} {% endblock title %}</h1>
-                <p class=" text-muted">{{ postdetail.author }} | {{ postdetail.created_on }}</p>
-                <p class="card-text ">{{ postdetail.content | safe }}</p>
+                        <ion-icon name="thumbs-down" onclick="updateCardDownvote(${data.pk})" id="iconDown"></ion-icon>
+                        ${data.fields.downvote}
+                    `
+                    )
+                }
+            });
+        }
+        
+        function updateCardDownvote(id) {
+            $.ajax({
+                url: `/blog/updateDownvote/${id}`,
+                type: 'PATCH',
+                success: function (data) {  
+                    $(`#${id}-vote`).empty()
+                    $(`#${id}-vote`).append(
+                    `
+                        <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
+                        ${data.fields.upvote}
+
+                        <ion-icon name="thumbs-down"  onclick="updateCardDownvote(${data.pk})" id="iconDown"></ion-icon>
+                        ${data.fields.downvote}
+                    `
+                    )
+                }
+            });
+        } 
+    </script> -->
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+        <nav class="navbar shadow navbar-expand-lg bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+                </a>
+                <div class="d-flex flex-row">
+                    <div class="dropdown m-auto mx-3">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Profile
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+                        </ul>
+                    </div>
+                    <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+                    {% if user.is_verified_user %}
+                    <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                    {% else %}
+                    <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                    {% endif %}
+                </div>
             </div>
-        </div>
-        <div class="col-md-4 float-right">
-            <div class="card my-3">
-                <h5 class="card-header">Another Topic</h5>
+        </nav>
+    {% else %}
+        <nav class="navbar shadow navbar-expand-lg bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+                </a>
+                <div class="d-flex flex-row-reverse">
+                    <a class="btn btn-outline-primary p-2 m-3" role="button" href="{% url 'home:register' %}">Sign Up</a>
+                    <a class="btn btn-outline-success p-2 m-3" role="button" href="{% url 'home:login' %}">Log In</a>
+                </div>
+            </div>
+        </nav>
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 card mb-4  mt-3 left  top">
                 <div class="card-body">
-                
+                    <h1>{% block title %} {{ postdetail.title }} {% endblock title %}</h1>
+                    <p class=" text-muted">{{ postdetail.author }} | {{ postdetail.created_on }}</p>
+                    <p class="card-text ">{{ postdetail.content | safe }}</p>
+                </div>
+                <div class="d-flex justify-content-end m-3">
+                    <div id="{{postdetail.pk}}-vote">   
+                        {% if user.is_authenticated %}
+                            <ion-icon name="thumbs-up" onclick="alert('Silakan login untuk memberikan downvote')" id="iconUpvote"></ion-icon>
+                            {{postdetail.upvote}}
+
+                            <ion-icon name="thumbs-down" onclick="alert('Silakan login untuk memberikan downvote')" id="iconDown"></ion-icon>
+                            {{postdetail.downvote}}
+                        {% else %}
+                            <ion-icon name="thumbs-up" onclick="alert('Silakan login untuk memberikan upvote')" id="iconUpvote"></ion-icon>
+                            {{postdetail.upvote}}
+
+                            <ion-icon name="thumbs-down" onclick="alert('Silakan login untuk memberikan downvote')" id="iconDown"></ion-icon>
+                            {{postdetail.downvote}}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</body>
 
 {% endblock content %}
