@@ -29,8 +29,8 @@ def show_post(request):
 
     
 
-def post_detail(request, id):
-    post_detail = Post.objects.get(pk = id)
+def post_detail(request):
+    post_detail = Post.objects.all()
     context = {
         'postdetail' : post_detail,
     }
