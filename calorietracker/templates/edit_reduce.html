@@ -30,21 +30,17 @@
                     <div class="card-body p-5 text-center">
                         <div class = "login">
                             <h1 class="title fw-bold">Edit data</h1>
-                                <form method="POST" action="">
+                                <form method="POST" action="{% url 'calorietracker:edit_reduce_save' edit.id %}">
                                     {% csrf_token %}
                                     
                                     <td>Calorie</td>
                                     <td><input type="text" name="calorie" value="{{edit.calorie}}" class="form-control" id="input_calorie"></td>
+                                    
                                     <td>Deskripsi </td>
-                                    <td><input type="text" name="deskripsi" value="{{edit.description}}" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
-                                    <label for="category">Choose a category:</label>
-                                    <select name="{{edit.category}}" id="category" selected="{{edit.category}}">
-                                        <option value="Breakfast">Breakfast</option>
-                                        <option value="Lunch">Lunch</option>
-                                        <option value="Dinner">Dinner</option>
-                                        <option value="Snack">Snack</option>
-                                    </select>
-                                    <a href="details/${i.pk}" class="btn login_btn btn-primary mx-auto m-1" type="submit" value="Edit">Edit</button>
+                                    <td><input type="text" name="description" value="{{edit.description}}" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
+                                    
+                                   
+                                    <button class="btn login_btn btn-primary mx-auto m-1" type="submit" value="Edit">Edit</button>
                                  
                                 </form> 
                         </div>

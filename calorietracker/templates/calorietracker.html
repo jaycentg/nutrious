@@ -39,22 +39,22 @@ function createTable(){
         var counter_decrease = 0
         var total = 0
         for (let i of resp){
-            if ( i.fields.category == ' '){
+            if ( i.fields.category == 'Burn Calorie'){
                 data_card +=
                 `
                 <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
                     <div class="card-header">
-                    <h5 class="card-title">${i.fields.description}</h5>
+                    <h5 class="card-title">${i.fields.category}</h5>
                     </div>
                     <div class="card-body">
                         <p class="card-text">Calorie: ${i.fields.calorie}</p>
                         <p class="card-text">Description: ${i.fields.description}</p>
                         <p class="card-text">Date: ${i.fields.date}</p>
-                        <a href="details/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
+                        <a href="edit_reduce/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
                     </div>
                 </div>
                 `
-            }
+            }else{
             data_card +=
             `
             <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
@@ -66,10 +66,11 @@ function createTable(){
                     <p class="card-text">Description: ${i.fields.description}</p>
                     <p class="card-text">Date: ${i.fields.date}</p>
             
-                    <a href="edit/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
+                    <a href="edit_add/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
                 </div>
             </div>
             `
+            }
             ;
             if(i.fields.is_increasing){
                 counter_add += i.fields.calorie
@@ -91,7 +92,7 @@ $(document).ready(function(){
         console.log("test1")
         var calorie = $("#input_calorie1").val();
         var description = $("#input_deskripsi1").val();
-        var category = ' ';
+        var category = 'Burn Calorie';
         console.log("haha")
         $.post("reduce_calorie/",
         {
@@ -139,6 +140,10 @@ $('#Test1').click(function(e){
     e.preventDefault();
     $('#Modal1').modal();
 });
+$('#closeBtn').click(function(e){
+    e.preventDefault();
+    $('#Modal').modal('hide');
+})
 </script>
 {% endblock meta %}
 {% block content %}
@@ -158,10 +163,10 @@ $('#Test1').click(function(e){
                 </a>
                 <div class="d-flex flex-row">
                     <div class="dropdown m-auto mx-3">
-                        <button type="button"  class="btn button-custom rounded-pill" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
+                        <button type="button"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
                             Add Calorie
                         </button>
-                        <button type="button"  class="btn button-custom rounded-pill" data-bs-toggle="modal" data-bs-target="#Modal1" id="Test1">
+                        <button type="button"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal1" id="Test1">
                             Reduce Calorie
                         </button>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -180,23 +185,43 @@ $('#Test1').click(function(e){
                 {% csrf_token %}
                 <h1 class="text-uppercase">Calorie Tracker</h1>
                 <p >Selamat datang {{user}}!</p>
-                <p >Silahkan masukkan calorie makanan yang telah anda konsumsi</p>
-                <p>Jumlah calorie yang telah anda konsumsi:</p>
-                <div id = "counter_add"></div>
-                <div id = "counter_decrease"></div>
-                <div id = "total"></div>
-
+                <div class="row align-items-center justify-content-center">
+                    <div class="card" style="width: 18rem;">
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Calories you have consumed</h5>
+                          <div class="card-text" id="counter_add"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Calories you have burned</h5>
+                            <div class="card-text" id="counter_decrease"></div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card" style="width: 18rem;">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Your total accumulated calories</h5>
+                            <div class="card-text" id="total"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
                 <div class="modal" tabindex="-1" id="Modal">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title">Add calorie</h5>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <button id="closeBtn" class="close">&times;</button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
-                            <td><input type="text" name="judul" placeholder="Judul" class="form-control" id="input_calorie"></td>
-                  
+                            <td><input type="text" name="calorie" placeholder="Calorie" class="form-control" id="input_calorie"></td>
                             <td>Deskripsi </td>
                             <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
                             <label for="category">Choose a category:</label>
@@ -208,30 +233,30 @@ $('#Test1').click(function(e){
                             </select>
                         </div>
                         <div class="modal-footer">
-                          <button id="add" class="btn button-custom rounded-pill" data-dismiss="modal">Add Calorie</button>
+                            <button id="closeBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="add" class="btn btn-primary" data-dismiss="modal">Add Calorie</button>
                         </div>
-                        
                       </div>
                     </div>
                   </div>
+
                   <div class="modal" tabindex="-1" id="Modal1">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title">Reduce calorie</h5>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <button id="closeBtn" class="close">&times;</button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
-                            <td><input type="text" name="judul" placeholder="Judul" class="form-control" id="input_calorie1"></td>
+                            <td><input type="text" name="calorie" placeholder="Calorie" class="form-control" id="input_calorie1"></td>
                   
                             <td>Deskripsi </td>
                             <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi1"></td>
-                            <label for="category">Choose a car:</label>
-                       
                         </div>
                         <div class="modal-footer">
-                          <button id="decrease" class="btn button-custom rounded-pill" data-dismiss="modal">Reduce Calorie</button>
+                            <button id="closeBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="decrease" class="btn btn-primary" data-dismiss="modal">Reduce Calorie</button>
                         </div>
                         
                       </div>
