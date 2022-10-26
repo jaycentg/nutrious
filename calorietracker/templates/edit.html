@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<nav class="navbar shadow navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
+        </a>
+        <div class="d-flex flex-row">
+            <div class="dropdown m-auto mx-3">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Profile
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </nav>
+<footer style="position:fixed justify-content center; bottom: 0;" class="bg-secondary text-center text-lg-start shadow text-light">
+    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
+</footer>
+{% endblock %}
