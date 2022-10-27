@@ -38,23 +38,50 @@ function createCard(){
         var counter_decrease = 0
         var total = 0
         for (let i of resp){
+            console.log(i.id)
+            if ( i.fields.category == 'Burn Calorie'){
                 data_card +=
-                
                 `
-                <div class="card mb-4  mt-3 left top">
+                <div class="card mb-4  mt-3 left  top">
                     <div class="card-header">
-                    <h4 class="card-title fw-bold">${i.fields.category}</h4>
+                    <h5 class="card-title">${i.fields.category}</h5>
                     </div>
                     <div class="card-body">
                         <p class="card-text">Calorie: ${i.fields.calorie}</p>
                         <p class="card-text">Description: ${i.fields.description}</p>
                         <p class="card-text">Date: ${i.fields.date}</p>
-                        <a href="edit_reduce/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
-                        <a href="delete/${i.pk}" class="btn btn-primary stretched-link">Delete</a>
+                        <div class="card-footer">
+                    <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
+                    
+                    <a href="edit_reduce/${i.pk}" class="btn btn-primary link">Edit</a>
+                </div>
+                        
                     </div>
                 </div>
                 `
-            
+            }else{
+            data_card +=
+            `
+            <div class="card mb-4  mt-3 left  top">
+                <div class="card-header">
+                <h5 class="card-title">${i.fields.category}</h5>
+                </div>
+                <div class="card-body">
+                   
+                    <p class="card-text">Calorie: ${i.fields.calorie}</p>
+                    <p class="card-text">Description: ${i.fields.description}</p>
+                    <p class="card-text">Date: ${i.fields.date}</p>
+                <div class="card-footer">
+                    <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
+                    
+                    <a href="edit_add/${i.pk}" class="btn btn-primary link">Edit</a>
+                </div>
+                  
+                
+                </div>
+            </div>
+            `
+            }
             ;
             if(i.fields.is_increasing){
                 counter_add += i.fields.calorie
@@ -76,6 +103,8 @@ $(document).ready(function(){
     document.getElementById('total').innerText = 0
     createCard();
     deleteCard();
+    const date = new Date();
+    console.log(date)
     $("#decrease").click(function(e){
         console.log("test1")
         var calorie = $("#input_calorie1").val();
