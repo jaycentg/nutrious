@@ -1,106 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block meta %}
 <title>Donation</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
-<script>
-    const rupiah = (number)=>{
-        return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR"
-        }).format(number);
-    };
-
-    function getPercentage(needed, collected){
-        if(needed <= collected){
-            return '100'
-        } else{
-            let percent = Math.ceil((collected/needed)*100)
-            return percent.toString()
-        };
-    };
-
-    function loadData(){
-        $('#card').empty();
-        let data_card ="";
-        $.ajax({
-            url: "{% url 'donation:show_json_user' %}",
-            type: "GET",
-            dataType: "json",
-            success: function(resp){
-                if (resp.length == 0){
-                    data_card += `
-                        <div class="text-center fw-bold">No Donation</div>
-                        <div class="text-center"> Donations that you create will appear here</div>
-                    `
-                } else{
-                    for (let i of resp){
-                        //let is_verified= i.fields.is_verified ? `<h5 class="card-text" style="color:#25f314;">Verified</h5>` : `<h5 class="card-text" style="color:red;">Not Verified</h5>`
-                        let needed_left = i.fields.amountNeeded - i.fields.collectedFunds
-                        needed_left = needed_left < 0 ? 0 : needed_left
-                        let amountNeeded = parseInt(i.fields.amountNeeded)
-                        let collectedFunds = parseInt(i.fields.collectedFunds)
-                        let percent = getPercentage(amountNeeded, collectedFunds)
-                        let is_Collected = i.fields.amountNeeded <= i.fields.collectedFunds ? "Collected" : "Not yet collected"
-                        let isVerified= i.fields.is_verified ? "Verified" : "Not Verified"
-                        data_card +=`
-                            <div class="card card-donatee p-2 m-2" id="donatee-${i.pk}">
-                                <div class="card-body m-2">
-                                    <div class="card-header">
-                                        <div class="card-title fw-bold h2">${i.fields.name}</div>
-                                        <div class="card-text m-1">Verification status: ${isVerified}</div>
-                                    </div>
-                                    <div class="card-text m-1">Description: ${i.fields.description}</div>
-                                    <div class="card-text m-1">Amount Needed: <span class="fw-bold">${rupiah(amountNeeded)}</span></div>
-                                    <div class="card-text m-1">Collected Funds: <span class="fw-bold">${rupiah(collectedFunds)}</span></div>
-                                    <div class="card-text m-1">Amount left: <span class="fw-bold">${rupiah(parseInt(needed_left))}</span></div>
-                                    <div class="card-text m-1">Donation Status: <span class="fw-bold">${is_Collected}</span></div>
-                                    <div class="progress mt-3 mx-1">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: ${percent}%" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <br>
-                                    <a href="delete/${i.pk}" class="btn btn-danger">Close Donatee</a>
-                                </div>
-                            </div>
-                        `
-                    }
-                }
-                $('#card').append(data_card);
-            },
-            error: function(resp){
-                console.log('Error?');
-            }
-        })
-    }
-
-    $(document).ready(function(){
-        loadData();
-    });
-
-
-</script>
-<style>
-    /* Dim and disable the button while the form is invalid */
-    form:invalid button {
-        opacity: 0.3;
-        pointer-events: none;
-    }
-    .card-donatee{
-        transition: 0.3s;
-    }
-    .card-donatee:hover{
-        background-color: #BEBEBE;
-    }
-    .avatar{
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-    }
-    body{
-        background-color: azure;
-    }
-</style>
+<link rel="stylesheet" href="{% static '/donationPageStyle.css' %}" />
+<link rel="stylesheet" href="{% static '/invalidButton.css' %}" />
+<script src="{% static '/donationPageUserJS.js' %}"></script>
 {% endblock meta %}
 
 {% block content %}
@@ -113,7 +20,9 @@
         </a>
 
         <div class="d-flex flex-row">
+            {% if user.is_verified_user %}
             <a class="m-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Open Donations</a>
+            {% endif %}
             <div class="dropdown m-auto mx-3">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Profile
