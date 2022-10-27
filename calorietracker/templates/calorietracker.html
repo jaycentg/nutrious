@@ -3,6 +3,9 @@
 {% load static %}
 {% block meta %}
 <style>
+body{
+    background-color: rgb(116, 177, 177);
+}
 th, td {
     padding-top: 10px;
     padding-bottom: 20px;
@@ -14,9 +17,7 @@ th, td {
     height: 50px;
     object-fit: cover;
 }
-body{
-    background-color: azure;
-}
+
 /* Dim and disable the button while the form is invalid */
 form:invalid button {
     opacity: 0.3;
@@ -28,8 +29,28 @@ form:invalid button {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
 <script>
+    function deleteCard(){
+    console.log("test1111")
+    $.get("json/", function(resp) {
+       var date = new Date();
+        for (let i of resp){
+            console.log(i.pk)
+            x = i.fields.date.split("-")
+            date1 = x[2]
+            if(parseInt(date1)<parseInt(date.getDate())){
+                console.log("jj")
+                $.ajax({
+                url: "delete/" + i.pk,
+            error: function (data) {
+                alert("it didnt work");
+        }
+    });
+            }
+        }
+    })
+}   
         
-function createTable(){
+function createCard(){
     $('#card').empty();
     let data_card ="";
     console.log("test3")
@@ -42,7 +63,7 @@ function createTable(){
             if ( i.fields.category == 'Burn Calorie'){
                 data_card +=
                 `
-                <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
+                <div class="card mb-4  mt-3 left  top">
                     <div class="card-header">
                     <h5 class="card-title">${i.fields.category}</h5>
                     </div>
@@ -51,13 +72,14 @@ function createTable(){
                         <p class="card-text">Description: ${i.fields.description}</p>
                         <p class="card-text">Date: ${i.fields.date}</p>
                         <a href="edit_reduce/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
+                        <a href="delete/${i.pk}" class="btn btn-primary stretched-link">Delete</a>
                     </div>
                 </div>
                 `
             }else{
             data_card +=
             `
-            <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
+            <div class="card mb-4  mt-3 left  top">
                 <div class="card-header">
                 <h5 class="card-title">${i.fields.category}</h5>
                 </div>
@@ -67,6 +89,7 @@ function createTable(){
                     <p class="card-text">Date: ${i.fields.date}</p>
             
                     <a href="edit_add/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
+                    <a href="delete/${i.pk}" class="btn btn-primary stretched-link">Delete</a>
                 </div>
             </div>
             `
@@ -87,23 +110,29 @@ function createTable(){
 }          
 $(document).ready(function(){
     console.log("test")
-    createTable();
+    document.getElementById('counter_add').innerText = 0
+    document.getElementById('counter_decrease').innerText = 0
+    document.getElementById('total').innerText = 0
+    createCard();
+    deleteCard();
     $("#decrease").click(function(e){
         console.log("test1")
         var calorie = $("#input_calorie1").val();
         var description = $("#input_deskripsi1").val();
         var category = 'Burn Calorie';
+        const date = new Date();
         console.log("haha")
         $.post("reduce_calorie/",
         {
             calorie,
             description,
-            category
+            category,
+            date,
         },
         
         function(data, status){
             console.log("test6")
-            createTable();
+            createCard();
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
             document.getElementById("category1").value;
@@ -114,15 +143,17 @@ $(document).ready(function(){
         var calorie = $("#input_calorie").val();
         var description = $("#input_deskripsi").val();
         var category = document.getElementById("category").value;
+        const date = new Date();
         $.post("add_calorie/",
         {
             calorie,
             description,
             category,
+            date,
         },
         function(data, status){
             console.log("test6")
-            createTable();
+            createCard();
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
             document.getElementById("category").value;
@@ -249,7 +280,7 @@ $('#closeBtn').click(function(e){
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
-                            <td><input type="text" name="calorie" placeholder="Calorie" class="form-control" id="input_calorie1"></td>
+                            <td><input type="text" name="calorie"  min="0" placeholder="Calorie" class="form-control" id="input_calorie1"></td>
                   
                             <td>Deskripsi </td>
                             <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi1"></td>
