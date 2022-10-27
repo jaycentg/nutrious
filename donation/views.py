@@ -76,7 +76,7 @@ def donation_detail(request, id):
     return render(request, "donation_details.html", context)
 
 def donate(request, id):
-    if request.method == 'POST':
+    if request.POST.get('action') == 'post':
         donatee = Donatee.objects.get(id=id)
         donatee.collectedFunds = donatee.collectedFunds + int(request.POST.get('amount'))
         donatee.save()
