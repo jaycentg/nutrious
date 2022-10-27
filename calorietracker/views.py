@@ -23,7 +23,8 @@ def add_calorie(request):
 		calorie = request.POST.get("calorie")
 		description = request.POST.get("description")
 		category = request.POST.get("category")
-		Calorie.objects.create(category = category,is_increasing = True, date = datetime.datetime.now(),calorie= calorie, description = description, user=request.user)
+		date= request.POST.get('date')
+		Calorie.objects.create(category = category,is_increasing = True, date =date,calorie= calorie, description = description, user=request.user)
 		return HttpResponse()
 	else:
 		return redirect('calorietracker:show_caloriepage')
@@ -35,7 +36,8 @@ def reduce_calorie(request):
 		calorie = request.POST.get("calorie")
 		description = request.POST.get("description")
 		category = request.POST.get("category")
-		Calorie.objects.create(category = category,is_increasing = False, date = datetime.datetime.now(), calorie = calorie, description = description, user=request.user)
+		date= request.POST.get('date')
+		Calorie.objects.create(category = category,is_increasing = False, date = date, calorie = calorie, description = description, user=request.user)
 		return HttpResponse()
 	else:
 		return redirect('calorietracker:show_caloriepage')
@@ -61,6 +63,20 @@ def edit_reduce_save(request, id):
 		x = Calorie.objects.get(pk = id)
 		x.calorie = request.POST['calorie']
 		x.description = request.POST['description']
+		
 		x.save()
 		
 		return redirect('calorietracker:show_caloriepage')
+def edit_add_save(request, id):
+	if request.method == "POST":
+		x = Calorie.objects.get(pk = id)
+		x.calorie = request.POST['calorie']
+		x.description = request.POST['description']
+		x.category = request.POST['category']
+		x.save()
+		
+		return redirect('calorietracker:show_caloriepage')
+def delete(request, id):
+	edit = Calorie.objects.get(pk = id)
+	edit.delete()
+	return redirect('calorietracker:show_caloriepage')

@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta %}
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(data){
+        var data = ("{{edit.category}}");
+         $("#category").val(data);
+    });
+    
+</script>
 {% endblock meta %}
 {% block content %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
@@ -30,23 +37,24 @@
                     <div class="card-body p-5 text-center">
                         <div class = "login">
                             <h1 class="title fw-bold">Edit data</h1>
-                                <form method="POST" action="">
+                                <form method="POST" action="{% url 'calorietracker:edit_add_save' edit.id %}">
                                     {% csrf_token %}
                                     
                                     <td>Calorie</td>
                                     <td><input type="text" name="calorie" value="{{edit.calorie}}" class="form-control" id="input_calorie"></td>
+                                    <br>
                                     <td>Deskripsi </td>
-                                    <td><input type="text" name="deskripsi" value="{{edit.description}}" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
+                                    <td><input type="text" name="description" value="{{edit.description}}" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
+                                    <br>
                                     <label for="category">Choose a category:</label>
-                                    <select name="{{edit.category}}" id="category" selected="{{edit.category}}">
+                                    <select name="category" id="category">
                                         <option value="Breakfast">Breakfast</option>
                                         <option value="Lunch">Lunch</option>
                                         <option value="Dinner">Dinner</option>
                                         <option value="Snack">Snack</option>
                                     </select>
-                                    <a href="details/${i.pk}" class="btn login_btn btn-primary mx-auto m-1" type="submit" value="Edit">Edit</button>
-                                 
-                                </form> 
+                                    <div><br><button class="btn login_btn btn-primary mx-auto m-1" type="submit" value="Edit">Edit</button></div>
+                            </form> 
                         </div>
                     </div>
                 </div>
