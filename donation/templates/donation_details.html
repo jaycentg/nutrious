@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
 <title>Donatee Details</title>
 
@@ -8,13 +10,7 @@
     }
 </script>
 
-<style>
-    /* Dim and disable the button while the form is invalid */
-    form:invalid button {
-        opacity: 0.3;
-        pointer-events: none;
-    }
-</style>
+<link rel="stylesheet" href="{% static '/invalidButton.css' %}" />
 {% endblock meta %}
 
 {% block content %}
