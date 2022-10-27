@@ -2,28 +2,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta %}
-<style>
-body{
-    background-color: rgb(116, 177, 177);
-}
-th, td {
-    padding-top: 10px;
-    padding-bottom: 20px;
-    padding-left: 30px;
-    padding-right: 40px;
-}
-.avatar{
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-}
-
-/* Dim and disable the button while the form is invalid */
-form:invalid button {
-    opacity: 0.3;
-    pointer-events: none;
-}
-</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -60,12 +38,12 @@ function createCard(){
         var counter_decrease = 0
         var total = 0
         for (let i of resp){
-            if ( i.fields.category == 'Burn Calorie'){
                 data_card +=
+                
                 `
-                <div class="card mb-4  mt-3 left  top">
+                <div class="card mb-4  mt-3 left top">
                     <div class="card-header">
-                    <h5 class="card-title">${i.fields.category}</h5>
+                    <h4 class="card-title fw-bold">${i.fields.category}</h4>
                     </div>
                     <div class="card-body">
                         <p class="card-text">Calorie: ${i.fields.calorie}</p>
@@ -76,24 +54,7 @@ function createCard(){
                     </div>
                 </div>
                 `
-            }else{
-            data_card +=
-            `
-            <div class="card mb-4  mt-3 left  top">
-                <div class="card-header">
-                <h5 class="card-title">${i.fields.category}</h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Calorie: ${i.fields.calorie}</p>
-                    <p class="card-text">Description: ${i.fields.description}</p>
-                    <p class="card-text">Date: ${i.fields.date}</p>
             
-                    <a href="edit_add/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
-                    <a href="delete/${i.pk}" class="btn btn-primary stretched-link">Delete</a>
-                </div>
-            </div>
-            `
-            }
             ;
             if(i.fields.is_increasing){
                 counter_add += i.fields.calorie
@@ -175,15 +136,26 @@ $('#closeBtn').click(function(e){
     e.preventDefault();
     $('#Modal').modal('hide');
 })
+$('#closeBtn').click(function(e){
+    e.preventDefault();
+    $('#Modal1').modal('hide');
+})
 </script>
+<style>
+    body{
+    background-color: azure;
+}
+</style>
+
 {% endblock meta %}
+
 {% block content %}
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE-edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>CalorieTracker</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   
+
     </head>
     <body>
         {% if user.is_user %}
@@ -214,11 +186,10 @@ $('#closeBtn').click(function(e){
         <div class="align-items-center justify-content-center">
             <form class="text-center" method="POST">
                 {% csrf_token %}
-                <h1 class="text-uppercase">Calorie Tracker</h1>
-                <p >Selamat datang {{user}}!</p>
+                <br>
                 <div class="row align-items-center justify-content-center">
                     <div class="card" style="width: 18rem;">
-                      <div class="card">
+                      <div class="card text-white bg-success mb-3">
                         <div class="card-body">
                           <h5 class="card-title">Calories you have consumed</h5>
                           <div class="card-text" id="counter_add"></div>
@@ -226,7 +197,7 @@ $('#closeBtn').click(function(e){
                       </div>
                     </div>
                     <div class="card" style="width: 18rem;">
-                        <div class="card">
+                        <div class="card text-white bg-danger mb-3">
                           <div class="card-body">
                             <h5 class="card-title">Calories you have burned</h5>
                             <div class="card-text" id="counter_decrease"></div>
@@ -234,7 +205,7 @@ $('#closeBtn').click(function(e){
                         </div>
                     </div>
                     <div class="card" style="width: 18rem;">
-                        <div class="card">
+                        <div class="card text-white bg-info mb-3">
                           <div class="card-body">
                             <h5 class="card-title">Your total accumulated calories</h5>
                             <div class="card-text" id="total"></div>
@@ -243,18 +214,20 @@ $('#closeBtn').click(function(e){
                     </div>
                 </div>
                 <br>
-                <div class="modal" tabindex="-1" id="Modal">
+                <div class="modal" tabindex="-1" id="Modal" >
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title">Add calorie</h5>
+                          <h3 class="modal-title w-100 text-center fw-bold pl-100">Add calorie</h5>
                           <button id="closeBtn" class="close">&times;</button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
-                            <td><input type="text" name="calorie" placeholder="Calorie" class="form-control" id="input_calorie"></td>
+                            <td><input type="number" name="calorie" min="0" placeholder="Calorie" class="form-control" id="input_calorie"  oninput="validity.valid||(value='');"/></td>
+                            <br>
                             <td>Deskripsi </td>
-                            <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
+                            <textarea name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi"></textarea>
+                            <br>
                             <label for="category">Choose a category:</label>
                             <select name="category" id="category">
                                 <option value="Breakfast">Breakfast</option>
@@ -264,8 +237,8 @@ $('#closeBtn').click(function(e){
                             </select>
                         </div>
                         <div class="modal-footer">
-                            <button id="closeBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="add" class="btn btn-primary" data-dismiss="modal">Add Calorie</button>
+                            <button id="closeBtn" class="btn btn-secondary" >Close</button>
+                            <button id="add" class="btn btn-primary" >Add Calorie</button>
                         </div>
                       </div>
                     </div>
@@ -280,14 +253,14 @@ $('#closeBtn').click(function(e){
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
-                            <td><input type="text" name="calorie"  min="0" placeholder="Calorie" class="form-control" id="input_calorie1"></td>
-                  
+                            <td><input type="number" name="calorie"  min="0" placeholder="Calorie" class="form-control" id="input_calorie1" oninput="validity.valid||(value='');"/></td>
+                            <br>
                             <td>Deskripsi </td>
-                            <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi1"></td>
+                            <textarea name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi1"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button id="closeBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="decrease" class="btn btn-primary" data-dismiss="modal">Reduce Calorie</button>
+                            <button id="closeBtn" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                            <button id="decrease" class="btn btn-primary"  data-dismiss="modal">Reduce Calorie</button>
                         </div>
                         
                       </div>
@@ -316,18 +289,10 @@ $('#closeBtn').click(function(e){
                   </div>
             </div>
         </nav>
-        <alert>You have to log in to use calorie tracker features of NUTRIOUS </alert>
+        <h1>You have to log in to use calorie tracker features of NUTRIOUS </h1>
         {% endif %}
     </body>
     <footer style="position:fixed; bottom: 0;" class="bg-secondary text-center text-lg-start shadow text-light">
         <div class="text-center p-3">2022: Platform-Based Programming F02</div>
     </footer>
-    {% endblock content %}
-        
-         
-      
-
-
-
- 
- 
+{% endblock content %}

@@ -10,9 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import datetime
 def show_caloriepage(request):
-	
+	data = Calorie.objects.order_by('-date')
 	context = {
     	'user' : request.user,
+		'data' : data
 	}
 	return render(request, 'calorietracker.html',context)
 
