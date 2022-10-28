@@ -16,7 +16,7 @@ def show_post(request):
         if (user.tag not in postarr):
             postarr.append(user.tag)
 
-    postarr.remove("")
+    print(postarr)
     context = {
         'postlist' : data_post,
         'taglist' : postarr
@@ -44,8 +44,11 @@ def upload(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
         tag = request.POST.get('tag')
-
+        # created_on= datetime.datetime.now()
+        # time = created_on.strftime("%Y-%m-%d %H:%M")
+        # print(time)
         post = Post.objects.create(title=title, author=request.user.nickname, content=content, created_on=datetime.datetime.now(), upvote=0, downvote=0, vote_state=2, tag=tag)
+        print(post.created_on)
 
         return redirect('blog:show_post')
 
