@@ -29,7 +29,7 @@ def show_index(request):
         # Jika user merupakan admin
         if request.user.is_admin:
             context = {}
-            context['users'] = AppUser.objects.filter(is_admin=False)
+            context['users'] = AppUser.objects.filter(is_admin=False, is_superuser=False)
             context['donatees'] = Donatee.objects.all()
             context['username'] = request.user.username
             context['profile_url'] = request.user.profile_pict_url
@@ -89,7 +89,7 @@ def logout_user(request):
 
 @login_required(login_url='/login/')
 def json_user(request):
-    data = AppUser.objects.all()
+    data = AppUser.objects.filter(is_admin=False, is_superuser=False)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @login_required(login_url='/login/')
