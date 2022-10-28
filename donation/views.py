@@ -12,6 +12,7 @@ from donation.forms import OpenDonationForm
 # Create your views here.
 @login_required(login_url='/login/')
 def show_donation(request):
+
     if request.method == 'POST':
 
         form = OpenDonationForm(request.POST)
@@ -35,16 +36,16 @@ def show_donation(request):
 
 @login_required(login_url='/login/')
 def show_donation_user(request):
-    if request.method == 'POST':
 
-            form = OpenDonationForm(request.POST)
+    if request.POST.get('action') == 'post':
+            name = request.POST.get('name')
+            description = request.POST.get('description')
+            amountNeeded = request.POST.get('amountNeeded')
+            user = request.user
+            obj_baru = Donatee(opener = user, name = name, description = description, amountNeeded = amountNeeded)
+            obj_baru.save()
 
-            if form.is_valid():
-                donatee = form.save()
-                donatee.opener = request.user
-                donatee.save()
-
-                return redirect('donation:show_donation_user')
+            return JsonResponse({'status': 'berhasil dibuka'}, status=200)
 
     else:
         form = OpenDonationForm()
@@ -85,7 +86,7 @@ def donate(request, id):
 @csrf_exempt
 def donation_delete(request, id):
     Donatee.objects.filter(id=id).delete()
-    return redirect('donation:show_donation_user')
+    return JsonResponse({'status': 'berhasil ditutup'}, status=200)
 
 @login_required(login_url='/login/')
 def delete_by_admin(request, id):
