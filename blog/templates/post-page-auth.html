@@ -23,6 +23,10 @@
         fill: #de0505;
         transform: scale(1.54);
     }
+    #share:hover {
+        fill: #041cfa;
+        transform: scale(1.54);
+    }
 
     .avatar{
         width: 50px;
@@ -106,6 +110,7 @@
                                     <div class="d-flex justify-content-between mt-3">
                                         <a href="/blog/details/?id=${data.pk}" class="btn btn-primary">Read More &rarr;</a>
                                         <div id="${data.pk}-vote" >   
+
                                             <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
                                             ${data.fields.upvote}
 
@@ -118,7 +123,8 @@
                         </div>
                     </div>
                 </div>
-            </div>`
+            </div>
+            `
         
         function loadData() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -191,15 +197,20 @@
 
     
     <div class="d-flex justify-content-center gap-3">
-        <a href="/blog/add-post/" class="btn btn-primary">Share a healthy tips</a>
+        <a href="/blog/add-post/" class="btn btn-primary">Share a healthy tips <ion-icon name="pencil-outline"></ion-icon> </a>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tagModal">
-            Search for available post
+            Search for available post 
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag-fill" viewBox="0 0 16 16">
+                <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+            </svg>
         </button>
     </div>
     <div class="grid lg:grid-cols-5 md:grid-cols-2 gap-5 mt-8 sm:mt-5 px-4 py-4" id="post"></div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+    <!-- Modal tag -->
+    <div class="modal fade modal-dialog-scrollable" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -218,9 +229,9 @@
         </div>
         </div>
     </div>
+
+    
 </body>
-
-
 
 
 {%endblock%}
