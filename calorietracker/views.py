@@ -13,7 +13,7 @@ def show_caloriepage(request):
 	data = Calorie.objects.order_by('-date')
 	context = {
     	'user' : request.user,
-		'data' : data
+		'data' : data,
 	}
 	return render(request, 'calorietracker.html',context)
 
@@ -25,7 +25,8 @@ def add_calorie(request):
 		description = request.POST.get("description")
 		category = request.POST.get("category")
 		date= request.POST.get('date')
-		Calorie.objects.create(category = category,is_increasing = True, date =date,calorie= calorie, description = description, user=request.user)
+		time= request.POST.get('time')
+		Calorie.objects.create(time = time,category = category,is_increasing = True, date =date,calorie= calorie, description = description, user=request.user)
 		return HttpResponse()
 	else:
 		return redirect('calorietracker:show_caloriepage')
@@ -38,7 +39,9 @@ def reduce_calorie(request):
 		description = request.POST.get("description")
 		category = request.POST.get("category")
 		date= request.POST.get('date')
-		Calorie.objects.create(category = category,is_increasing = False, date = date, calorie = calorie, description = description, user=request.user)
+		time= request.POST.get('time')
+		Calorie.objects.create(time = time,category = category,is_increasing = False, date =date,calorie= calorie, description = description, user=request.user)
+
 		return HttpResponse()
 	else:
 		return redirect('calorietracker:show_caloriepage')

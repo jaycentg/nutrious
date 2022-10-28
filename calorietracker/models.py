@@ -12,6 +12,7 @@ class Calorie(models.Model):
     user = models.ForeignKey(AppUser, on_delete= models.CASCADE)
     calorie= models.IntegerField(default=0,null=True,blank=True)
     date = models.DateTimeField(auto_now_add = True)
+    time = models.CharField(max_length = 300, default='')
     is_increasing = models.BooleanField()
     class Meta:
         ordering = ['-date']

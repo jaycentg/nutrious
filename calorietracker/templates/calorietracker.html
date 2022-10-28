@@ -6,17 +6,33 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+<style>
+.card-calorie:hover{
+    transform: scale(1.02);
+}
+.avatar{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+body{
+    background-color: azure;
+}
+.button{
+    background-color:rgb(255, 223, 95);
+    color:white;
+}
+
+  
+</style>
 <script>
-    function deleteCard(){
-    console.log("test1111")
+function deleteCard(){
     $.get("json/", function(resp) {
        var date = new Date();
         for (let i of resp){
-            console.log(i.pk)
-            x = i.fields.date.split("-")
-            date1 = x[2]
-            if(parseInt(date1)<parseInt(date.getDate())){
-                console.log("jj")
+            x=i.fields.date
+            tanggal = x.slice(8,10)
+            if(tanggal<date.getDate()){
                 $.ajax({
                 url: "delete/" + i.pk,
             error: function (data) {
@@ -31,56 +47,39 @@
 function createCard(){
     $('#card').empty();
     let data_card ="";
-    console.log("test3")
     $.get("json/", function(resp) {
-        console.log("test4")
         var counter_add = 0
         var counter_decrease = 0
         var total = 0
         for (let i of resp){
-            console.log(i.id)
             if ( i.fields.category == 'Burn Calorie'){
                 data_card +=
                 `
-                <div class="card mb-4  mt-3 left  top">
-                    <div class="card-header">
-                    <h5 class="card-title">${i.fields.category}</h5>
-                    </div>
+                <div class="card mb-4 card-calorie">
                     <div class="card-body">
-                        <p class="card-text">Calorie: ${i.fields.calorie}</p>
-                        <p class="card-text">Description: ${i.fields.description}</p>
-                        <p class="card-text">Date: ${i.fields.date}</p>
-                        <div class="card-footer">
-                    <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
-                    
-                    <a href="edit_reduce/${i.pk}" class="btn btn-primary link">Edit</a>
-                </div>
-                        
+                        <div class="card-title fw-bold h2">${i.fields.category}</div>
+                        <div class="card-text m-1">Calorie: ${i.fields.calorie}</div>
+                        <div class="card-text m-1">Description: ${i.fields.description}</div>
+                        <div class="card-text m-1">Time added: ${i.fields.time}</div>
+                        <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
+                        <a href="edit_reduce/${i.pk}" class="btn btn-primary link">Edit</a>
                     </div>
                 </div>
                 `
             }else{
             data_card +=
             `
-            <div class="card mb-4  mt-3 left  top">
-                <div class="card-header">
-                <h5 class="card-title">${i.fields.category}</h5>
+                <div class="card mb-4 card-calorie">
+                    <div class="card-body">
+                        <div class="card-title fw-bold h2">${i.fields.category}</div>
+                        <div class="card-text m-1">Calorie: ${i.fields.calorie}</div>
+                        <div class="card-text m-1">Description: ${i.fields.description}</div>
+                        <div class="card-text m-1">Time added: ${i.fields.time}</div>
+                        <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
+                        <a href="edit_add/${i.pk}" class="btn btn-primary link">Edit</a>
+                    </div>
                 </div>
-                <div class="card-body">
-                   
-                    <p class="card-text">Calorie: ${i.fields.calorie}</p>
-                    <p class="card-text">Description: ${i.fields.description}</p>
-                    <p class="card-text">Date: ${i.fields.date}</p>
-                <div class="card-footer">
-                    <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
-                    
-                    <a href="edit_add/${i.pk}" class="btn btn-primary link">Edit</a>
-                </div>
-                  
-                
-                </div>
-            </div>
-            `
+                `
             }
             ;
             if(i.fields.is_increasing){
@@ -97,31 +96,31 @@ function createCard(){
     })
 }          
 $(document).ready(function(){
-    console.log("test")
+    var date = new Date();
+    document.getElementById('date-info').innerText = date.toDateString();
     document.getElementById('counter_add').innerText = 0
     document.getElementById('counter_decrease').innerText = 0
     document.getElementById('total').innerText = 0
     createCard();
     deleteCard();
-    const date = new Date();
-    console.log(date)
     $("#decrease").click(function(e){
-        console.log("test1")
         var calorie = $("#input_calorie1").val();
         var description = $("#input_deskripsi1").val();
-        var category = 'Burn Calorie';
-        const date = new Date();
-        console.log("haha")
+        var category = 'Burn Calorie'
+        var date = new Date();
+        var hours = date.getHours();  
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds(); 
+        time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
         $.post("reduce_calorie/",
         {
             calorie,
             description,
             category,
+            time,
             date,
         },
-        
         function(data, status){
-            console.log("test6")
             createCard();
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
@@ -129,16 +128,20 @@ $(document).ready(function(){
         });
     });
     $("#add").click(function(e){
-        console.log("test1")
         var calorie = $("#input_calorie").val();
         var description = $("#input_deskripsi").val();
         var category = document.getElementById("category").value;
-        const date = new Date();
+        var date = new Date();
+        var hours = date.getHours();  
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds(); 
+        time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
         $.post("add_calorie/",
         {
             calorie,
             description,
             category,
+            time,
             date,
         },
         function(data, status){
@@ -152,12 +155,10 @@ $(document).ready(function(){
     
 });
 $('#Test').click(function(e){
-    console.log("test2")
     e.preventDefault();
     $('#Modal').modal();
 });
 $('#Test1').click(function(e){
-    console.log("test2")
     e.preventDefault();
     $('#Modal1').modal();
 });
@@ -170,11 +171,7 @@ $('#closeBtn').click(function(e){
     $('#Modal1').modal('hide');
 })
 </script>
-<style>
-    body{
-    background-color: azure;
-}
-</style>
+
 
 {% endblock meta %}
 
@@ -195,10 +192,10 @@ $('#closeBtn').click(function(e){
                 </a>
                 <div class="d-flex flex-row">
                     <div class="dropdown m-auto mx-3">
-                        <button type="button"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
+                        <button type="button"  class="btn button" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
                             Add Calorie
                         </button>
-                        <button type="button"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal1" id="Test1">
+                        <button type="button"  class="btn button" data-bs-toggle="modal" data-bs-target="#Modal1" id="Test1">
                             Reduce Calorie
                         </button>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -209,32 +206,43 @@ $('#closeBtn').click(function(e){
                             <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                         </ul>
                     </div>
+                     <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+                    {% if user.is_verified_user %}
+                    <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                    {% else %}
+                    <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                    {% endif %}
                 </div>
             </div>
         </nav>
-        <div class="align-items-center justify-content-center">
-            <form class="text-center" method="POST">
+        <div>
+            <form method="POST">
                 {% csrf_token %}
                 <br>
-                <div class="row align-items-center justify-content-center">
-                    <div class="card" style="width: 18rem;">
-                      <div class="card text-white bg-success mb-3">
+                <div class="text-center">
+                <h2 class="fw-bold">Welcome {{user}} !</h2>
+                <p>This is your calorie tracker for today</p>
+                <p id="date-info"></p>
+                </div>
+                <div class="row align-items-center justify-content-center text-center">
+                    <div  style="width: 18rem;">
+                      <div class="card mb-3 card-calorie">
                         <div class="card-body">
                           <h5 class="card-title">Calories you have consumed</h5>
                           <div class="card-text" id="counter_add"></div>
                         </div>
                       </div>
                     </div>
-                    <div class="card" style="width: 18rem;">
-                        <div class="card text-white bg-danger mb-3">
+                    <div  style="width: 18rem;">
+                        <div class="card mb-3 card-calorie">
                           <div class="card-body">
                             <h5 class="card-title">Calories you have burned</h5>
                             <div class="card-text" id="counter_decrease"></div>
                           </div>
                         </div>
                     </div>
-                    <div class="card" style="width: 18rem;">
-                        <div class="card text-white bg-info mb-3">
+                    <div  style="width: 18rem;">
+                        <div class="card mb-3 card-calorie">
                           <div class="card-body">
                             <h5 class="card-title">Your total accumulated calories</h5>
                             <div class="card-text" id="total"></div>
@@ -266,8 +274,8 @@ $('#closeBtn').click(function(e){
                             </select>
                         </div>
                         <div class="modal-footer">
+                            <button id="add" class="btn button" >Add Calorie</button>
                             <button id="closeBtn" class="btn btn-secondary" >Close</button>
-                            <button id="add" class="btn btn-primary" >Add Calorie</button>
                         </div>
                       </div>
                     </div>
@@ -277,8 +285,8 @@ $('#closeBtn').click(function(e){
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title">Reduce calorie</h5>
-                          <button id="closeBtn" class="close">&times;</button>
+                            <h3 class="modal-title w-100 text-center fw-bold pl-100">Reduce calorie</h5>
+                            <button id="closeBtn" class="close">&times;</button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
@@ -288,17 +296,18 @@ $('#closeBtn').click(function(e){
                             <textarea name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi1"></textarea>
                         </div>
                         <div class="modal-footer">
+                            <button id="decrease" class="btn button"  data-dismiss="modal">Reduce Calorie</button>
                             <button id="closeBtn" class="btn btn-secondary"  data-dismiss="modal">Close</button>
-                            <button id="decrease" class="btn btn-primary"  data-dismiss="modal">Reduce Calorie</button>
                         </div>
                         
                       </div>
                     </div>
                   </div>
                         <!-- Card berisi Donatee -->
+                        
                 <div class="container">
                     <div class="row no-gutters">
-                            <div class="card" id ="card">
+                            <div id ="card">
 
                             </div>
                     </div>
