@@ -30,8 +30,8 @@ def add_location(request):
     if request.method == 'POST':
         location = request.POST.get('location')
         description = request.POST.get('description')
-
-        Sharing.objects.create(author=request.user, location = location, description=description, date=datetime.datetime.now())
+        img = request.POST.get('img')
+        Sharing.objects.create(author=request.user, img = img, location = location, description=description, date=datetime.datetime.now())
         
         return redirect('foodsharing:show_location')
 
