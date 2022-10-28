@@ -53,7 +53,7 @@ function loadData(){
                                         <div class="progress-bar bg-success" role="progressbar" style="width: ${percent}%" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                     <br>
-                                    <a href="delete/${i.pk}" class="btn btn-danger">Close Donatee</a>
+                                    <button class="btn btn-danger" onclick="closeDonations(${i.pk})">Close Donations</button>
                                 </div>
                             </div>
                         `
@@ -71,3 +71,34 @@ $(document).ready(function(){
     loadData();
 });
 
+$(document).on('submit', '#form_modal',function(e){
+    e.preventDefault();
+    $.ajax({
+        type:'POST',
+        url:"/donation/opened-donatee",
+        data:{
+            name:$('#id_name').val(),
+            description:$('#id_description').val(),
+            amountNeeded:$('#id_amountNeeded').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success:function(){
+            document.getElementById("form_modal").reset();
+            loadData();
+        },
+    });
+});
+
+function closeDonations(val){
+    console.log(123);
+    $.ajax({
+        type :"DELETE",
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        url :`/donation/delete/${val}`,
+        success: function () {
+            console.log(12333);
+            loadData();
+        },
+    })
+}

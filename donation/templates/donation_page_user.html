@@ -68,22 +68,32 @@
                         <tr class="fieldWrapper">
                             {{ form.name.errors }}
                             <td class="p m-3">Donatee Name: </td>
-                            <td class="m-3">{{ form.name }}</td>
+                            <td class="m-3">
+                                <input type="text" id="{{form.name.id_for_label}}" name="{{form.name.html_name}}"
+                                class="form-control{% if form.name.errors %} is-invalid{% endif %}"
+                                value="{% if form.name.value %}{{form.name.value}}{% endif %}" placeholder="Name" required>
+                            </td>
                         </tr>
                         <tr class="fieldWrapper">
                             {{ form.description.errors }}
                             <td class="p m-3">Description: </td>
-                            <td class="m-3">{{ form.description }}</td>
+                            <td class="m-3">
+                                <textarea id="{{form.description.id_for_label}}" name="{{form.description.html_name}}"
+                                class="form-control{% if form.description.errors %} is-invalid{% endif %}"
+                                value="{% if form.description.value %}{{form.description.value}}{% endif %}" placeholder="Description" required> </textarea>
+                            </td>
                         </tr>
                         <tr class="fieldWrapper">
                             {{ form.amountNeeded.errors }}
                             <td class="p m-3">Amount Needed: </td>
-                            <td class="p m-3"><input type="number" id="{{form.amountNeeded.id_for_label}}" name="{{form.amountNeeded.html_name}}"
+                            <td class="p m-3">
+                                <input type="number" id="{{form.amountNeeded.id_for_label}}" name="{{form.amountNeeded.html_name}}"
                                        class="form-control{% if form.amountNeeded.errors %} is-invalid{% endif %}"
-                                       value="{% if form.amountNeeded.value %}{{form.amountNeeded.value}}{% endif %}" placeholder="Min: 100000" min="100000" required></td>
+                                       value="{% if form.amountNeeded.value %}{{form.amountNeeded.value}}{% endif %}" placeholder="Min: 100000" min="100000" required>
+                            </td>
                         </tr>
                         <tr>
-                            <td class="p m-3"><button class="btn btn-warning" type="submit" value="Open Donatee">Open Donatee</button></td>
+                            <td class="p m-3"><button id="open" class="btn btn-warning" type="submit" value="Open Donatee" data-bs-dismiss="modal">Open Donatee</button></td>
                         </tr>
                     </table>
 
