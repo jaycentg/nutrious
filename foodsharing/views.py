@@ -1,4 +1,4 @@
-import datetime
+import datetime, validators
 from multiprocessing import context
 from django.shortcuts import render, redirect
 from foodsharing.models import Sharing
@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 # Create your views here.
 # semua orang juga bisa baca
 def show_location(request):
@@ -44,7 +44,7 @@ def edit_add(request, id):
     context = {
         'edit' : edit
     }
-    return render(request, "edit.html", context)
+    return render(request, "location_page.html", context)
 
 def edit_add_save(request, id):
 	if request.method == "POST":
