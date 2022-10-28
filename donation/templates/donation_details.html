@@ -1,20 +1,33 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
 <title>Donatee Details</title>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     function myFunction() {
         alert("Thank you for your donation! We hope that you keep donating to help others in need.");
     }
+
+    $(document).on('submit', '#form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:"donate/{{ postdetail.pk }}",
+            data:{
+                amount:$('#amount').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(){
+                document.getElementById("form").reset();
+                window.location.href = "";
+            },
+        });
+    });
 </script>
 
-<style>
-    /* Dim and disable the button while the form is invalid */
-    form:invalid button {
-        opacity: 0.3;
-        pointer-events: none;
-    }
-</style>
+<link rel="stylesheet" href="{% static '/invalidButton.css' %}" />
 {% endblock meta %}
 
 {% block content %}
@@ -28,10 +41,10 @@
                 <p class="card-text ">Description: {{ postdetail.description | safe }}</p>
                 <p class="card-text ">Amount Needed: {{ postdetail.amountNeeded | safe }}</p>
                 <p class="card-text ">Collected Funds: {{ postdetail.collectedFunds | safe }}</p>
-                <form id="form" method="POST" action="donate/{{ postdetail.pk }}">
+                <form id="form" method="POST" action="">
                     {% csrf_token %}
                     <p class="card-text">Donate: </p>
-                    <input type="number" name="amount" min="1000" placeholder="Minimum amount of donation is 1000" class="form-control" required>
+                    <input id="amount" type="number" name="amount" min="1000" placeholder="Minimum amount of donation is 1000" class="form-control" required>
                     <br>
                     <button onclick="myFunction()" class="btn btn-warning" type="submit" value="Donate">Donate</button>
                 </form>

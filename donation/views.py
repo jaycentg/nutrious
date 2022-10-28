@@ -12,6 +12,7 @@ from donation.forms import OpenDonationForm
 # Create your views here.
 @login_required(login_url='/login/')
 def show_donation(request):
+
     if request.method == 'POST':
 
         form = OpenDonationForm(request.POST)
@@ -35,16 +36,16 @@ def show_donation(request):
 
 @login_required(login_url='/login/')
 def show_donation_user(request):
-    if request.method == 'POST':
 
-            form = OpenDonationForm(request.POST)
+    if request.POST.get('action') == 'post':
+            name = request.POST.get('name')
+            description = request.POST.get('description')
+            amountNeeded = request.POST.get('amountNeeded')
+            user = request.user
+            obj_baru = Donatee(opener = user, name = name, description = description, amountNeeded = amountNeeded)
+            obj_baru.save()
 
-            if form.is_valid():
-                donatee = form.save()
-                donatee.opener = request.user
-                donatee.save()
-
-                return redirect('donation:show_donation_user')
+            return JsonResponse({'status': 'berhasil dibuka'}, status=200)
 
     else:
         form = OpenDonationForm()
@@ -55,56 +56,6 @@ def show_donation_user(request):
             'form': form,
     }
     return render(request, "donation_page_user.html", context)
-
-@login_required(login_url='/login/')
-def create_donation(request):
-    if request.method == 'POST':
-
-        form = OpenDonationForm(request.POST)
-
-        if form.is_valid():
-            name = request.POST.get('name')
-            description = request.POST.get('description')
-            amountNeeded = request.POST.get('amountNeeded')
-
-            Donatee.objects.create(name=name, opener=request.user, description=description, amountNeeded=amountNeeded)
-
-        return redirect('donation:show_donation')
-
-    else:
-        form = OpenDonationForm()
-
-    context = {
-            'user' : request.user,
-            'user_profile' : request.user.profile_pict_url,
-            'form': form,
-    }
-    return render(request, 'donation_page.html', context)
-
-@login_required(login_url='/login/')
-def create_donation_user(request):
-    if request.method == 'POST':
-
-            form = OpenDonationForm(request.POST)
-
-            if form.is_valid():
-                name = form.cleaned_data['name']
-                description = form.cleaned_data['description']
-                amountNeeded = form.cleaned_data['description']
-
-                Donatee.objects.create(name=name, opener=request.user, description=description, amountNeeded=amountNeeded)
-
-            return redirect('donation:show_donation_user')
-
-    else:
-        form = OpenDonationForm()
-
-    context = {
-                'user' : request.user,
-                'user_profile' : request.user.profile_pict_url,
-                'form': form,
-    }
-    return render(request, 'donation_page_user.html', context)
 
 def show_json(request):
     data = Donatee.objects.filter(is_verified = True)
@@ -118,7 +69,6 @@ def show_json_user(request):
     data = Donatee.objects.filter(opener = request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-
 def donation_detail(request, id):
     post_detail = Donatee.objects.get(pk = id)
     context = {
@@ -127,7 +77,7 @@ def donation_detail(request, id):
     return render(request, "donation_details.html", context)
 
 def donate(request, id):
-    if request.method == 'POST':
+    if request.POST.get('action') == 'post':
         donatee = Donatee.objects.get(id=id)
         donatee.collectedFunds = donatee.collectedFunds + int(request.POST.get('amount'))
         donatee.save()
@@ -136,7 +86,7 @@ def donate(request, id):
 @csrf_exempt
 def donation_delete(request, id):
     Donatee.objects.filter(id=id).delete()
-    return redirect('donation:show_donation_user')
+    return JsonResponse({'status': 'berhasil ditutup'}, status=200)
 
 @login_required(login_url='/login/')
 def delete_by_admin(request, id):

@@ -2,12 +2,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
 <style>
-th, td {
-    padding-top: 10px;
-    padding-bottom: 20px;
-    padding-left: 30px;
-    padding-right: 40px;
+.card-calorie:hover{
+    transform: scale(1.02);
 }
 .avatar{
     width: 50px;
@@ -17,59 +18,69 @@ th, td {
 body{
     background-color: azure;
 }
-/* Dim and disable the button while the form is invalid */
-form:invalid button {
-    opacity: 0.3;
-    pointer-events: none;
+.button{
+    background-color:rgb(255, 223, 95);
+    color:white;
 }
+
+  
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
 <script>
+function deleteCard(){
+    $.get("json/", function(resp) {
+       var date = new Date();
+        for (let i of resp){
+            x=i.fields.date
+            tanggal = x.slice(8,10)
+            if(tanggal<date.getDate()){
+                $.ajax({
+                url: "delete/" + i.pk,
+            error: function (data) {
+                alert("it didnt work");
+        }
+    });
+            }
+        }
+    })
+}   
         
-function createTable(){
+function createCard(){
     $('#card').empty();
     let data_card ="";
-    console.log("test3")
     $.get("json/", function(resp) {
-        console.log("test4")
         var counter_add = 0
         var counter_decrease = 0
         var total = 0
         for (let i of resp){
-            if ( i.fields.category == ' '){
+            if ( i.fields.category == 'Burn Calorie'){
                 data_card +=
                 `
-                <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
-                    <div class="card-header">
-                    <h5 class="card-title">${i.fields.description}</h5>
-                    </div>
+                <div class="card mb-4 card-calorie">
                     <div class="card-body">
-                        <p class="card-text">Calorie: ${i.fields.calorie}</p>
-                        <p class="card-text">Description: ${i.fields.description}</p>
-                        <p class="card-text">Date: ${i.fields.date}</p>
-                        <a href="details/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
+                        <div class="card-title fw-bold h2">${i.fields.category}</div>
+                        <div class="card-text m-1">Calorie: ${i.fields.calorie}</div>
+                        <div class="card-text m-1">Description: ${i.fields.description}</div>
+                        <div class="card-text m-1">Time added: ${i.fields.time}</div>
+                        <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
+                        <a href="edit_reduce/${i.pk}" class="btn btn-primary link">Edit</a>
+                    </div>
+                </div>
+                `
+            }else{
+            data_card +=
+            `
+                <div class="card mb-4 card-calorie">
+                    <div class="card-body">
+                        <div class="card-title fw-bold h2">${i.fields.category}</div>
+                        <div class="card-text m-1">Calorie: ${i.fields.calorie}</div>
+                        <div class="card-text m-1">Description: ${i.fields.description}</div>
+                        <div class="card-text m-1">Time added: ${i.fields.time}</div>
+                        <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
+                        <a href="edit_add/${i.pk}" class="btn btn-primary link">Edit</a>
                     </div>
                 </div>
                 `
             }
-            data_card +=
-            `
-            <div class="card mb-4  mt-3 left  top" id="donatee-${i.pk}">
-                <div class="card-header">
-                <h5 class="card-title">${i.fields.category}</h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Calorie: ${i.fields.calorie}</p>
-                    <p class="card-text">Description: ${i.fields.description}</p>
-                    <p class="card-text">Date: ${i.fields.date}</p>
-            
-                    <a href="edit/${i.pk}" class="btn btn-primary stretched-link">Edit</a>
-                </div>
-            </div>
-            `
             ;
             if(i.fields.is_increasing){
                 counter_add += i.fields.calorie
@@ -85,43 +96,57 @@ function createTable(){
     })
 }          
 $(document).ready(function(){
-    console.log("test")
-    createTable();
+    var date = new Date();
+    document.getElementById('date-info').innerText = date.toDateString();
+    document.getElementById('counter_add').innerText = 0
+    document.getElementById('counter_decrease').innerText = 0
+    document.getElementById('total').innerText = 0
+    createCard();
+    deleteCard();
     $("#decrease").click(function(e){
-        console.log("test1")
         var calorie = $("#input_calorie1").val();
         var description = $("#input_deskripsi1").val();
-        var category = ' ';
-        console.log("haha")
+        var category = 'Burn Calorie'
+        var date = new Date();
+        var hours = date.getHours();  
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds(); 
+        time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
         $.post("reduce_calorie/",
         {
             calorie,
             description,
-            category
+            category,
+            time,
+            date,
         },
-        
         function(data, status){
-            console.log("test6")
-            createTable();
+            createCard();
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
             document.getElementById("category1").value;
         });
     });
     $("#add").click(function(e){
-        console.log("test1")
         var calorie = $("#input_calorie").val();
         var description = $("#input_deskripsi").val();
         var category = document.getElementById("category").value;
+        var date = new Date();
+        var hours = date.getHours();  
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds(); 
+        time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
         $.post("add_calorie/",
         {
             calorie,
             description,
             category,
+            time,
+            date,
         },
         function(data, status){
             console.log("test6")
-            createTable();
+            createCard();
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
             document.getElementById("category").value;
@@ -130,24 +155,33 @@ $(document).ready(function(){
     
 });
 $('#Test').click(function(e){
-    console.log("test2")
     e.preventDefault();
     $('#Modal').modal();
 });
 $('#Test1').click(function(e){
-    console.log("test2")
     e.preventDefault();
     $('#Modal1').modal();
 });
+$('#closeBtn').click(function(e){
+    e.preventDefault();
+    $('#Modal').modal('hide');
+})
+$('#closeBtn').click(function(e){
+    e.preventDefault();
+    $('#Modal1').modal('hide');
+})
 </script>
+
+
 {% endblock meta %}
+
 {% block content %}
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE-edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>CalorieTracker</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   
+
     </head>
     <body>
         {% if user.is_user %}
@@ -158,10 +192,10 @@ $('#Test1').click(function(e){
                 </a>
                 <div class="d-flex flex-row">
                     <div class="dropdown m-auto mx-3">
-                        <button type="button"  class="btn button-custom rounded-pill" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
+                        <button type="button"  class="btn button" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
                             Add Calorie
                         </button>
-                        <button type="button"  class="btn button-custom rounded-pill" data-bs-toggle="modal" data-bs-target="#Modal1" id="Test1">
+                        <button type="button"  class="btn button" data-bs-toggle="modal" data-bs-target="#Modal1" id="Test1">
                             Reduce Calorie
                         </button>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -172,33 +206,65 @@ $('#Test1').click(function(e){
                             <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                         </ul>
                     </div>
+                     <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+                    {% if user.is_verified_user %}
+                    <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                    {% else %}
+                    <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                    {% endif %}
                 </div>
             </div>
         </nav>
-        <div class="align-items-center justify-content-center">
-            <form class="text-center" method="POST">
+        <div>
+            <form method="POST">
                 {% csrf_token %}
-                <h1 class="text-uppercase">Calorie Tracker</h1>
-                <p >Selamat datang {{user}}!</p>
-                <p >Silahkan masukkan calorie makanan yang telah anda konsumsi</p>
-                <p>Jumlah calorie yang telah anda konsumsi:</p>
-                <div id = "counter_add"></div>
-                <div id = "counter_decrease"></div>
-                <div id = "total"></div>
-
-                <div class="modal" tabindex="-1" id="Modal">
+                <br>
+                <div class="text-center">
+                <h2 class="fw-bold">Welcome {{user}} !</h2>
+                <p>This is your calorie tracker for today</p>
+                <p id="date-info"></p>
+                </div>
+                <div class="row align-items-center justify-content-center text-center">
+                    <div  style="width: 18rem;">
+                      <div class="card mb-3 card-calorie">
+                        <div class="card-body">
+                          <h5 class="card-title">Calories you have consumed</h5>
+                          <div class="card-text" id="counter_add"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div  style="width: 18rem;">
+                        <div class="card mb-3 card-calorie">
+                          <div class="card-body">
+                            <h5 class="card-title">Calories you have burned</h5>
+                            <div class="card-text" id="counter_decrease"></div>
+                          </div>
+                        </div>
+                    </div>
+                    <div  style="width: 18rem;">
+                        <div class="card mb-3 card-calorie">
+                          <div class="card-body">
+                            <h5 class="card-title">Your total accumulated calories</h5>
+                            <div class="card-text" id="total"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="modal" tabindex="-1" id="Modal" >
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title">Add calorie</h5>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h3 class="modal-title w-100 text-center fw-bold pl-100">Add calorie</h5>
+                          <button id="closeBtn" class="close">&times;</button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
-                            <td><input type="text" name="judul" placeholder="Judul" class="form-control" id="input_calorie"></td>
-                  
+                            <td><input type="number" name="calorie" min="0" placeholder="Calorie" class="form-control" id="input_calorie"  oninput="validity.valid||(value='');"/></td>
+                            <br>
                             <td>Deskripsi </td>
-                            <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
+                            <textarea name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi"></textarea>
+                            <br>
                             <label for="category">Choose a category:</label>
                             <select name="category" id="category">
                                 <option value="Breakfast">Breakfast</option>
@@ -208,39 +274,40 @@ $('#Test1').click(function(e){
                             </select>
                         </div>
                         <div class="modal-footer">
-                          <button id="add" class="btn button-custom rounded-pill" data-dismiss="modal">Add Calorie</button>
+                            <button id="add" class="btn button" >Add Calorie</button>
+                            <button id="closeBtn" class="btn btn-secondary" >Close</button>
                         </div>
-                        
                       </div>
                     </div>
                   </div>
+
                   <div class="modal" tabindex="-1" id="Modal1">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title">Reduce calorie</h5>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3 class="modal-title w-100 text-center fw-bold pl-100">Reduce calorie</h5>
+                            <button id="closeBtn" class="close">&times;</button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
-                            <td><input type="text" name="judul" placeholder="Judul" class="form-control" id="input_calorie1"></td>
-                  
+                            <td><input type="number" name="calorie"  min="0" placeholder="Calorie" class="form-control" id="input_calorie1" oninput="validity.valid||(value='');"/></td>
+                            <br>
                             <td>Deskripsi </td>
-                            <td><input type="text" name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi1"></td>
-                            <label for="category">Choose a car:</label>
-                       
+                            <textarea name="deskripsi" placeholder="Deskripsi" style="min-height: 100px" class="form-control" id="input_deskripsi1"></textarea>
                         </div>
                         <div class="modal-footer">
-                          <button id="decrease" class="btn button-custom rounded-pill" data-dismiss="modal">Reduce Calorie</button>
+                            <button id="decrease" class="btn button"  data-dismiss="modal">Reduce Calorie</button>
+                            <button id="closeBtn" class="btn btn-secondary"  data-dismiss="modal">Close</button>
                         </div>
                         
                       </div>
                     </div>
                   </div>
                         <!-- Card berisi Donatee -->
+                        
                 <div class="container">
                     <div class="row no-gutters">
-                            <div class="card" id ="card">
+                            <div id ="card">
 
                             </div>
                     </div>
@@ -260,18 +327,10 @@ $('#Test1').click(function(e){
                   </div>
             </div>
         </nav>
-        <alert>You have to log in to use calorie tracker features of NUTRIOUS </alert>
+        <h1>You have to log in to use calorie tracker features of NUTRIOUS </h1>
         {% endif %}
     </body>
     <footer style="position:fixed; bottom: 0;" class="bg-secondary text-center text-lg-start shadow text-light">
         <div class="text-center p-3">2022: Platform-Based Programming F02</div>
     </footer>
-    {% endblock content %}
-        
-         
-      
-
-
-
- 
- 
+{% endblock content %}
