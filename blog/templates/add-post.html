@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta %}
-<title>Upload Task</title>
+<title>Upload Blog</title>
 {% endblock meta %}
 
 {% block content %}  
@@ -11,9 +11,47 @@
     body{height:100vh;}
 </style>
 <body>
-    
+    <div class="container p-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-5">
+                <div class="card bg-white text-dark shadow-lg border-0" style="border-radius: 1rem;">
+                    <div class="card-body mt-3 p-5 text-center">
+                        <div class = "add-post">
+                            <a href="{% url 'home:show_index' %}" class="m-auto"><img src="{% static 'NUTRIOUS.png' %}" class="img-fluid" 
+                                style="width: 200px; height: auto;"></a>
+                            <h1 class="title fw-bold">Write Blog</h1>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                    <div>
+                                        <div class="flex flex-col justify-around gap-1 w-full">
+                                            <div>
+                                                <label>Title:</label>
+                                                <input type="text" name="title" id="title" class="form-control rounded-lg text-black" placeholder="Title" required>
+                                            </div>
+                                            <div>
+                                                <label>Tag:</label>
+                                                <input type="text" name="tag" id="tag" class="form-control rounded-lg text-black" placeholder="Tag about your post" required>
+                                            </div>
+                                            <div>
+                                                <label>Content:</label>
+                                                <textarea name="content" rows="7" cols="10" id="content" class="form-control rounded-lg text-black" placeholder="What are we writing today :D" required></textarea>
+                                            </div>
+                                            
+                                            <div class="flex justify-center gap-10 px-5 mt-3">
+                                                <button type="submit" id="add-todolist" name="submit" value="Tambah" class="btn btn-primary" >Post</button> 
+                                                <a class="btn btn-primary" href="{% url 'blog:show_post' %}" role="button">Close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="d-flex flex-column min-vh-100 min-vw-100">
+    <!-- <div class="d-flex flex-column min-vh-100 min-vw-100">
         <div class="d-flex flex-grow-1 justify-content-center align-items-center">
             <div class="">
                 <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="rounded mx-auto d-block ">
@@ -47,7 +85,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
 </body>
 
 {% endblock content %}
