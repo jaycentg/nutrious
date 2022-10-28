@@ -7,7 +7,8 @@ class Sharing(models.Model):
     author = models.ForeignKey(AppUser, on_delete= models.CASCADE, related_name='foodsharing_posts')
     location = models.TextField()
     description = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.TextField()
+    update_date = models.TextField()
     img = models.TextField()
 
     class Meta:

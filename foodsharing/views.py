@@ -7,10 +7,16 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+import timeago
 # Create your views here.
 # semua orang juga bisa baca
 def show_location(request):
     data_post = Sharing.objects.order_by('-date')
+
+    for i in data_post:
+        print(i)
+
     context = {
         'locationlist' : data_post
     }
@@ -31,7 +37,9 @@ def add_location(request):
         location = request.POST.get('location')
         description = request.POST.get('description')
         img = request.POST.get('img')
-        Sharing.objects.create(author=request.user, img = img, location = location, description=description, date=datetime.datetime.now())
+        date=datetime.datetime.now()
+        update_date = date
+        Sharing.objects.create(update_date = update_date, author=request.user, date = date, img = img, location = location, description=description)
         
         return redirect('foodsharing:show_location')
 
@@ -41,19 +49,30 @@ def show_json(request):
 
 def edit_add(request, id):
     edit = Sharing.objects.get(pk = id)
+    dic = {}
+    dic['pk'] = edit.pk
+    dic['img'] = edit.img
+    dic['location'] = edit.location
+    dic['description'] = edit.description
+    print("aosdsodosd", dic)
     context = {
-        'edit' : edit
+        'edit' : dic
     }
-    return render(request, "location_page.html", context)
+    import json
+    # return render(request, "location_page.html", context)
+    return HttpResponse(json.dumps(dic))
+
 
 def edit_add_save(request, id):
-	if request.method == "POST":
-		x = Sharing.objects.get(pk = id)
-		x.location = request.POST['location']
-		x.description = request.POST['description']
-		x.save()
-		
-		return redirect('foodsharing:show_location')
+    if request.method == "POST":
+        x = Sharing.objects.get(pk = id)
+        x.location = request.POST['location']
+        x.description = request.POST['description']
+        x.img = request.POST['img']
+        x.date = datetime.datetime.now()
+        x.save()
+    return redirect('foodsharing:show_location')
+        
 
 def delete(request, id):
     editing = Sharing.objects.get(pk=id)

@@ -43,9 +43,11 @@
                 </div>
 
                 {% if user.is_verified_user %}
-                <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                <img src="{{user_profile}}"
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
                 {% else %}
-                <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                <img src="{{user_profile}}"
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
                 {% endif %}
 
             </div>
@@ -66,21 +68,21 @@
                         <div class="modal-header">
                             <h5 class="modal-title">Add Location</h5>
                             <button id="close-modal" class="close">&times;</button>
-                            </button>
                         </div>
 
                         <div class="modal-body">
-                            
+
                             <td>URl Image</td>
-                            <td><input type="url" name="image" placeholder="Image" class="form-control" id="input_image" required></td>
-                            
+                            <td><input type="url" name="image" placeholder="Image" class="form-control" id="input_image"
+                                    required></td>
+
                             <td>Location</td>
                             <td><input type="text" name="location" placeholder="Location" class="form-control"
                                     id="input_location" required></td>
 
                             <td>Description</td>
                             <td><input type="text" name="description" placeholder="Description"
-                                    style="min-height: 100px" class="form-control" id="input_description" required ></td>
+                                    style="min-height: 100px" class="form-control" id="input_description" required></td>
 
                         </div>
 
@@ -98,31 +100,33 @@
                         <div class="modal-header">
                             <h5 class="modal-title">Edit Location</h5>
                             <button id="close-edit-modal" class="close">&times;</button>
-                            </button>
                         </div>
 
                         <div class="modal-body">
-                            
+                            <input type="hidden" name="" id="input_pk" value="">
                             <td>URl Image</td>
-                            <td><input type="url" name="image" placeholder="Image" class="form-control" id="input_image" required></td>
-                            
+                            <td><input type="url" name="image" placeholder="Image" class="form-control"
+                                    id="input_image_edit" required></td>
+
                             <td>Location</td>
                             <td><input type="text" name="location" placeholder="Location" class="form-control"
-                                    id="input_location" required></td>
+                                    id="input_location_edit" required></td>
 
                             <td>Description</td>
                             <td><input type="text" name="description" placeholder="Description"
-                                    style="min-height: 100px" class="form-control" id="input_description" required ></td>
+                                    style="min-height: 100px" class="form-control" id="input_description_edit" required>
+                            </td>
 
                         </div>
 
                         <div class="modal-footer">
-                            <button id="edit_post" class="btn button-custom rounded-pill" data-dismiss="modal">Update Post</button>
+                            <button id="edit_post" class="btn button-custom rounded-pill" data-dismiss="modal">Update
+                                Post</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
         </form>
     </div>
     {% else %}
@@ -140,9 +144,9 @@
     </nav>
 
     {% endif %}
-    <div class= "container">
+    <div class="container">
         <div class="card" id="card"></div>
-        
+
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -175,9 +179,10 @@
                                         <h5 class="card-title">${i.fields.location}</h5>
                                         <p class="card-text">${i.fields.description}</p>
                                         <p class="card-text">${i.fields.date}</small></p>
+                                        <p class="card-text">${i.fields.update_date}</small></p>
                                         
-                                        <button href="edit_add/${i.pk}" type="button" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
-                                        data-bs-target="#edit-modal" id="edit-modal-btn-${i.pk}">Edit</button>
+                                        <a data-id="${i.pk}" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
+                                        data-bs-target="#edit-modal" id="edit-modal-btn">Edit</a>
                                         <a href="delete/${i.pk}" class="btn btn-outline-primary p-2 m-1">Delete</a>
                                     </div>
                                 <div>
@@ -194,6 +199,8 @@
         }
 
         $(document).ready(function () {
+            var id = $(this).data;
+            console.log(id)
             createCard();
             function validate() {
                 if ($('#input_location').val().length > 0 &&
@@ -202,7 +209,7 @@
                     $("#Send-footer").prop("disabled", false);
                 }
                 else {
-                    $("#Send-footer]").prop("disabled", true);
+                    $("#Send-footer").prop("disabled", true);
                 }
             }
 
@@ -231,43 +238,75 @@
             });
 
             $("#edit_post").click(function (e) {
-                console.log($.get("edit_add/${i.pk}"));
-                console.log($(this).data);
+                // console.log($.get("edit_add/${i.pk}"));
+
                 console.log("ini kan");
-                
-                var location =  $("#input_location").val();
-                var description = $("#input_description").val();
-                var img = $("#input_image").val();
+
+                var pk = $("#input_pk").val();
+                console.log(pk)
+
+                var location = $("#input_location_edit").val();
+                var description = $("#input_description_edit").val();
+                var img = $("#input_image_edit").val();
                 validate();
                 console.log(location)
-                $.post("edit_add/",
-                    {
+                $.ajax({
+                    url: `edit_add_save/${pk}`,
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                    data: {
                         location,
                         description,
                         img,
                     },
-
-                    function (data, status) {
+                    method: "POST",
+                    success: function (data, status) {
+                        console.log("edit card success");
+                        $("#input_location_edit").val("");
+                        $("#input_description_edit").val("");
+                        $("#input_image_edit").val("");
                         createCard();
-                        console.log("create card success");
-                        $("#input_location").val("");
-                        $("#input_description").val("");
-                        $("#input_image").val("");
-                    });
+                        $('#edit-modal').modal('hide');
+                    },
+
+                });
 
             });
         });
-        
+
+        $(document).on('click', '#edit-modal-btn', function (e) {
+            e.preventDefault();
+            edit_id = $(this).attr("data-id");
+            $.ajax({
+                url: `edit_add/${edit_id}`,
+                method: "GET",
+
+                success: function (data) {
+                    data = JSON.parse(data);
+
+                    $("#input_location_edit").val(data.location);
+                    $("#input_description_edit").val(data.description);
+                    $("#input_image_edit").val(data.img);
+                    $("#input_pk").val(data.pk);
+                    $('#edit-modal').modal('show');
+                }
+            })
+
+
+        })
         $('#modal-btn').click(function (e) {
             e.preventDefault();
+            console.log("ya masuk la")
             $('#Modal').modal();
         });
 
-        $('#edit-modal-btn').click(function (e) {
-        // $('[id^="edit-modal-btn"]').click(function (e) {
-            e.preventDefault();
-            $('#edit-modal').modal();
-        });
+        // $('#edit-modal-btn').click(function (e) {
+        // // $('[id^="edit-modal-btn"]').click(function (e) {
+        //     e.preventDefault();
+        //     $('#edit-modal').modal();
+        //     console.log("uda panggil ya ges ya");
+        //     var pk = $(this).data("data-id");
+        //     console.log(pk);
+        // });
 
         $('#close-modal').click(function (e) {
             e.preventDefault();
