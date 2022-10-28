@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta %}
-
+<style>
+    .avatar{
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+    body{
+        background-color: azure;
+    }
+      
+</style>
 {% endblock meta %}
 {% block content %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
@@ -19,6 +29,12 @@
                     <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                 </ul>
             </div>
+             <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+             {% if user.is_verified_user %}
+             <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+             {% else %}
+             <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+             {% endif %}
         </div>
     </div>
 </nav>
