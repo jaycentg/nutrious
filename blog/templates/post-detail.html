@@ -2,14 +2,18 @@
 {% load static %}
 {% block content %}
 
+<title>Blog Detail</title>
+
 <style>
     #iconUpvote:hover {
         fill: #235ff6;
         transform: scale(1.54);
+        transition: all 0.15s ease;
     }
     #iconDown:hover {
         fill: #de0505;
         transform: scale(1.54);
+        transition: all 0.15s ease;
     }
 
     .avatar{
@@ -24,17 +28,69 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
-    <script>
-        $(document).ready(function(){
-            loadData();
-        });
+    {% if user.is_authenticated %}
+        <script>
+            $(document).ready(function(){
+                loadData();
+            });
 
-        const card = (data) => 
+            
+            function updateCardUpvote(id) {
+                $.ajax({
+                    url: `/blog/updateUpvote/${id}`,
+                    type: 'PATCH',
+                    success: function (data) {
+                        $(`#${id}-vote`).empty()
+                        $(`#${id}-vote`).append(
+                        `
+                            <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
+                            ${data.fields.upvote}
+
+                            <ion-icon name="thumbs-down" onclick="updateCardDownvote(${data.pk})" id="iconDown"></ion-icon>
+                            ${data.fields.downvote}
+                        `
+                        )
+                    }
+                });
+            }
+            
+            function updateCardDownvote(id) {
+                $.ajax({
+                    url: `/blog/updateDownvote/${id}`,
+                    type: 'PATCH',
+                    success: function (data) {  
+                        $(`#${id}-vote`).empty()
+                        $(`#${id}-vote`).append(
+                        `
+                            <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
+                            ${data.fields.upvote}
+
+                            <ion-icon name="thumbs-down" onclick="updateCardDownvote(${data.pk})" id="iconDown"></ion-icon>
+                            ${data.fields.downvote}
+                        `
+                        )
+                    }
+                });
+            } 
+            function loadData() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.has('id');
+                if (id){
+                    const id_value = urlParams.get('id');
+                    $.get(`/blog/json/id/${id_value}`, function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#post').append(card(data[i]))
+                        }
+                    });
+                }
+            }
+
+            const card = (data) => 
             `
             <div class="container">
                 <div class="row">
                     <div class="mt-3">
-                        <div class="card mb-4" id="${data.pk}-card">
+                        <div class="card mb-4 shadow p-3 mb-3 bg-body rounded" id="${data.pk}-card">
                             <div class="card-body">
                                 <h1>${ data.fields.title }</h1>
                                 <p class=" text-muted">${ data.fields.author } | ${ data.fields.created_on }</p>
@@ -54,59 +110,54 @@
                 </div>
             </div>
             `
-        function updateCardUpvote(id) {
-            console.log("halo")
-            $.ajax({
-                url: `/blog/updateUpvote/${id}`,
-                type: 'PATCH',
-                success: function (data) {
-                    $(`#${id}-vote`).empty()
-                    $(`#${id}-vote`).append(
-                    `
-                        <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
-                        ${data.fields.upvote}
-
-                        <ion-icon name="thumbs-down" onclick="updateCardDownvote(${data.pk})" id="iconDown"></ion-icon>
-                        ${data.fields.downvote}
-                    `
-                    )
-                }
+        </script>
+    {% else %}
+        <script>
+            $(document).ready(function(){
+                loadData();
             });
-        }
-        
-        function updateCardDownvote(id) {
-            $.ajax({
-                url: `/blog/updateDownvote/${id}`,
-                type: 'PATCH',
-                success: function (data) {  
-                    $(`#${id}-vote`).empty()
-                    $(`#${id}-vote`).append(
-                    `
-                        <ion-icon name="thumbs-up" onclick="updateCardUpvote(${data.pk})" id="iconUpvote"></ion-icon>
-                        ${data.fields.upvote}
 
-                        <ion-icon name="thumbs-down"  onclick="updateCardDownvote(${data.pk})" id="iconDown"></ion-icon>
-                        ${data.fields.downvote}
-                    `
-                    )
+            function loadData() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.has('id');
+                if (id){
+                    const id_value = urlParams.get('id');
+                    $.get(`/blog/json/id/${id_value}`, function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#post').append(cardunauth(data[i]))
+                        }
+                    });
                 }
-            });
-        } 
-        function loadData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.has('id');
-            if (id){
-                const id_value = urlParams.get('id');
-                $.get(`/blog/json/id/${id_value}`, function (data) {
-                    console.log(data);
-                    for (var i = 0; i < data.length; i++) {
-                        $('#post').append(card(data[i]));
-                    }
-                });
             }
-        }
 
-    </script>
+            const cardunauth = (data) => 
+            `
+            <div class="container">
+                <div class="row">
+                    <div class="mt-3">
+                        <div class="card mb-4 shadow p-3 mb-3 bg-body rounded" id="${data.pk}-card">
+                            <div class="card-body">
+                                <h1>${ data.fields.title }</h1>
+                                <p class=" text-muted">${ data.fields.author } | ${ data.fields.created_on }</p>
+                                <p class="card-text ">${ data.fields.content }</p>
+                            </div>
+                            <div class="d-flex justify-content-end m-3">
+                                <div id="${data.pk}-vote">   
+                                        <ion-icon name="thumbs-up" onclick="alert('Silakan login untuk memberikan upvote')" id="iconUpvote"></ion-icon>
+                                        ${data.fields.upvote}
+
+                                        <ion-icon name="thumbs-down" onclick="alert('Silakan login untuk memberikan downvote')" id="iconDown"></ion-icon>
+                                        ${data.fields.downvote}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+        </script>
+    {% endif %}
+    
 </head>
 
 <body>
@@ -151,7 +202,7 @@
 
     <!-- <div class="col-md-8 card m-4  mt-3" id="post"></div> -->
     <div class="grid lg:grid-cols-1 md:grid-cols-1 gap-5 mt-8 sm:mt-5 p-4" id="post"></div>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center mb-5">
         <a class="btn btn-primary" href="{% url 'blog:show_post' %}" role="button">Back to blogpage</a>
     </div>
 
