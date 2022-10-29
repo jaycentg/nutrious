@@ -13,4 +13,4 @@ class Sharing(models.Model):
 
     class Meta:
         # descending order
-        ordering = ['-date']
+        ordering = ['-update_date']
