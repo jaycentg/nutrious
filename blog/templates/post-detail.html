@@ -21,6 +21,47 @@
         height: 50px;
         object-fit: cover;
     }
+    .button {
+        display: inline-block;
+        border-radius: 4px;
+        background-color: #60ce80;
+        border: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 15px;
+        padding: 5px;
+        width: 130px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+    .button span:after {
+        content: '\00ab';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        /* right: 20px; */
+        left: -20px;
+        transition: 0.5s;
+    }
+
+    .button:hover span {
+        padding-left: 15px;
+    }
+
+    .button:hover span:after {
+        opacity: 1;
+        left: 0;
+    }
+
 
 </style>
 
@@ -93,7 +134,7 @@
                         <div class="card mb-4 shadow p-3 mb-3 bg-body rounded" id="${data.pk}-card">
                             <div class="card-body">
                                 <h1>${ data.fields.title }</h1>
-                                <p class=" text-muted">${ data.fields.author } | ${ data.fields.created_on }</p>
+                                <p class=" text-muted">${ data.fields.author } |  ${parseDate(data.fields.created_on)}</p>
                                 <p class="card-text ">${ data.fields.content }</p>
                             </div>
                             <div class="d-flex justify-content-end m-3">
@@ -110,6 +151,18 @@
                 </div>
             </div>
             `
+            
+            parseDate = (d) => {
+                let date = new Date(d);        
+                var mm = date.getMonth() + 1; // getMonth() is zero-based
+                var dd = date.getDate();
+
+                let newdate = [(dd>9 ? '' : '0') + dd + '/',
+                            (mm>9 ? '' : '0') + mm+  '/',
+                            date.getFullYear(),
+                        ].join('');
+                return newdate + ' at ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+            }   
         </script>
     {% else %}
         <script>
@@ -138,7 +191,7 @@
                         <div class="card mb-4 shadow p-3 mb-3 bg-body rounded" id="${data.pk}-card">
                             <div class="card-body">
                                 <h1>${ data.fields.title }</h1>
-                                <p class=" text-muted">${ data.fields.author } | ${ data.fields.created_on }</p>
+                                <p class=" text-muted">${ data.fields.author } |  ${parseDate(data.fields.created_on)}</p>
                                 <p class="card-text ">${ data.fields.content }</p>
                             </div>
                             <div class="d-flex justify-content-end m-3">
@@ -155,7 +208,19 @@
                 </div>
             </div>
             `
+            parseDate = (d) => {
+                let date = new Date(d);        
+                var mm = date.getMonth() + 1; // getMonth() is zero-based
+                var dd = date.getDate();
+
+                let newdate = [(dd>9 ? '' : '0') + dd + '/',
+                            (mm>9 ? '' : '0') + mm+  '/',
+                            date.getFullYear(),
+                        ].join('');
+                return newdate + ' at ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+            }   
         </script>
+
     {% endif %}
     
 </head>
@@ -164,7 +229,7 @@
     {% if user.is_authenticated %}
         <nav class="navbar shadow navbar-expand-lg bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'home:show_index' %}">
                     <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
                 </a>
                 <div class="d-flex flex-row">
@@ -189,7 +254,7 @@
     {% else %}
         <nav class="navbar shadow navbar-expand-lg bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'home:show_index' %}">
                     <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
                 </a>
                 <div class="d-flex flex-row-reverse">
@@ -200,10 +265,9 @@
         </nav>
     {% endif %}
 
-    <!-- <div class="col-md-8 card m-4  mt-3" id="post"></div> -->
     <div class="grid lg:grid-cols-1 md:grid-cols-1 gap-5 mt-8 sm:mt-5 p-4" id="post"></div>
     <div class="d-flex justify-content-center mb-5">
-        <a class="btn btn-primary" href="{% url 'blog:show_post' %}" role="button">Back to blogpage</a>
+        <button class="button" style="vertical-align:middle" onclick="location.href='/blog/'"><span>Return </span></button>
     </div>
 
     

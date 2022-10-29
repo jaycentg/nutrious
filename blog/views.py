@@ -16,7 +16,6 @@ def show_post(request):
         if (user.tag not in postarr):
             postarr.append(user.tag)
 
-    print(postarr)
     context = {
         'postlist' : data_post,
         'taglist' : postarr
@@ -38,17 +37,14 @@ def post_detail(request):
 
 
 # ini harus login juga
+@login_required(login_url='/login/')
 def upload(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
         tag = request.POST.get('tag')
-        # created_on= datetime.datetime.now()
-        # time = created_on.strftime("%Y-%m-%d %H:%M")
-        # print(time)
         post = Post.objects.create(title=title, author=request.user.nickname, content=content, created_on=datetime.datetime.now(), upvote=0, downvote=0, vote_state=2, tag=tag)
-        print(post.created_on)
 
         return redirect('blog:show_post')
 
@@ -68,6 +64,7 @@ def show_json_by_id(request, id):
 
 # login dulu
 @csrf_exempt
+@login_required(login_url='/login/')
 def addUpvote(request, id):
     if request.method == 'PATCH':
 
@@ -138,6 +135,7 @@ def addUpvote(request, id):
     return JsonResponse(result)
 
 @csrf_exempt
+@login_required(login_url='/login/')
 def addDownvote(request, id):
     if request.method == 'PATCH':
 

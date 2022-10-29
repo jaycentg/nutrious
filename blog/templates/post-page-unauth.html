@@ -39,6 +39,57 @@
         height: 50px;
         object-fit: cover;
     }
+    #buttonTag{
+        background-color: #60ce80;
+        border-style: none;
+        cursor: pointer;
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
+    }
+
+    #buttonTag:hover{
+        background-color: #4aa564;
+        transition: all 0.3s ease;
+        transform: scale(1.009);
+    }
+    .button {
+        display: inline-block;
+        border-radius: 4px;
+        background-color: #60ce80;
+        border: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 15px;
+        padding: 5px;
+        width: 130px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+    .button span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+    .button:hover span {
+        padding-right: 15px;
+    }
+
+    .button:hover span:after {
+        opacity: 1;
+        right: 0;
+    }
 
 </style>
 
@@ -69,13 +120,13 @@
                                 </div>
                                 <div>
                                     <p class="text-muted">
-                                        ${data.fields.author} | ${data.fields.created_on}
+                                        ${data.fields.author} |  ${parseDate(data.fields.created_on)}
                                     </p>
                                     
                                 </div>
                                 <div>
                                     <div class="d-flex justify-content-between mt-3">
-                                        <a href="/blog/details/?id=${data.pk}" class="btn btn-primary">Read More &rarr;</a>
+                                        <button class="button" style="vertical-align:middle" onclick="location.href='/blog/details/?id=${data.pk}'"><span>Read more </span></button>
                                         <div id="${data.pk}-vote" >   
                                             <ion-icon name="thumbs-up" onclick="alert('Silakan login untuk memberikan upvote')" id="iconUpvote"></ion-icon>
                                             ${data.fields.upvote}
@@ -90,6 +141,18 @@
                     </div>
                 </div>
             </div>`
+
+        parseDate = (d) => {
+            let date = new Date(d);        
+            var mm = date.getMonth() + 1; // getMonth() is zero-based
+            var dd = date.getDate();
+
+            let newdate = [(dd>9 ? '' : '0') + dd + '/',
+                        (mm>9 ? '' : '0') + mm+  '/',
+                        date.getFullYear(),
+                    ].join('');
+            return newdate + ' at ' + date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
+        }   
         
         function loadData() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -120,7 +183,7 @@
     {% if user.is_authenticated %}
         <nav class="navbar shadow navbar-expand-lg bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'home:show_index' %}">
                     <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
                 </a>
                 <div class="d-flex flex-row">
@@ -145,7 +208,7 @@
     {% else %}
         <nav class="navbar shadow navbar-expand-lg bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'home:show_index' %}">
                     <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
                 </a>
                 <div class="d-flex flex-row-reverse">
@@ -182,9 +245,11 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body gap-3">
                 {% for tag in taglist %}
-                    <a href="/blog/?tag={{tag}}">#{{tag}}</a>
+                    <button class="rounded-pill mt-2" onclick="location.href='/blog/?tag={{tag}}'" id="buttonTag">
+                        {{tag}}
+                    </button>
                 {% endfor %}
             </div>
             <div class="modal-footer">
