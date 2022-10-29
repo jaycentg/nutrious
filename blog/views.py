@@ -2,6 +2,7 @@ import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from blog.models import Post
 from home.models import AppUser
+from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core import serializers
@@ -11,10 +12,13 @@ from django.contrib.auth.decorators import login_required
 def show_post(request):
     
     data_post = Post.objects.order_by('-created_on')
+    # data_post.fields.tag
     postarr = []
     for user in data_post:
-        if (user.tag not in postarr):
-            postarr.append(user.tag)
+        splitArr = user.tag.split(" ")
+        for i in splitArr:
+            if (i not in postarr):
+                postarr.append(i)
 
     context = {
         'postlist' : data_post,
@@ -55,8 +59,10 @@ def show_json(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_json_by_tag(request, tag):
-    data = Post.objects.filter(tag=tag)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    query = Post.objects.filter(
+        Q(tag__icontains=tag)
+    )
+    return HttpResponse(serializers.serialize("json", query), content_type="application/json")
 
 def show_json_by_id(request, id):
     data = Post.objects.filter(pk=id)
