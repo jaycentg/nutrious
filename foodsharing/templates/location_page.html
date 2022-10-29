@@ -25,7 +25,7 @@
     {% if user.is_user %}
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'home:show_index' %}">
                 <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
             </a>
             <div class="d-flex flex-row">
@@ -131,21 +131,24 @@
     {% else %}
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'home:show_index' %}">
                 <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
             </a>
             <div class="d-flex flex-row-reverse">
                 <a class="btn btn-outline-primary p-2 m-3" role="button" href="{% url 'home:register' %}">Sign Up</a>
                 <a class="btn btn-outline-success p-2 m-3" role="button" href="{% url 'home:login' %}">Log In</a>
-                <p class="btn-outline-primary p-2 m-3">You have to log in to to post location of food sharing </p>
             </div>
         </div>
     </nav>
-
+    <div><p class="btn-outline-primary p-2 m-3">You have to log in to to post location of food sharing </p>
+    </div>
+    
     {% endif %}
     <div class="container">
-        <div class="card" id="card"></div>
-
+        <div class="card" id="card">
+            
+        </div>
+        
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -176,9 +179,10 @@
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">Locatian at: ${i.fields.location}</h5>
-                                        <p class="card-text">Description: ${i.fields.description}</p>
-                                        <p class="card-text">Date: ${i.fields.date}</small></p>
-                                        <p class="card-text">Update Edit: ${i.fields.update_date}</small></p>
+                                        <p class="card-text">Description  : ${i.fields.description}</p>
+                                        <br>
+                                        <p class="card-text"><small>Post Date: ${i.fields.date}</small></p>
+                                        <p class="card-text"><small>Last Edit: ${i.fields.update_date}</small></p>
                                         
                                         <a data-id="${i.pk}" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
                                         data-bs-target="#edit-modal" id="edit-modal-btn">Edit</a>
@@ -323,7 +327,10 @@
 </body>
 
 
-<footer class="bg-secondary text-center text-lg-start shadow text-light">
+<footer style="position:fixed;
+bottom:0;
+width:100%;
+height:60px;" class="bg-secondary text-center text-lg-start shadow text-light">
     <div class="text-center p-3">2022: Platform-Based Programming F02</div>
 </footer>
 {% endblock content %}
