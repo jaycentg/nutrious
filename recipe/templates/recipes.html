@@ -104,7 +104,7 @@
                             <textarea type="text" class="form-control" id="formInput" name="method" required></textarea>
                         </div>
 
-                        <button class="btn btn-success btn-lg px-py-5 row my-2" id="button" type="submit"
+                        <button class="btn btn-success btn-lg px-py-5 row my-2" id="addButton" type="submit"
                             value="Submit">Add Recipe</button></td>
                     </div>
                 </form>
@@ -144,8 +144,10 @@ async function refreshRecipe() {
         htmlString += `\n<div class="col-3">
         <div class="card border-success text-dark bg-white mb-3" style="max-width: 22rem;" id="card-task">
             <div class="card-header">
-                <p>by ${item.fields.author}</p>
-                <footer class="blockquote-footer">Created on ${item.fields.created_on}</footer>
+                <h3>${item.fields.food_name}</h3>
+                <h6 class="card-subtitle mb-2 text-muted">— by ${item.fields.author_name}, ${item.fields.formatted_date}</h6>
+                <br>
+                <footer class="blockquote-footer">by ${item.fields.author_name}, ${item.fields.formatted_date}</footer>
             </div>
 
             <div class="card-body">
@@ -163,22 +165,24 @@ async function refreshRecipe() {
 }
 
 async function addRecipe() {
-    fetch("{% url 'recipe:add_recipe' %}", {
+    // const input = document.querySelector(".input");
+    // const textarea = document.querySelector(".textarea");
+    // let inp = input.value;
+    // let txt = textarea.value;
+    var txt = document.getElementById("formInput").value;
+    console.log(txt);
+    if (txt!= "") {
+        fetch("{% url 'recipe:add_recipe' %}", {
             method: "POST",
             body: new FormData(document.querySelector('#form'))
         }).then(refreshRecipe)
+    }
         
     return false
 }
 
 // const input = document.getElementById("formInput");
-// // const textarea = document.querySelector("#textarea");
-// let inp = input.value;
-// // let txt = textarea.value;
-// if (inp != "") {
-//     refreshRecipe()
-// }
-document.getElementById("button").onclick = addRecipe
+document.getElementById("addButton").onclick = addRecipe
 refreshRecipe()
 
 </script>
