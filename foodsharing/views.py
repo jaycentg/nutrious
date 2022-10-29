@@ -14,9 +14,6 @@ import timeago
 def show_location(request):
     data_post = Sharing.objects.order_by('-date')
 
-    for i in data_post:
-        print(i)
-
     context = {
         'locationlist' : data_post
     }
