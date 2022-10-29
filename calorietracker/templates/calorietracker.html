@@ -88,11 +88,16 @@ function createCard(){
                 counter_decrease += i.fields.calorie
             }
             total = counter_add - counter_decrease
+            if(total<0){
+                total =0
+            }
             document.getElementById('counter_add').innerText = counter_add 
             document.getElementById('counter_decrease').innerText = counter_decrease
             document.getElementById('total').innerText = total
+            
         }
         $('#card').append(data_card);
+        
     })
 }          
 $(document).ready(function(){
@@ -222,6 +227,7 @@ $('#closeBtn').click(function(e){
                 <div class="text-center">
                 <h2 class="fw-bold">Welcome {{user}} !</h2>
                 <p>This is your calorie tracker for today</p>
+                <p>Refresh page to delete your yesterday calorie tracker</p>
                 <p id="date-info"></p>
                 </div>
                 <div class="row align-items-center justify-content-center text-center">
