@@ -23,7 +23,7 @@
 {% block content %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'home:show_index' %}">
             <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
         </a>
         <div class="d-flex flex-row">
@@ -78,7 +78,7 @@
         </div>
     </div>
 </body>
-<footer style="position:fixed justify-content center; bottom: 0;" class="bg-secondary text-center text-lg-start shadow text-light">
+<footer class="bg-secondary text-center text-lg-start shadow text-light">
     <div class="text-center p-3">2022: Platform-Based Programming F02</div>
 </footer>
 {% endblock %}
