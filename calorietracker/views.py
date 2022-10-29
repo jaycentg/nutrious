@@ -2,19 +2,27 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.core import serializers
 from calorietracker.models import Calorie
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-import datetime
+@login_required(login_url='/login/')
 def show_caloriepage(request):
+
+    
 	data = Calorie.objects.order_by('-date')
-	context = {
-    	'user' : request.user,
-		'data' : data,
-	}
+	if request.user.is_authenticated:
+		context = {
+			'user' : request.user,
+			'nickname' : request.user.nickname,
+			'user_profile' : request.user.profile_pict_url,
+			'data' : data,
+		}
+	else:
+		context = {
+			'user' : request.user,
+			'data' : data,
+		}
 	return render(request, 'calorietracker.html',context)
 
 @login_required(login_url='/home/login/')
@@ -53,13 +61,15 @@ def show_json(request):
 def edit_add(request, id):
     edit = Calorie.objects.get(pk = id)
     context = {
-        'edit' : edit
+        'edit' : edit,
+		'user_profile' : request.user.profile_pict_url,
     }
     return render(request, "edit.html", context)
 def edit_reduce(request, id):
     edit = Calorie.objects.get(pk = id)
     context = {
-        'edit' : edit
+        'edit' : edit,
+		'user_profile' : request.user.profile_pict_url,
     }
     return render(request, "edit_reduce.html", context)
 def edit_reduce_save(request, id):
