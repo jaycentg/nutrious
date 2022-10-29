@@ -30,7 +30,7 @@
             </a>
             <div class="d-flex flex-row">
                 <button type="button" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
-                    data-bs-target="#Modal" id="modal-btn">Add Loc</button>
+                    data-bs-target="#Modal" id="modal-btn">Add Post</button>
                 <div class="dropdown m-auto mx-3">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -73,16 +73,15 @@
                         <div class="modal-body">
 
                             <td>URl Image</td>
-                            <td><input type="url" name="image" placeholder="Image" class="form-control" id="input_image"
-                                    required></td>
+                            <td><input type="url" name="image" placeholder="Image" class="form-control" id="input_image"></td>
 
                             <td>Location</td>
                             <td><input type="text" name="location" placeholder="Location" class="form-control"
-                                    id="input_location" required></td>
+                                    id="input_location" ></td>
 
                             <td>Description</td>
                             <td><input type="text" name="description" placeholder="Description"
-                                    style="min-height: 100px" class="form-control" id="input_description" required></td>
+                                    style="min-height: 100px" class="form-control" id="input_description" ></td>
 
                         </div>
 
@@ -106,15 +105,15 @@
                             <input type="hidden" name="" id="input_pk" value="">
                             <td>URl Image</td>
                             <td><input type="url" name="image" placeholder="Image" class="form-control"
-                                    id="input_image_edit" required></td>
+                                    id="input_image_edit" ></td>
 
                             <td>Location</td>
                             <td><input type="text" name="location" placeholder="Location" class="form-control"
-                                    id="input_location_edit" required></td>
+                                    id="input_location_edit" ></td>
 
                             <td>Description</td>
                             <td><input type="text" name="description" placeholder="Description"
-                                    style="min-height: 100px" class="form-control" id="input_description_edit" required>
+                                    style="min-height: 100px" class="form-control" id="input_description_edit" >
                             </td>
 
                         </div>
@@ -176,10 +175,10 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                        <h5 class="card-title">${i.fields.location}</h5>
-                                        <p class="card-text">${i.fields.description}</p>
-                                        <p class="card-text">${i.fields.date}</small></p>
-                                        <p class="card-text">${i.fields.update_date}</small></p>
+                                        <h5 class="card-title">Locatian at: ${i.fields.location}</h5>
+                                        <p class="card-text">Description: ${i.fields.description}</p>
+                                        <p class="card-text">Date: ${i.fields.date}</small></p>
+                                        <p class="card-text">Update Edit: ${i.fields.update_date}</small></p>
                                         
                                         <a data-id="${i.pk}" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
                                         data-bs-target="#edit-modal" id="edit-modal-btn">Edit</a>
@@ -233,12 +232,12 @@
                         $("#input_location").val("");
                         $("#input_description").val("");
                         $("#input_image").val("");
+                        $('#Modal').modal('hide');
                     });
 
             });
 
             $("#edit_post").click(function (e) {
-                // console.log($.get("edit_add/${i.pk}"));
 
                 console.log("ini kan");
 
@@ -249,7 +248,7 @@
                 var description = $("#input_description_edit").val();
                 var img = $("#input_image_edit").val();
                 validate();
-                console.log(location)
+                console.log("ini kan yg edit", location)
                 $.ajax({
                     url: `edit_add_save/${pk}`,
                     headers: { 'X-CSRFToken': '{{ csrf_token }}' },
@@ -291,8 +290,8 @@
                 }
             })
 
-
         })
+
         $('#modal-btn').click(function (e) {
             e.preventDefault();
             console.log("ya masuk la")
