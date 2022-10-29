@@ -244,9 +244,9 @@
                     </div>
                     <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
                     {% if user.is_verified_user %}
-                    <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                    <img src="{{user.profile_pict_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
                     {% else %}
-                    <img src="{{user.profile_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                    <img src="{{user.profile_pict_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
                     {% endif %}
                 </div>
             </div>
