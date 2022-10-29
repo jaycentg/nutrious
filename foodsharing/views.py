@@ -66,7 +66,7 @@ def edit_add_save(request, id):
         x.location = request.POST['location']
         x.description = request.POST['description']
         x.img = request.POST['img']
-        x.date = datetime.datetime.now()
+        x.update_date = datetime.datetime.now()
         x.save()
     return redirect('foodsharing:show_location')
         
