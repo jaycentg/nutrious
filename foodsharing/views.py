@@ -1,4 +1,4 @@
-import datetime, validators
+import datetime
 from multiprocessing import context
 from django.shortcuts import render, redirect
 from foodsharing.models import Sharing
