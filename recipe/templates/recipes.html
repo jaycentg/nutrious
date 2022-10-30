@@ -7,25 +7,28 @@
 {% block meta %}
 <title>Food Recipes</title>
 <style>
-    .avatar{
+    .avatar {
         width: 50px;
         height: 50px;
         object-fit: cover;
     }
+
     .header-content {
         background-image: url("{% static 'recipe-header.png' %}");
         transition: transform .2s;
         background-size: cover;
         background-repeat: no-repeat;
     }
-    .card:hover{
-      transform: scale(1.02);
-      box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
-      opacity: 1.0;
+
+    .card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+        opacity: 1.0;
     }
-    .row{
-      margin-left: 75px;
-      margin-right: 75px;
+
+    .row {
+        margin-left: 75px;
+        margin-right: 75px;
     }
 </style>
 {% endblock meta %}
@@ -41,8 +44,8 @@
         </a>
         <div class="d-flex flex-row">
             <div class="dropdown m-auto mx-3">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg"
-                    data-bs-whatever="@getbootstrap">Add recipe</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                    data-bs-target=".bd-example-modal-lg" data-bs-whatever="@getbootstrap">Add recipe</button>
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Profile
@@ -51,14 +54,16 @@
                     <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
                     <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                 </ul>
-                
+
                 <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
                 {% if user.is_verified_user %}
-                <img src="{{user.image.url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                <img src="{{user.image.url}}"
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
                 {% else %}
-                <img src="{{user.profile_pict_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                <img src="{{user.profile_pict_url}}"
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
                 {% endif %}
-                
+
             </div>
         </div>
     </div>
@@ -79,7 +84,8 @@
 {% endif %}
 
 <!-- Modal -->
-<div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content bg-white text-black">
 
@@ -92,7 +98,7 @@
 
             <div class="modal-body">
                 <form style="text-align:center" id="form" onsubmit="return false;">
-                {% csrf_token %}  
+                    {% csrf_token %}
                     <div class="col mx-3">
 
                         <div class="form-group row my-2">
@@ -102,15 +108,17 @@
 
                         <div class="form-group row my-2">
                             <label for="formInput2">Ingredients</label>
-                            <textarea  type="text" class="form-control" id="formInput" name="ingredients" required></textarea>
+                            <textarea rows="7" type="text" class="form-control" id="formInput" name="ingredients"
+                                required></textarea>
                         </div>
 
                         <div class="form-group row my-2">
                             <label for="formInput2">How to make it?</label>
-                            <textarea type="text" class="form-control" id="formInput" name="method" required></textarea>
+                            <textarea rows="7" type="text" class="form-control" id="formInput" name="method"
+                                required></textarea>
                         </div>
 
-                        <button class="btn btn-success btn-lg px-py-5 row my-2" id="addButton" type="submit" 
+                        <button class="btn btn-success btn-lg px-py-5 row my-2" id="addButton" type="submit"
                             value="Submit">Add Recipe</button></td>
                     </div>
                 </form>
@@ -138,17 +146,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-async function getRecipe(){
-     return fetch("{% url 'recipe:show_json' %}").then((res) => res.json())
-}
+    async function getRecipe() {
+        return fetch("{% url 'recipe:show_json' %}").then((res) => res.json())
+    }
 
-async function refreshRecipe() {
-    document.getElementById("card-row").innerHTML = ""
-    const recipes = await getRecipe()
-    let htmlString = ``
-    recipes.forEach((item) => {
-        htmlString += `\n<div class="col-3">
-        <div class="card border-success text-dark bg-white mb-3" style="max-width: 22rem;" id="card-task">
+    async function refreshRecipe() {
+        document.getElementById("card-row").innerHTML = ""
+        const recipes = await getRecipe()
+        let htmlString = ``
+        recipes.forEach((item) => {
+            htmlString += `\n<div class="col-4">
+        <div class="card border-success text-dark bg-white mb-3" style="max-width: 28rem;" id="card-task">
             <div class="card-header">
                 <h3>${item.fields.food_name}</h3>
                 <h6 class="card-subtitle mb-2 text-muted">— by ${item.fields.author_name}, ${item.fields.formatted_date}</h6>
@@ -162,30 +170,30 @@ async function refreshRecipe() {
                 <p class="card-text">${item.fields.method}</p>
             </div>
         </div>
-        </div>` 
-    })
-    
-    document.getElementById("card-row").innerHTML = htmlString
-}
+        </div>`
+        })
 
-async function addRecipe() {
-    var txt = document.getElementById("formInput").value;
-    // var frm = document.getElementById('form')[0];
-    console.log(txt);
-    if (txt!= "") {
-        fetch("{% url 'recipe:add_recipe' %}", {
-            method: "POST",
-            body: new FormData(document.querySelector('#form'))
-        }).then(refreshRecipe);
-        $('#modal').modal('hide');
-        document.getElementById("form").reset();
+        document.getElementById("card-row").innerHTML = htmlString
     }
-        
-    return false
-}
 
-document.getElementById("addButton").onclick = addRecipe
-refreshRecipe()
+    async function addRecipe() {
+        var txt = document.getElementById("formInput").value;
+        // var frm = document.getElementById('form')[0];
+        console.log(txt);
+        if (txt != "") {
+            fetch("{% url 'recipe:add_recipe' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshRecipe);
+            $('#modal').modal('hide');
+            document.getElementById("form").reset();
+        }
+
+        return false
+    }
+
+    document.getElementById("addButton").onclick = addRecipe
+    refreshRecipe()
 
 </script>
 
