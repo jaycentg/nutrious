@@ -1,0 +1,12 @@
+  .nutrious-intro:hover{
+    transform: scale(1.02);
+  }
+  .feature{
+    transition: transform .2s;
+  }
+  .feature:hover{
+    transform: scale(1.04);
+  }
+  body{
+    background-color: azure;
+  }
