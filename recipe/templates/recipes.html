@@ -7,6 +7,11 @@
 {% block meta %}
 <title>Food Recipes</title>
 <style>
+    .avatar{
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
     .header-content {
         background-image: url("{% static 'recipe-header.png' %}");
         transition: transform .2s;
@@ -35,9 +40,9 @@
             <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
         </a>
         <div class="d-flex flex-row">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg"
-                data-bs-whatever="@getbootstrap">Add recipe</button>
             <div class="dropdown m-auto mx-3">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg"
+                    data-bs-whatever="@getbootstrap">Add recipe</button>
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Profile
@@ -46,15 +51,15 @@
                     <li><a class="dropdown-item" href="{% url 'home:profile' %}">View Profile</a></li>
                     <li><a class="dropdown-item" href="{% url 'home:logout' %}">Log Out</a></li>
                 </ul>
+                
+                <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
+                {% if user.is_verified_user %}
+                <img src="{{user.image.url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                {% else %}
+                <img src="{{user.profile_pict_url}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                {% endif %}
+                
             </div>
-            <!-- Pembeda dari user yang sudah verified dan belum adalah pada border dari profile picture -->
-            {% if user.is_verified_user %}
-            <img src="{{user.profile_url}}"
-                class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
-            {% else %}
-            <img src="{{user.profile_url}}"
-                class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
-            {% endif %}
         </div>
     </div>
 </nav>
@@ -64,16 +69,17 @@
         <a class="navbar-brand" href="{% url 'home:show_index' %}">
             <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
         </a>
-        <div class="d-flex flex-row-reverse">
+        <div class="d-flex flex-row-reverse ">
             <a class="btn btn-outline-primary p-2 m-3" role="button" href="{% url 'home:register' %}">Sign Up</a>
             <a class="btn btn-outline-success p-2 m-3" role="button" href="{% url 'home:login' %}">Log In</a>
+            <a class="btn btn-success p-2 m-3" role="button" href="{% url 'home:login' %}">Add Recipe</a>
         </div>
     </div>
 </nav>
 {% endif %}
 
 <!-- Modal -->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content bg-white text-black">
 
@@ -104,7 +110,7 @@
                             <textarea type="text" class="form-control" id="formInput" name="method" required></textarea>
                         </div>
 
-                        <button class="btn btn-success btn-lg px-py-5 row my-2" id="addButton" type="submit"
+                        <button class="btn btn-success btn-lg px-py-5 row my-2" id="addButton" type="submit" 
                             value="Submit">Add Recipe</button></td>
                     </div>
                 </form>
@@ -163,23 +169,21 @@ async function refreshRecipe() {
 }
 
 async function addRecipe() {
-    // const input = document.querySelector(".input");
-    // const textarea = document.querySelector(".textarea");
-    // let inp = input.value;
-    // let txt = textarea.value;
     var txt = document.getElementById("formInput").value;
+    // var frm = document.getElementById('form')[0];
     console.log(txt);
     if (txt!= "") {
         fetch("{% url 'recipe:add_recipe' %}", {
             method: "POST",
             body: new FormData(document.querySelector('#form'))
-        }).then(refreshRecipe)
+        }).then(refreshRecipe);
+        $('#modal').modal('hide');
+        document.getElementById("form").reset();
     }
         
     return false
 }
 
-// const input = document.getElementById("formInput");
 document.getElementById("addButton").onclick = addRecipe
 refreshRecipe()
 
