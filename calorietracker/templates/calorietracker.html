@@ -91,11 +91,8 @@ function createCard(){
             
             document.getElementById('counter_add').innerText = counter_add +' kkal'
             document.getElementById('counter_decrease').innerText = counter_decrease +' kkal'
-            if(total<0){
-                document.getElementById('total').innerText = 0 +' kkal'
-            }else{
             document.getElementById('total').innerText = total +' kkal'
-            }
+            
         }
         $('#card').append(data_card);
         
