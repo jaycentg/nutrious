@@ -2,14 +2,7 @@
 {% load static %}
 {% block meta %}
 <title>Registration</title>
-<style>
-  body{
-    background-color: azure;
-  }
-  .card{
-    background-color: white;
-  }
-</style>
+<link rel="stylesheet" href="{% static 'css/reg.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -109,7 +102,7 @@
                   <span class="invalid-feedback">{{ error }}</span>
                 {% endfor %}
               </div>
-              <input class="btn btn-primary w-100" type="submit" value="Register" name="submit" onclick=showAlert()>
+              <input class="btn btn-primary w-100" type="submit" value="Register" name="submit" onclick="alert('Thank you for registering. Please wait for our admin to verify your account to use full features of our app.')">
             </form>
           </div>
         </div>
@@ -118,8 +111,5 @@
   </div>
 </body>
 <script>
-  function showAlert(){
-    alert('Thank you for registering. Please wait for our admin to verify your account to use full features of our app.')
-  };
 </script>
 {% endblock %}
