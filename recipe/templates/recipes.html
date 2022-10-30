@@ -163,11 +163,10 @@
             </div>
 
             <div class="card-body">
-                <h5 class="card-title">${item.fields.food_name}</h5>
                 <p class="card-text"><u>Ingredients: </u></p>
-                <p class="card-text">${item.fields.ingredients}</p>
+                <ul class="card-text"><li>${item.fields.ingredients}</li></ul>
                 <p class="card-text"><u>Step by step:</u></p>
-                <p class="card-text">${item.fields.method}</p>
+                <ol class="card-text"><li>${item.fields.method}</li></ol>
             </div>
         </div>
         </div>`
@@ -178,7 +177,6 @@
 
     async function addRecipe() {
         var txt = document.getElementById("formInput").value;
-        // var frm = document.getElementById('form')[0];
         console.log(txt);
         if (txt != "") {
             fetch("{% url 'recipe:add_recipe' %}", {
