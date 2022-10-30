@@ -29,7 +29,7 @@ Fitur bagi *user* untuk membagikan pemikirannya terkait nutrisi, gizi, dan keseh
 
 ## Daftar Role dan Deskripsinya
 1. Unverified User<br>
-*User* yang belum terverifikasi dapat melakukan donasi untuk penggalangan dana, membuat *log* terkait aktivitas yang berkaitan dengan penambahan atau pembakaran kalori, membagikan resep makanan sehat, serta membuat *blog* dan melakukan *upvote* atau *downvote* pada *post* tersebut. *User* yang belum terverifikasi juga dapat mengirimkan pesan kepada *admin* melalui halaman utama.
+*User* yang belum terverifikasi dapat melakukan donasi untuk penggalangan dana, membuat *log* terkait aktivitas yang berkaitan dengan penambahan atau pembakaran kalori, membagikan resep makanan sehat, serta membuat blog dan melakukan *upvote* atau *downvote* pada *post* tersebut. *User* yang belum terverifikasi juga dapat mengirimkan pesan kepada *admin* melalui halaman utama.
 2. Verified User<br>
 *User* yang sudah terverifikasi dapat membuka penggalangan dana dan membagikan informasi terkait pembagian makanan. Semua *user* yang sudah terverifikasi dapat mengakses fitur yang juga dapat diakses oleh *user* yang belum terverifikasi.
 3. Admin<br>
