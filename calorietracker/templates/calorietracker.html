@@ -58,7 +58,7 @@ function createCard(){
                 <div class="card mb-4 card-calorie">
                     <div class="card-body">
                         <div class="card-title fw-bold h2">${i.fields.category}</div>
-                        <div class="card-text m-1">Calorie: ${i.fields.calorie}</div>
+                        <div class="card-text m-1">Calorie: ${i.fields.calorie} kkal</div>
                         <div class="card-text m-1">Description: ${i.fields.description}</div>
                         <div class="card-text m-1">Time added: ${i.fields.time}</div>
                         <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
@@ -72,7 +72,7 @@ function createCard(){
                 <div class="card mb-4 card-calorie">
                     <div class="card-body">
                         <div class="card-title fw-bold h2">${i.fields.category}</div>
-                        <div class="card-text m-1">Calorie: ${i.fields.calorie}</div>
+                        <div class="card-text m-1">Calorie: ${i.fields.calorie} kkal</div>
                         <div class="card-text m-1">Description: ${i.fields.description}</div>
                         <div class="card-text m-1">Time added: ${i.fields.time}</div>
                         <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
@@ -89,12 +89,12 @@ function createCard(){
             }
             total = counter_add - counter_decrease
             
-            document.getElementById('counter_add').innerText = counter_add 
-            document.getElementById('counter_decrease').innerText = counter_decrease
+            document.getElementById('counter_add').innerText = counter_add +' kkal'
+            document.getElementById('counter_decrease').innerText = counter_decrease +' kkal'
             if(total<0){
-                document.getElementById('total').innerText = 0
+                document.getElementById('total').innerText = 0 +' kkal'
             }else{
-            document.getElementById('total').innerText = total
+            document.getElementById('total').innerText = total +' kkal'
             }
         }
         $('#card').append(data_card);

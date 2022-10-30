@@ -49,11 +49,15 @@
                                 <form method="POST" action="{% url 'calorietracker:edit_reduce_save' edit.id %}">
                                     {% csrf_token %}
                                     
+                          
+                         
+                           
                                     <td>Calorie</td>
-                                    <td><input type="text" name="calorie" value="{{edit.calorie}}" class="form-control" id="input_calorie"></td>
+                                    <td><input type="number" name="calorie" min="0" value="{{edit.calorie}}" class="form-control" id="input_calorie"  oninput="validity.valid||(value='');"/></td>
+
                                     
                                     <td>Deskripsi </td>
-                                    <td><input type="text" name="description" value="{{edit.description}}" style="min-height: 100px" class="form-control" id="input_deskripsi"></td>
+                                    <input type="text" name="description" value="{{edit.description}}" s style="min-height: 100px" class="form-control" id="input_deskripsi"></input>
                                     
                                    
                                     <div><br><button class="btn login_btn btn-primary mx-auto m-1" type="submit" value="Edit">Edit</button></div>
