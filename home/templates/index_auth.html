@@ -2,6 +2,16 @@
 {% load static %}
 {% block meta %}
 <title>Nutrious</title>
+
+<!-- Preload for faster image load -->
+<link rel="preload" as="image" href="{% static 'NUTRIOUS.png' %}">
+<link rel="preload" as="image" href="{% static 'bg-header.png' %}">
+<link rel="preload" as="image" href="{% static 'fundraising.jpg' %}">
+<link rel="preload" as="image" href="{% static 'foodsharing.jpg' %}">
+<link rel="preload" as="image" href="{% static 'calorie.jpg' %}">
+<link rel="preload" as="image" href="{% static 'recipe.jpg' %}">
+<link rel="preload" as="image" href="{% static 'trivia.jpg' %}">
+
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <style>
   .nutrious-intro{
