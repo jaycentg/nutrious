@@ -16,16 +16,10 @@ def show_location(request):
    
     context = {
         'locationlist' : data_post,
+        'user_profile' : request.user.profile_pict_url,
     }
     
     return render(request, "location_page.html", context)
-
-def location_detail(request, id):
-    location_detail = Sharing.objects.get(pk = id)
-    context = {
-        'locationdetail' : location_detail
-    }
-    return render(request, "location_detail.html", context)
 
 # harus pas kondisi login
 @login_required(login_url='home/login/')
@@ -59,7 +53,8 @@ def edit_add(request, id):
 
         print("aosdsodosd", dic)
         context = {
-            'edit' : dic
+            'edit' : dic,
+            'user_profile' : request.user.profile_pict_url,
         }
         import json
         # return render(request, "location_page.html", context)
