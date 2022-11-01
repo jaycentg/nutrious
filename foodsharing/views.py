@@ -16,7 +16,7 @@ def show_location(request):
     data_post = Sharing.objects.order_by('-date')
    
     context = {
-        'user_profile' : request.user.profile_pict_url,
+        'locationlist' : data_post,
     }
     
     if request.user.is_authenticated:
