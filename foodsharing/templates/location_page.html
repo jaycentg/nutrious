@@ -173,7 +173,7 @@
             console.log(`{{user}}`)
             $('#card').empty();
             let data_card = "";
-    
+
             let button = "";
             $.get("json/", function (resp) {
                 if (resp.length == 0) {
@@ -198,7 +198,7 @@
                                 <a href="delete/${i.pk}" class="btn btn-outline-primary p-2 m-1">Delete</a>`
                         }
                         // console.log("user:", `{{user.is_user}}`)
-                        
+
                         // console.log("user hmhm:", `{{author_id}}`)
                         // console.log("user:", `{{locationlist.author}}`)
                         // console.log(`${i.fields.author}`)
@@ -237,7 +237,7 @@
 
                 $('#card').append(data_card);
 
-            
+
 
             })
         }
@@ -366,5 +366,8 @@
     </script>
 
 </body>
+<footer class="bg-secondary text-center text-lg-start shadow text-light">
+    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
+</footer>
 
 {% endblock content %}
