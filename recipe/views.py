@@ -1,15 +1,14 @@
 import datetime
 
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.core import serializers
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from recipe.models import FoodRecipe
-from recipe.forms import CreateRecipe
-from home.models import AppUser
+
 
 @csrf_exempt
 def show_recipe(request):
@@ -41,7 +40,7 @@ def add_recipe(request):
 
 @csrf_exempt
 def delete(request, id):
-    task = FoodRecipe.objects.get(pk=id)
-    if (task.user == request.user):
-        FoodRecipe.objects.filter(pk=id).delete()
-        return HttpResponseRedirect(reverse('recipe:show_recipe'))
+    food = FoodRecipe.objects.get(pk=id)
+    if(request.user == food.author):
+        food.delete()
+    return redirect('recipe:show_recipe')
