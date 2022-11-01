@@ -21,7 +21,7 @@ function createCard() {
         }
         else {
             for (let i of resp) {
-               
+
                 if (`{{user.is_user}}`) {
                     if (($("#current_user").val()) == `${i.fields.author}`) {
                         button = `<a data-id="${i.pk}" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
@@ -31,7 +31,7 @@ function createCard() {
                     }
                 }
                 data_card += ` 
-            <div class="p-3">
+            <div class="p-3" id="per_satuan">
                 <div class="card mb-3 text-bg-light">
                     <div class="row g-0">
                         <div class="col-md-4 bg-light text-center" style="width: md-4;">
@@ -50,14 +50,12 @@ function createCard() {
                                 
                                 ${button}
                             </div>
-                        <div>
-                        </div>
                     </div>
                     </div>
                 </div>
             </div>
             `
-
+                button = "";
 
             };
         }

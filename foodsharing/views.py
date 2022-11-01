@@ -35,8 +35,8 @@ def add_location(request):
         location = request.POST.get('location')
         description = request.POST.get('description')
         img = request.POST.get('img')
-        date=datetime.datetime.now()
-        update_date = date
+        date = datetime.date.today()
+        update_date = datetime.date.today()
         Sharing.objects.create(update_date = update_date, author=request.user, date = date, img = img, location = location, description=description)
         
         return redirect('foodsharing:show_location')
@@ -75,7 +75,7 @@ def edit_add_save(request, id):
             edit.location = request.POST['location']
             edit.description = request.POST['description']
             edit.img = request.POST['img']
-            edit.update_date = datetime.datetime.now()
+            edit.update_date = datetime.date.today()
             edit.save()
     return redirect('foodsharing:show_location')
         
