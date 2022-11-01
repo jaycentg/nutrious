@@ -16,7 +16,6 @@ def show_location(request):
     data_post = Sharing.objects.order_by('-date')
    
     context = {
-        'locationlist' : data_post,
         'user_profile' : request.user.profile_pict_url,
     }
     
