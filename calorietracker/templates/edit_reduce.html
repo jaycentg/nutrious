@@ -1,17 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta %}
-<style>
-    .avatar{
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-    }
-    body{
-        background-color: azure;
-    }
-      
-</style>
+<link rel="stylesheet" href="{% static '/editPageStyle.css' %}" />
 {% endblock meta %}
 {% block content %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
@@ -70,7 +60,4 @@
         </div>
     </div>
 </body>
-<footer class="bg-secondary text-center text-lg-start shadow text-light">
-    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
-</footer>
 {% endblock %}

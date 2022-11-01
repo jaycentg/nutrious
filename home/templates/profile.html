@@ -6,7 +6,6 @@
 {% endblock meta %}
 
 {% block content %}
-<body>
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">
@@ -17,33 +16,29 @@
           </div>
         </div>
     </nav>
-    <div class="card mx-5 my-4 p-3">
-        <div class="h2 fw-bold text-center">My Profile</div>
-        <img src="{{profile_url}}" class="rounded-circle shadow-lg img-fluid mx-auto d-block my-2">
-        <div class="container text-center my-2">
-            <div class="h6">Username</div>
-            <div class="h4 fw-bold">{{username}}</div>
+        <div class="card mx-5 my-4 p-3">
+            <div class="h2 fw-bold text-center">My Profile</div>
+            <img src="{{profile_url}}" class="rounded-circle shadow-lg img-fluid mx-auto d-block my-2">
+            <div class="container text-center my-2">
+                <div class="h6">Username</div>
+                <div class="h4 fw-bold">{{username}}</div>
+            </div>
+            <div class="container text-center my-2">
+                <div class="h6">Nickname</div>
+                <div class="h4 fw-bold">{{nickname}}</div>
+            </div>
+            <div class="container text-center my-2">
+                <div class="h6">Description</div>
+                {% if description %}
+                    <div class="h4 fw-bold">{{description}}</div>
+                {% else %}
+                <div class="h4 fw-bold">-</div>
+                {% endif %}
+            </div>
+            <div class="container text-center my-2">
+                <div class="h6">Status</div>
+                <div class="h4 fw-bold">{{status}}</div>
+            </div>
+            <a href="{% url 'home:show_index' %}" role="button" class="btn btn-primary mx-5">Back to Home</a>
         </div>
-        <div class="container text-center my-2">
-            <div class="h6">Nickname</div>
-            <div class="h4 fw-bold">{{nickname}}</div>
-        </div>
-        <div class="container text-center my-2">
-            <div class="h6">Description</div>
-            {% if description %}
-                <div class="h4 fw-bold">{{description}}</div>
-            {% else %}
-            <div class="h4 fw-bold">-</div>
-            {% endif %}
-        </div>
-        <div class="container text-center my-2">
-            <div class="h6">Status</div>
-            <div class="h4 fw-bold">{{status}}</div>
-        </div>
-        <a href="{% url 'home:show_index' %}" role="button" class="btn btn-primary mx-5">Back to Home</a>
-    </div>
-</body>
-<footer class="bg-secondary text-center text-lg-start shadow text-light">
-    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
-</footer>
 {% endblock content %}

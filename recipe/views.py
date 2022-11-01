@@ -28,8 +28,8 @@ def show_json(request):
 def add_recipe(request):
     if request.method == 'POST':
         food_name = request.POST.get('food_name')
-        ingredients = request.POST.get('ingredients').replace("\n", "</li> <li>" )
-        method = request.POST.get('method').replace("\n", "</li> <li>" )
+        ingredients = request.POST.get('ingredients').strip().replace("\n", "</li> <li>" )
+        method = request.POST.get('method').strip().replace("\n", "</li> <li>" )
         date = datetime.datetime.now()
         formatted_date = formatted_date = date.strftime("%d") + " " + date.strftime("%B") + " " + date.strftime("%Y")
 

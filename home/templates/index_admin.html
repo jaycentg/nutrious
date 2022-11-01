@@ -7,7 +7,6 @@
 {% endblock meta %}
 
 {% block content %}
-<body>
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">
@@ -27,39 +26,39 @@
           </div>
         </div>
     </nav>
-    <div class="h1 m-3 fw-bold text-center">Admin Dashboard</div>
-    <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
-      <div class="h3 text-center fw-bold">User Verification</div>
-      <table class="table text-center table-hover table-responsive">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Username</th>
-                <th scope="col">Verified</th>
-                <th scope="col">Change</th>
-                <th scope="col">Delete</th>
-            </tr>
-        </thead>
-        <tbody id="user-verif"></tbody>
-      </table>
-    </div>
-    <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
-      <div class="h3 text-center fw-bold">Fundraising Verification</div>
-      <table class="table text-center table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Opener ID</th>
-                <th scope="col">Description</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Verified</th>
-                <th scope="col">Change</th>
-                <th scope="col">Delete</th>
-            </tr>
-        </thead>
-        <tbody id="fundraising-verif"></tbody>
-      </table>
-    </div>
+      <div class="h1 m-3 fw-bold text-center">Admin Dashboard</div>
+      <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
+        <div class="h3 text-center fw-bold">User Verification</div>
+        <table class="table text-center table-hover table-responsive">
+          <thead>
+              <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Verified</th>
+                  <th scope="col">Change</th>
+                  <th scope="col">Delete</th>
+              </tr>
+          </thead>
+          <tbody id="user-verif"></tbody>
+        </table>
+      </div>
+      <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
+        <div class="h3 text-center fw-bold">Fundraising Verification</div>
+        <table class="table text-center table-hover">
+          <thead>
+              <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Opener ID</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Verified</th>
+                  <th scope="col">Change</th>
+                  <th scope="col">Delete</th>
+              </tr>
+          </thead>
+          <tbody id="fundraising-verif"></tbody>
+        </table>
+      </div>
     <div class="card p-3 m-2 my-3 text-center" style="overflow:auto">
       <div class="h3 text-center fw-bold">Messages</div>
       <table class="table text-center table-hover table-responsive">
@@ -74,7 +73,6 @@
         <tbody id="user-msg"></tbody>
       </table>
     </div>
-</body>
 <script>
   function getAllDonatee(){
     $.get('/donation/json-admin/', function(data){

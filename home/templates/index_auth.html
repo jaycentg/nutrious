@@ -2,6 +2,16 @@
 {% load static %}
 {% block meta %}
 <title>Nutrious</title>
+
+<!-- Preload for faster image load -->
+<link rel="preload" as="image" href="{% static 'NUTRIOUS.png' %}">
+<link rel="preload" as="image" href="{% static 'bg-header.png' %}">
+<link rel="preload" as="image" href="{% static 'fundraising.jpg' %}">
+<link rel="preload" as="image" href="{% static 'foodsharing.jpg' %}">
+<link rel="preload" as="image" href="{% static 'calorie.jpg' %}">
+<link rel="preload" as="image" href="{% static 'recipe.jpg' %}">
+<link rel="preload" as="image" href="{% static 'trivia.jpg' %}">
+
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <style>
   .nutrious-intro{
@@ -13,7 +23,6 @@
 {% endblock meta %}
 
 {% block content %}
-<body>
   <nav class="navbar shadow navbar-expand-lg bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
@@ -38,68 +47,65 @@
       </div>
     </div>
   </nav>
-  <div class="h3 text-center m-3">Hello, <span class="fw-bold">{{nickname}}</span>!</div>
-  <div class="card m-3 p-5 nutrious-intro text-light">
-    <div class="text-center fw-bold h1 m-2">Welcome to Nutrious!</div>
-    <div class="text-center">With great nutrition, comes great health. So, help yourself and others to achieve good health!</div>
-  </div>
-  <div class="d-flex m-3 flex-wrap">
-    <div class="card flex-fill my-1 mr-1 feature" style="width: 18rem;">
-      <img src="{% static 'fundraising.jpg' %}" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title fw-bold text-center">Fundraising</h5>
-        <p class="card-text text-center">Help others by donating what they need</p>
-        <a href="/donation/" class="stretched-link"></a>
-      </div>
+  <div class="site-content">
+    <div class="h3 text-center m-3">Hello, <span class="fw-bold">{{nickname}}</span>!</div>
+    <div class="card m-3 p-5 nutrious-intro text-light">
+      <div class="text-center fw-bold h1 m-2">Welcome to Nutrious!</div>
+      <div class="text-center">With great nutrition, comes great health. So, help yourself and others to achieve good health!</div>
     </div>
-    <div class="card flex-fill m-1 feature" style="width: 18rem;">
-      <img src="{% static 'foodsharing.jpg' %}" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title fw-bold text-center">Food-Sharing</h5>
-        <p class="card-text text-center">Share your location and let others enjoy your food</p>
-        <a href="/foodsharing/" class="stretched-link"></a>
-      </div>
-    </div>
-    <div class="card flex-fill m-1 feature" style="width: 18rem;">
-      <img src="{% static 'calorie.jpg' %}" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title fw-bold text-center">Calorie Tracker</h5>
-        <p class="card-text text-center">Track your calories here and be healthy</p>
-        <a href="/calorietracker/" class="stretched-link"></a>
-      </div>
-    </div>
-    <div class="card flex-fill m-1 feature" style="width: 18rem;">
-      <img src="{% static 'recipe.jpg' %}" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title fw-bold text-center">Food Recipes</h5>
-        <p class="card-text text-center">Share your masterpieces here and let others taste how delicious they are</p>
-        <a href="/recipe/" class="stretched-link"></a>
-      </div>
-    </div>
-    <div class="card flex-fill my-1 ml-1 feature" style="width: 18rem;">
-      <img src="{% static 'trivia.jpg' %}" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title fw-bold text-center">Blog</h5>
-        <p class="card-text text-center">Share your thoughts about nutrition here</p>
-        <a href="/blog/" class="stretched-link"></a>
-      </div>
-    </div>
-  </div>
-  <div class="container-fluid">
-    <div class="h6 fw-bold text-center">Leave a message for our admin</div>
-    <form method="POST" id="form-message" action="">
-      {% csrf_token %}
-      <div class="d-flex m-2 p-1">
-        <div class="flex-grow-1 mx-2">
-          {{form.as_div}}
+    <div class="d-flex m-3 flex-wrap">
+      <div class="card flex-fill my-1 mr-1 feature" style="width: 18rem;">
+        <img src="{% static 'fundraising.jpg' %}" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-center">Fundraising</h5>
+          <p class="card-text text-center">Help others by donating what they need</p>
+          <a href="/donation/" class="stretched-link"></a>
         </div>
-        <input type="submit" value="Submit" class="btn btn-primary mx-2">
       </div>
-    </form>
-  </div>
+      <div class="card flex-fill m-1 feature" style="width: 18rem;">
+        <img src="{% static 'foodsharing.jpg' %}" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-center">Food-Sharing</h5>
+          <p class="card-text text-center">Share your location and let others enjoy your food</p>
+          <a href="/foodsharing/" class="stretched-link"></a>
+        </div>
+      </div>
+      <div class="card flex-fill m-1 feature" style="width: 18rem;">
+        <img src="{% static 'calorie.jpg' %}" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-center">Calorie Tracker</h5>
+          <p class="card-text text-center">Track your calories here and be healthy</p>
+          <a href="/calorietracker/" class="stretched-link"></a>
+        </div>
+      </div>
+      <div class="card flex-fill m-1 feature" style="width: 18rem;">
+        <img src="{% static 'recipe.jpg' %}" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-center">Food Recipes</h5>
+          <p class="card-text text-center">Share your masterpieces here and let others taste how delicious they are</p>
+          <a href="/recipe/" class="stretched-link"></a>
+        </div>
+      </div>
+      <div class="card flex-fill my-1 ml-1 feature" style="width: 18rem;">
+        <img src="{% static 'trivia.jpg' %}" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-center">Blog</h5>
+          <p class="card-text text-center">Share your thoughts about nutrition here</p>
+          <a href="/blog/" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="h6 fw-bold text-center">Leave a message for our admin</div>
+      <form method="POST" id="form-message" action="">
+        {% csrf_token %}
+        <div class="d-flex m-2 p-1">
+          <div class="flex-grow-1 mx-2">
+            {{form.as_div}}
+          </div>
+          <input type="submit" value="Submit" class="btn btn-primary mx-2">
+        </div>
+      </form>
+    </div>
   <script src="{% static 'js/message.js' %}"></script>
-</body>
-<footer class="bg-secondary text-center text-lg-start shadow text-light">
-  <div class="text-center p-3">2022: Platform-Based Programming F02</div>
-</footer>
 {% endblock content %}

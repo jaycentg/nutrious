@@ -6,176 +6,9 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
-<style>
-.card-calorie:hover{
-    transform: scale(1.02);
-}
-.avatar{
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-}
-body{
-    background-color: azure;
-}
-.button{
-    background-color:rgb(255, 223, 95);
-    color:white;
-}
 
-  
-</style>
-<script>
-function deleteCard(){
-    $.get("json/", function(resp) {
-       var date = new Date();
-        for (let i of resp){
-            x=i.fields.date
-            tanggal = x.slice(8,10)
-            if(tanggal<date.getDate()){
-                $.ajax({
-                url: "delete/" + i.pk,
-            error: function (data) {
-                alert("it didnt work");
-        }
-    });
-            }
-        }
-    })
-}   
-        
-function createCard(){
-    $('#card').empty();
-    let data_card ="";
-    $.get("json/", function(resp) {
-        var counter_add = 0
-        var counter_decrease = 0
-        var total = 0
-        for (let i of resp){
-            if ( i.fields.category == 'Burn Calorie'){
-                data_card +=
-                `
-                <div class="card mb-4 card-calorie">
-                    <div class="card-body">
-                        <div class="card-title fw-bold h2">${i.fields.category}</div>
-                        <div class="card-text m-1">Calorie: ${i.fields.calorie} kkal</div>
-                        <div class="card-text m-1">Description: ${i.fields.description}</div>
-                        <div class="card-text m-1">Time added: ${i.fields.time}</div>
-                        <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
-                        <a href="edit_reduce/${i.pk}" class="btn btn-primary link">Edit</a>
-                    </div>
-                </div>
-                `
-            }else{
-            data_card +=
-            `
-                <div class="card mb-4 card-calorie">
-                    <div class="card-body">
-                        <div class="card-title fw-bold h2">${i.fields.category}</div>
-                        <div class="card-text m-1">Calorie: ${i.fields.calorie} kkal</div>
-                        <div class="card-text m-1">Description: ${i.fields.description}</div>
-                        <div class="card-text m-1">Time added: ${i.fields.time}</div>
-                        <a href="delete/${i.pk}"  class="btn btn-primary link">Delete</a>
-                        <a href="edit_add/${i.pk}" class="btn btn-primary link">Edit</a>
-                    </div>
-                </div>
-                `
-            }
-            ;
-            if(i.fields.is_increasing){
-                counter_add += i.fields.calorie
-            }else{
-                counter_decrease += i.fields.calorie
-            }
-            total = counter_add - counter_decrease
-            
-            document.getElementById('counter_add').innerText = counter_add +' kkal'
-            document.getElementById('counter_decrease').innerText = counter_decrease +' kkal'
-            document.getElementById('total').innerText = total +' kkal'
-            
-        }
-        $('#card').append(data_card);
-        
-    })
-}          
-$(document).ready(function(){
-    var date = new Date();
-    document.getElementById('date-info').innerText = date.toDateString();
-    document.getElementById('counter_add').innerText = 0
-    document.getElementById('counter_decrease').innerText = 0
-    document.getElementById('total').innerText = 0
-
-    createCard();
-    deleteCard();
-    $("#decrease").click(function(e){
-        var calorie = $("#input_calorie1").val();
-        var description = $("#input_deskripsi1").val();
-        var category = 'Burn Calorie'
-        var date = new Date();
-        var hours = date.getHours();  
-        var minutes = "0" + date.getMinutes();
-        var seconds = "0" + date.getSeconds(); 
-        time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-        $.post("reduce_calorie/",
-        {
-            calorie,
-            description,
-            category,
-            time,
-            date,
-        },
-        function(data, status){
-            createCard();
-            $("#input_deskripsi").val("");
-            $("#input_calorie").val("");
-            document.getElementById("category1").value;
-        });
-    });
-    $("#add").click(function(e){
-        var calorie = $("#input_calorie").val();
-        var description = $("#input_deskripsi").val();
-        var category = document.getElementById("category").value;
-        var date = new Date();
-        var hours = date.getHours();  
-        var minutes = "0" + date.getMinutes();
-        var seconds = "0" + date.getSeconds(); 
-        time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-        $.post("add_calorie/",
-        {
-            calorie,
-            description,
-            category,
-            time,
-            date,
-        },
-        function(data, status){
-            console.log("test6")
-            createCard();
-            $("#input_deskripsi").val("");
-            $("#input_calorie").val("");
-            document.getElementById("category").value;
-        });
-    });
-    
-});
-$('#Test').click(function(e){
-    e.preventDefault();
-    $('#Modal').modal();
-});
-$('#Test1').click(function(e){
-    e.preventDefault();
-    $('#Modal1').modal();
-});
-$('#closeBtn').click(function(e){
-    e.preventDefault();
-    $('#Modal').modal('hide');
-})
-$('#closeBtn').click(function(e){
-    e.preventDefault();
-    $('#Modal1').modal('hide');
-})
-</script>
-
+<script src="{% static '/caloriePageJS.js' %}"></script>
+<link rel="stylesheet" href="{% static '/caloriePageStyle.css' %}" />
 
 {% endblock meta %}
 
@@ -223,11 +56,14 @@ $('#closeBtn').click(function(e){
             <form method="POST">
                 {% csrf_token %}
                 <br>
+                <br> 
                 <div class="text-center">
-                <h2 class="fw-bold">Welcome {{nickname}} !</h2>
+                <h1 class="fw-bold">Welcome to Calorie Tracker, {{nickname}} !</h1>
+                <br>
                 <p>This is your calorie tracker for today</p>
                 <p>Refresh page to delete your yesterday calorie tracker</p>
                 <p id="date-info"></p>
+                <br>
                 </div>
                 <div class="row align-items-center justify-content-center text-center">
                     <div  style="width: 18rem;">
@@ -322,7 +158,4 @@ $('#closeBtn').click(function(e){
         </div>
 
     </body>
-    <footer class="bg-secondary text-center text-lg-start shadow text-light">
-        <div class="text-center p-3">2022: Platform-Based Programming F02</div>
-    </footer>
 {% endblock content %}

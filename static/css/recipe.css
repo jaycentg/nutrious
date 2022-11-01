@@ -1,0 +1,35 @@
+.avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.header-content {
+    /* background-image: url("{% static 'recipe-header.png' %}"); */
+    background-image: url("../recipe-header.png");
+    
+    transition: transform .2s;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+    opacity: 1.0;
+}
+
+.row {
+    margin-left: 75px;
+    margin-right: 75px;
+}
+
+@media screen and (max-width: 900px) {
+    #column {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+}
