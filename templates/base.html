@@ -17,11 +17,24 @@
   body{
     font-family: 'Poppins', sans-serif;
   }
+  .site{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  .site-content{
+    flex: 1;
+  }
 </style>
 
-<body>
-  {% block content %}
-  {% endblock content %}
+<body class="site">
+  <main class="site-content">
+    {% block content %}
+    {% endblock content %}
+  </main>
+  <footer class="bg-secondary text-center text-lg-start shadow text-light">
+    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
+  </footer>
 </body>
 
 </html>

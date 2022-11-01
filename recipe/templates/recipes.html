@@ -1,51 +1,23 @@
 {% extends 'base.html' %}
 
-
 {% load static %}
 
 
 {% block meta %}
 <title>Food Recipes</title>
-<style>
-    .avatar {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-    }
 
-    .header-content {
-        background-image: url("{% static 'recipe-header.png' %}");
-        transition: transform .2s;
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
+<!-- Preload for faster image load -->
+<link rel="preload" as="image" href="{% static 'recipe-header.png' %}">
 
-    .card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
-        opacity: 1.0;
-    }
-    
-    .row {
-        margin-left: 75px;
-        margin-right: 75px;
-    }
-    
-    @media screen and (max-width: 900px) {
-        #column {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            flex-direction: column;
-            margin-bottom: 20px;
-        }
-    }
-</style>
+<!-- Styling -->
+<link rel="stylesheet" href="{% static 'css/recipe.css' %}">
+
 {% endblock meta %}
 
 
 {% block content %}
 
+<!-- Navbar -->
 {% if user.is_authenticated %}
 <nav class="navbar shadow navbar-expand-lg bg-light">
     <div class="container-fluid">
