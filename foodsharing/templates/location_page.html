@@ -16,24 +16,16 @@
 
 
 <script src="{% static '/foodsharing.js' %}"></script>
-
+<link rel="stylesheet" href="{% static '/foodsharing.css' %}" />
 {% endblock meta %}
 
 {% block content %}
+
 <head>
-    
+
     <title>Food Sharing</title>
-    <style>
-        body {
-            background-color: azure;
-        }
-        .avatar{
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-        }
-    </style>
-    
+
+
 
 </head>
 
@@ -61,11 +53,13 @@
                     </ul>
                 </div>
 
-                
+
                 {% if is_verified %}
-                <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                <img src="{{user_profile}}"
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
                 {% else %}
-                <img src="{{user_profile}}" class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                <img src="{{user_profile}}"
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
                 {% endif %}
             </div>
         </div>
@@ -177,7 +171,6 @@
         <div class="card" id="card"></div>
     </div>
 
-   
 
 
 </body>
