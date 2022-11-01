@@ -68,12 +68,20 @@
                             <tr class="fieldWrapper">
                                 {{ form.name.errors }}
                                 <td class="p m-3">Donatee Name: </td>
-                                <td class="m-3">{{ form.name }}</td>
+                                <td class="m-3">
+                                    <input type="text" id="{{form.name.id_for_label}}" name="{{form.name.html_name}}"
+                                           class="form-control{% if form.name.errors %} is-invalid{% endif %}"
+                                           value="{% if form.name.value %}{{form.name.value}}{% endif %}" placeholder="Name" required>
+                                </td>
                             </tr>
                             <tr class="fieldWrapper">
                                 {{ form.description.errors }}
                                 <td class="p m-3">Description: </td>
-                                <td class="m-3">{{ form.description }}</td>
+                                <td class="m-3">
+                                <textarea id="{{form.description.id_for_label}}" name="{{form.description.html_name}}"
+                                          class="form-control{% if form.description.errors %} is-invalid{% endif %}"
+                                          value="{% if form.description.value %}{{form.description.value}}{% endif %}" placeholder="Description" required> </textarea>
+                                </td>
                             </tr>
                             <tr class="fieldWrapper">
                                 {{ form.amountNeeded.errors }}
