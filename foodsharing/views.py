@@ -17,6 +17,7 @@ def show_location(request):
    
     context = {
         'locationlist' : data_post,
+        'user_profile' : request.user.profile_pict_url,
     }
     
     if request.user.is_authenticated:

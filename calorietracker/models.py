@@ -17,24 +17,3 @@ class Calorie(models.Model):
     class Meta:
         ordering = ['-date']
     
-# from django.db import models
-# from django.contrib.auth.models import User
-# from home.models import AppUser
-# # Create your models here.
-
-
-# class Food(models.Model):
-
-#     def __str__(self):
-#         return self.name
-
-#     name = models.CharField(max_length=100)
-#     carbs = models.FloatField()
-#     protein = models.FloatField()
-#     fats = models.FloatField()
-#     calories = models.IntegerField()
-
-
-# class Consume(models.Model):
-#     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
-#     food_consumed = models.ForeignKey(Food, on_delete=models.CASCADE)

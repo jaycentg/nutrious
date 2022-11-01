@@ -1,6 +1,6 @@
 function deleteCard(){
     $.get("json/", function(resp) {
-      
+
         for (let i of resp){
             var date = new Date();
             x=i.fields.date
@@ -16,7 +16,7 @@ function deleteCard(){
         }
     })
 }   
-        
+
 function createCard(){
     $('#card').empty();
     let data_card ="";
@@ -61,16 +61,14 @@ function createCard(){
                 counter_decrease += i.fields.calorie
             }
             total = counter_add - counter_decrease
+
             document.getElementById('counter_add').innerText = counter_add +' kkal'
             document.getElementById('counter_decrease').innerText = counter_decrease +' kkal'
             document.getElementById('total').innerText = total +' kkal'
-           
-        }
-        if(total<0){
-            alert("You have burned more calories than you consumed, go get your food!");
+
         }
         $('#card').append(data_card);
-        
+
     })
 }          
 $(document).ready(function(){
@@ -104,7 +102,6 @@ $(document).ready(function(){
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
             document.getElementById("category1").value;
-           
         });
     });
     $("#add").click(function(e){
@@ -132,7 +129,7 @@ $(document).ready(function(){
             document.getElementById("category").value;
         });
     });
-    
+
 });
 $('#Test').click(function(e){
     e.preventDefault();
