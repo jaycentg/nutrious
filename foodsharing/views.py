@@ -11,13 +11,19 @@ from django.contrib import messages
 import timeago
 # Create your views here.
 # semua orang juga bisa baca
+
 def show_location(request):
     data_post = Sharing.objects.order_by('-date')
    
     context = {
         'locationlist' : data_post,
-        'user_profile' : request.user.profile_pict_url,
     }
+    
+    if request.user.is_authenticated:
+        context = {
+        'locationlist' : data_post,
+        'user_profile' : request.user.profile_pict_url,
+        }
     
     return render(request, "location_page.html", context)
 
@@ -48,13 +54,12 @@ def edit_add(request, id):
     dic['img'] = edit.img
     dic['location'] = edit.location
     dic['description'] = edit.description
-    print("user", request.user, edit.author)
+    # print("user", request.user, edit.author)
     if(request.user == edit.author):
 
-        print("aosdsodosd", dic)
+        # print("aosdsodosd", dic)
         context = {
             'edit' : dic,
-            'user_profile' : request.user.profile_pict_url,
         }
         import json
         # return render(request, "location_page.html", context)
