@@ -25,10 +25,20 @@
         box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
         opacity: 1.0;
     }
-
+    
     .row {
         margin-left: 75px;
         margin-right: 75px;
+    }
+    
+    @media screen and (max-width: 900px) {
+        #column {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
     }
 </style>
 {% endblock meta %}
@@ -155,7 +165,7 @@
         const recipes = await getRecipe()
         let htmlString = ``
         recipes.forEach((item) => {
-            htmlString += `\n<div class="col-4">
+            htmlString += `\n<div id="column" class="col-4">
         <div class="card border-success text-dark bg-white mb-3" style="max-width: 28rem;" id="card-task">
             <div class="card-header">
                 <h3>${item.fields.food_name}</h3>
