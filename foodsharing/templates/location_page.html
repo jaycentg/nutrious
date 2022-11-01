@@ -23,6 +23,7 @@
 
 <body>
     {% if user.is_user %}
+    <input id="current_user" value={{user}} type="hidden"></input>
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home:show_index' %}">
@@ -55,6 +56,7 @@
     </nav>
 
 
+
     <div class="todolist d-flex align-items-center justify-content-center">
         <form class="todolist-form text-center" method="POST">
             {% csrf_token %}
@@ -62,6 +64,7 @@
             <h1 class="text-uppercase">Info Sharing Food</h1>
 
             <p>User: {{user}}</p>
+
             <div class="modal" tabindex="-1" id="Modal">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -73,15 +76,16 @@
                         <div class="modal-body">
 
                             <td>URl Image</td>
-                            <td><input type="url" name="image" placeholder="Image" class="form-control" id="input_image"></td>
+                            <td><input type="url" name="image" placeholder="Image" class="form-control"
+                                    id="input_image"></td>
 
                             <td>Location</td>
                             <td><input type="text" name="location" placeholder="Location" class="form-control"
-                                    id="input_location" ></td>
+                                    id="input_location"></td>
 
                             <td>Description</td>
                             <td><input type="text" name="description" placeholder="Description"
-                                    style="min-height: 100px" class="form-control" id="input_description" ></td>
+                                    style="min-height: 100px" class="form-control" id="input_description"></td>
 
                         </div>
 
@@ -105,15 +109,15 @@
                             <input type="hidden" name="" id="input_pk" value="">
                             <td>URl Image</td>
                             <td><input type="url" name="image" placeholder="Image" class="form-control"
-                                    id="input_image_edit" ></td>
+                                    id="input_image_edit"></td>
 
                             <td>Location</td>
                             <td><input type="text" name="location" placeholder="Location" class="form-control"
-                                    id="input_location_edit" ></td>
+                                    id="input_location_edit"></td>
 
                             <td>Description</td>
                             <td><input type="text" name="description" placeholder="Description"
-                                    style="min-height: 100px" class="form-control" id="input_description_edit" >
+                                    style="min-height: 100px" class="form-control" id="input_description_edit">
                             </td>
 
                         </div>
@@ -128,6 +132,10 @@
 
         </form>
     </div>
+
+    <!-- <div class="container">
+        <div class="card" id="card"></div>
+    </div> -->
     {% else %}
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
@@ -140,15 +148,14 @@
             </div>
         </div>
     </nav>
-    <div><p class="btn-outline-primary p-2 m-3">You have to log in to to post location of food sharing </p>
+    <div>
+        <p class="btn-outline-primary p-2 m-3">You have to log in to to post location of food sharing </p>
     </div>
-    
+
     {% endif %}
+
     <div class="container">
-        <div class="card" id="card">
-            
-        </div>
-        
+        <div class="card" id="card"></div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -163,13 +170,41 @@
     <script>
         function createCard() {
             console.log("masukkkk")
+            console.log(`{{user}}`)
             $('#card').empty();
             let data_card = "";
+    
+            let button = "";
             $.get("json/", function (resp) {
-                for (let i of resp) {
-                    data_card += ` 
+                if (resp.length == 0) {
+                    data_card = `<div class="p-4">
+                        <div class="card mb-1 text-bg-light">
+                                    <div class="card-body">
+                                        <div class="col bg-light text-center">
+                                        <h5 class="card-title">There is no post</h5>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+
+                }
+                else {
+                    for (let i of resp) {
+                        // if (int(i.fields.author) == {{request.User}})
+                        if (`{{user.is_user}}`) {
+                            button = `<a data-id="${i.pk}" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
+                                            data-bs-target="#edit-modal" id="edit-modal-btn">Edit</a>
+                                <a href="delete/${i.pk}" class="btn btn-outline-primary p-2 m-1">Delete</a>`
+                        }
+                        // console.log("user:", `{{user.is_user}}`)
+                        
+                        // console.log("user hmhm:", `{{author_id}}`)
+                        // console.log("user:", `{{locationlist.author}}`)
+                        // console.log(`${i.fields.author}`)
+                        data_card += ` 
                     <div class="p-3">
-                        <div class="card mb-3 text-bg-dark">
+                        <div class="card mb-3 text-bg-light">
                             <div class="row g-0">
                                 <div class="col-md-4 bg-light text-center">
                                     <img src=${i.fields.img}
@@ -181,12 +216,12 @@
                                         <h5 class="card-title">Locatian at: ${i.fields.location}</h5>
                                         <p class="card-text">Description  : ${i.fields.description}</p>
                                         <br>
+                                        <p>a : {{request.user}} and b : ${i.fields.author}</p>
+                                        <p class="card-text"><small>Author: ${i.fields.author}</small></p>
                                         <p class="card-text"><small>Post Date: ${i.fields.date}</small></p>
                                         <p class="card-text"><small>Last Edit: ${i.fields.update_date}</small></p>
                                         
-                                        <a data-id="${i.pk}" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
-                                        data-bs-target="#edit-modal" id="edit-modal-btn">Edit</a>
-                                        <a href="delete/${i.pk}" class="btn btn-outline-primary p-2 m-1">Delete</a>
+                                        ${button}
                                     </div>
                                 <div>
                                 </div>
@@ -195,9 +230,15 @@
                         </div>
                     </div>
                     `
-                };
+
+
+                    };
+                }
 
                 $('#card').append(data_card);
+
+            
+
             })
         }
 
@@ -326,11 +367,4 @@
 
 </body>
 
-
-<footer style="position:fixed;
-bottom:0;
-width:100%;
-height:60px;" class="bg-secondary text-center text-lg-start shadow text-light">
-    <div class="text-center p-3">2022: Platform-Based Programming F02</div>
-</footer>
 {% endblock content %}

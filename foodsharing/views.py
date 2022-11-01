@@ -13,10 +13,11 @@ import timeago
 # semua orang juga bisa baca
 def show_location(request):
     data_post = Sharing.objects.order_by('-date')
-
+   
     context = {
-        'locationlist' : data_post
+        'locationlist' : data_post,
     }
+    
     return render(request, "location_page.html", context)
 
 def location_detail(request, id):
@@ -44,6 +45,8 @@ def show_json(request):
     data = Sharing.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required(login_url='home/login/')
+@csrf_exempt
 def edit_add(request, id):
     edit = Sharing.objects.get(pk = id)
     dic = {}
@@ -51,27 +54,36 @@ def edit_add(request, id):
     dic['img'] = edit.img
     dic['location'] = edit.location
     dic['description'] = edit.description
-    print("aosdsodosd", dic)
-    context = {
-        'edit' : dic
-    }
-    import json
-    # return render(request, "location_page.html", context)
-    return HttpResponse(json.dumps(dic))
+    print("user", request.user, edit.author)
+    if(request.user == edit.author):
 
+        print("aosdsodosd", dic)
+        context = {
+            'edit' : dic
+        }
+        import json
+        # return render(request, "location_page.html", context)
+        return HttpResponse(json.dumps(dic))
 
+@login_required(login_url='home/login/')
+@csrf_exempt
 def edit_add_save(request, id):
     if request.method == "POST":
-        x = Sharing.objects.get(pk = id)
-        x.location = request.POST['location']
-        x.description = request.POST['description']
-        x.img = request.POST['img']
-        x.update_date = datetime.datetime.now()
-        x.save()
+        edit = Sharing.objects.get(pk = id)
+        # user hanya bisa edit post sendiri
+        if(request.user == edit.author):
+            edit.location = request.POST['location']
+            edit.description = request.POST['description']
+            edit.img = request.POST['img']
+            edit.update_date = datetime.datetime.now()
+            edit.save()
     return redirect('foodsharing:show_location')
         
-
+@login_required(login_url='home/login/')
+@csrf_exempt
 def delete(request, id):
-    editing = Sharing.objects.get(pk=id)
-    editing.delete()
+    edit = Sharing.objects.get(pk=id)
+    # user hanya bisa delete post sendiri
+    if(request.user == edit.author):
+        edit.delete()
     return redirect('foodsharing:show_location')
