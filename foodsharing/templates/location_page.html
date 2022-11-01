@@ -40,8 +40,10 @@
                 <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
             </a>
             <div class="d-flex flex-row">
+                {% if is_verified %}
                 <button type="button" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
                     data-bs-target="#Modal" id="modal-btn">Add Post</button>
+                {% endif %}
                 <div class="dropdown m-auto mx-3">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -53,19 +55,20 @@
                     </ul>
                 </div>
 
-
+                
                 {% if is_verified %}
                 <img src="{{user_profile}}"
-                    class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
                 {% else %}
                 <img src="{{user_profile}}"
-                    class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
                 {% endif %}
             </div>
         </div>
     </nav>
-
-
+    {% endif %}
+    
+    {% if user.is_verified %}
     <div class="sharing d-flex align-items-center justify-content-center">
         <form class="sharing-form text-center" method="POST">
             {% csrf_token %}
@@ -142,9 +145,15 @@
         </form>
     </div>
 
-    <!-- <div class="container">
-        <div class="card" id="card"></div>
-    </div> -->
+    {% elif user.is_user %}
+    <div class="text-uppercase" style="text-align: center;">
+        <br>
+        <h1>Info Sharing Food</h1>
+
+        <p>Your account must be verified to post something</p>
+    </div>
+
+   
     {% else %}
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
