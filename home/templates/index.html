@@ -23,7 +23,6 @@
 {% endblock meta %}
 
 {% block content %}
-<body class="site">
   <nav class="navbar shadow navbar-expand-lg bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
@@ -39,7 +38,6 @@
     <div class="text-center fw-bold h1 m-2">Welcome to Nutrious!</div>
     <div class="text-center">With great nutrition, comes great health. So, help yourself and others to achieve good health!</div>
   </div>
-  <div class="site-content">
     <div class="d-flex m-3 flex-wrap">
       <div class="card flex-fill my-1 mr-1 feature" style="width: 18rem;">
         <img src="{% static 'fundraising.jpg' %}" class="card-img-top">
@@ -82,10 +80,4 @@
         </div>
       </div>
     </div>
-  </div>
-  <!-- Bisa buat fitur seperti trivia of the day, latest fundraising -->
-</body>
-<footer class="bg-secondary text-center text-lg-start shadow text-light">
-  <div class="text-center p-3">2022: Platform-Based Programming F02</div>
-</footer>
 {% endblock content %}
