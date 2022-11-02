@@ -1,5 +1,6 @@
 function deleteCard(){
     $.get("json/", function(resp) {
+      
 
         for (let i of resp){
             var date = new Date();
@@ -16,6 +17,7 @@ function deleteCard(){
         }
     })
 }   
+        
 
 function createCard(){
     $('#card').empty();
@@ -67,7 +69,9 @@ function createCard(){
             document.getElementById('total').innerText = total +' kkal'
 
         }
+        
         $('#card').append(data_card);
+        
 
     })
 }          
@@ -77,7 +81,6 @@ $(document).ready(function(){
     document.getElementById('counter_add').innerText = 0
     document.getElementById('counter_decrease').innerText = 0
     document.getElementById('total').innerText = 0
-
     createCard();
     deleteCard();
     $("#decrease").click(function(e){
@@ -102,6 +105,7 @@ $(document).ready(function(){
             $("#input_deskripsi").val("");
             $("#input_calorie").val("");
             document.getElementById("category1").value;
+
         });
     });
     $("#add").click(function(e){
@@ -129,6 +133,7 @@ $(document).ready(function(){
             document.getElementById("category").value;
         });
     });
+    
 
 });
 $('#Test').click(function(e){
