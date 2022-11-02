@@ -51,28 +51,29 @@
                     </ul>
                 </div>
 
-                
+
                 {% if user.is_verified_user %}
                 <img src="{{user_profile}}"
-                class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
                 {% else %}
                 <img src="{{user_profile}}"
-                class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
+                    class="rounded-circle shadow avatar m-auto mx-3 border border-danger border-3">
                 {% endif %}
             </div>
         </div>
     </nav>
     {% endif %}
-    
+
     {% if user.is_verified_user %}
     <div class="sharing d-flex align-items-center justify-content-center">
         <form class="sharing-form text-center" method="POST">
             {% csrf_token %}
-            <br>
-            <h1 class="text"><b>Food-Sharing Information</b></h1>
+            <div class="text">
+                <br>
+                <h2><b>Food-Sharing Information</b></h2>
 
-            <p>User: {{user}}</p>
-
+                <p>Hello, {{nickname}}!</p>
+            </div>
             <div class="modal" tabindex="-1" id="Modal">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -144,12 +145,13 @@
     {% elif user.is_user %}
     <div class="text" style="text-align: center;">
         <br>
-        <h1>Food-Sharing Information</h1>
+        <h2><b>Food-Sharing Information</b></h2>
 
-        <p>Your account must be verified to post something</p>
+        <p>Hello, {{nickname}}. It seems that you are not a verified user.
+            You can't post things on this page until you are verified.</p>
     </div>
 
-   
+
     {% else %}
     <nav class="navbar shadow navbar-expand-lg bg-light">
         <div class="container-fluid">
@@ -165,9 +167,9 @@
 
     <div class="text" style="text-align: center;">
         <br>
-        <h1>Food-Sharing Information</h1>
+        <h2><b>Food-Sharing Information</b></h2>
 
-        <p>You have to log in to post location of food sharing</p>
+        <p>You have to log in to share information about food-sharing.</p>
     </div>
 
     {% endif %}
