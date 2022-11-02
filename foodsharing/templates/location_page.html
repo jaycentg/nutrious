@@ -64,7 +64,7 @@
     </nav>
     {% endif %}
     
-    {% if user.is_verified %}
+    {% if user.is_verified_user %}
     <div class="sharing d-flex align-items-center justify-content-center">
         <form class="sharing-form text-center" method="POST">
             {% csrf_token %}
