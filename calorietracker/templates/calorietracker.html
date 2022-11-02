@@ -16,14 +16,14 @@
                     <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
                 </a>
                 <div class="d-flex flex-row">
-                  
-                    <div class="dropdown m-auto mx-3">
+                    
                         <button type="button"  class="btn button p-2 m-1" data-bs-toggle="modal" data-bs-target="#Modal" id="Test">
                             Add Calorie
                         </button>
                         <button type="button"  class="btn button p-2 m-1"data-bs-toggle="modal" data-bs-target="#Modal1" id="Test1">
                             Reduce Calorie
                         </button>
+                    <div class="dropdown m-auto mx-3">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             Profile
@@ -87,7 +87,7 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h3 class="modal-title w-100 text-center fw-bold pl-100">Add calorie</h5>
-                          <button id="closeBtn" class="close">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="modal-footer">
                             <button id="add" class="btn button"  data-dismiss="modal">Add Calorie</button>
-                            <button id="closeBtn" class="btn btn-secondary" >Close</button>
+                            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
                         </div>
                       </div>
                     </div>
@@ -117,7 +117,7 @@
                       <div class="modal-content">
                         <div class="modal-header">
                             <h3 class="modal-title w-100 text-center fw-bold pl-100">Reduce calorie</h5>
-                            <button id="closeBtn" class="close">&times;</button>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                         </div>
                         <div class="modal-body">
                             <td>Calorie</td>
@@ -128,7 +128,7 @@
                         </div>
                         <div class="modal-footer">
                             <button id="decrease" class="btn button"  data-dismiss="modal">Reduce Calorie</button>
-                            <button id="closeBtn" class="btn btn-secondary"  data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
                         </div>
                       </div>
                     </div>

@@ -150,11 +150,3 @@ $('#Test1').click(function(e){
     e.preventDefault();
     $('#Modal1').modal();
 });
-$('#closeBtn').click(function(e){
-    e.preventDefault();
-    $('#Modal').modal('hide');
-})
-$('#closeBtn').click(function(e){
-    e.preventDefault();
-    $('#Modal1').modal('hide');
-})
