@@ -16,8 +16,7 @@ function deleteCard(){
             }
         }
     })
-}   
-        
+}     
 
 function createCard(){
     $('#card').empty();
@@ -69,7 +68,6 @@ function createCard(){
             document.getElementById('total').innerText = total +' kkal'
 
         }
-        
         $('#card').append(data_card);
         
 
@@ -92,6 +90,10 @@ $(document).ready(function(){
         var minutes = "0" + date.getMinutes();
         var seconds = "0" + date.getSeconds(); 
         time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        if(calorie=="" || description==""){
+            alert("Please fill in the calorie and description!");
+            return
+        }
         $.post("reduce_calorie/",
         {
             calorie,
@@ -117,6 +119,10 @@ $(document).ready(function(){
         var minutes = "0" + date.getMinutes();
         var seconds = "0" + date.getSeconds(); 
         time =  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        if(calorie=="" || description==""){
+            alert("Please fill in the calorie and description!");
+            return
+        }
         $.post("add_calorie/",
         {
             calorie,
