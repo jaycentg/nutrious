@@ -36,7 +36,7 @@
                 <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
             </a>
             <div class="d-flex flex-row">
-                {% if user.is_verified_user %}
+                {% if user.is_user %}
                 <button type="button" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
                     data-bs-target="#Modal" id="modal-btn">Add Post</button>
                 {% endif %}
@@ -64,7 +64,7 @@
     </nav>
     {% endif %}
 
-    {% if user.is_verified_user %}
+    {% if user.is_user %}
     <div class="sharing d-flex align-items-center justify-content-center">
         <form class="sharing-form text-center" method="POST">
             {% csrf_token %}
