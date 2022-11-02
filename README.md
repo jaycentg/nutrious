@@ -34,3 +34,11 @@ Fitur bagi *user* untuk membagikan pemikirannya terkait nutrisi, gizi, dan keseh
 *User* yang sudah terverifikasi dapat membuka penggalangan dana dan membagikan informasi terkait pembagian makanan. Semua *user* yang sudah terverifikasi dapat mengakses fitur yang juga dapat diakses oleh *user* yang belum terverifikasi.
 3. Admin<br>
 *Admin* mempunyai tugas untuk melakukan verifikasi terhadap *user* dan penggalangan dana yang dibuat oleh *user*. *Admin* juga dapat dikirimi pesan oleh *user*.
+
+## Username dan Password
+1. Admin Aplikasi<br>
+Username: `admin` <br>
+Password: `abc43210987`
+2. Superuser<br>
+Username: `admintugaspbp`<br>
+Password: `admintugaspbp`
