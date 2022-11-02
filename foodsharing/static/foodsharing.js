@@ -71,40 +71,40 @@ $(document).ready(function () {
     var id = $(this).data;
     console.log(id)
     createCard();
-    function validate() {
-        if ($('#input_location').val().length > 0 &&
-            $('#input_description').val().length > 0 &&
-            $('#input_image').val().length > 0) {
-            $("#Send-footer").prop("disabled", false);
-        }
-        else {
-            $("#Send-footer").prop("disabled", true);
-        }
-    }
 
     $("#create_post").click(function (e) {
         console.log("ada masuk");
         var location = $("#input_location").val();
         var description = $("#input_description").val();
         var img = $("#input_image").val();
-        validate();
+        
+        if ((location == "" || img == "")){
+            alert("URL Image and Location must be filled out");
+            $("#input_location").val("");
+            $("#input_description").val("");
+            $("#input_image").val("");
+            return
+        }
+        
         console.log(location)
         $.post("add_location/",
-            {
-                location,
-                description,
-                img,
-            },
-
-            function (data, status) {
-                createCard();
-                console.log("create card success");
-                $("#input_location").val("");
-                $("#input_description").val("");
-                $("#input_image").val("");
-                $('#Modal').modal('hide');
+        {
+            location,
+            description,
+            img,
+        },
+        
+        function (data, status) {
+            createCard();
+            console.log("create card success");
+            $("#input_location").val("");
+            $("#input_description").val("");
+            $("#input_image").val("");
+        
+            $('#Modal').modal('hide');
             });
 
+        
     });
 
     $("#edit_post").click(function (e) {
@@ -117,7 +117,10 @@ $(document).ready(function () {
         var location = $("#input_location_edit").val();
         var description = $("#input_description_edit").val();
         var img = $("#input_image_edit").val();
-        validate();
+        if ((location == "" || img == "")){
+            alert("You must not leave the URL Image and Location field empty\nEdit denied");
+            return
+        }
         console.log("ini kan yg edit", location)
         $.ajax({
             url: `edit_add_save/${pk}`,
@@ -130,10 +133,10 @@ $(document).ready(function () {
             method: "POST",
             success: function (data, status) {
                 console.log("edit card success");
+                createCard();
                 $("#input_location_edit").val("");
                 $("#input_description_edit").val("");
                 $("#input_image_edit").val("");
-                createCard();
                 $('#edit-modal').modal('hide');
             },
 
