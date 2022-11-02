@@ -41,8 +41,8 @@ function createCard() {
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title"><b>Locatian at:</b> ${i.fields.location}</h5>
-                                <p class="card-text"><b>Description : </b> ${i.fields.description}</p>
+                                <h5 class="card-title"><b>Location at:</b> ${i.fields.location}</h5>
+                                <p class="card-text"><b>Description: </b> ${i.fields.description}</p>
                                 <br>
                              
                                 <p class="card-text"><small>Post Date: ${i.fields.date}</small></p>
@@ -168,14 +168,7 @@ $('#modal-btn').click(function (e) {
     $('#Modal').modal();
 });
 
-// $('#edit-modal-btn').click(function (e) {
-// // $('[id^="edit-modal-btn"]').click(function (e) {
-//     e.preventDefault();
-//     $('#edit-modal').modal();
-//     console.log("uda panggil ya ges ya");
-//     var pk = $(this).data("data-id");
-//     console.log(pk);
-// });
+
 
 $('#close-modal').click(function (e) {
     e.preventDefault();

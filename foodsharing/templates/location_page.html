@@ -22,11 +22,7 @@
 {% block content %}
 
 <head>
-
     <title>Food Sharing</title>
-
-
-
 </head>
 
 
@@ -40,7 +36,7 @@
                 <img src="{% static 'NUTRIOUS.png' %}" alt="Logo" height="70" class="d-inline-block align-text-top">
             </a>
             <div class="d-flex flex-row">
-                {% if is_verified %}
+                {% if user.is_verified_user %}
                 <button type="button" class="btn btn-outline-primary p-2 m-1" data-bs-toggle="modal"
                     data-bs-target="#Modal" id="modal-btn">Add Post</button>
                 {% endif %}
@@ -56,7 +52,7 @@
                 </div>
 
                 
-                {% if is_verified %}
+                {% if user.is_verified_user %}
                 <img src="{{user_profile}}"
                 class="rounded-circle shadow avatar m-auto mx-3 border border-success border-3">
                 {% else %}
@@ -73,7 +69,7 @@
         <form class="sharing-form text-center" method="POST">
             {% csrf_token %}
             <br>
-            <h1 class="text-uppercase"><b>Info Sharing Food</b></h1>
+            <h1 class="text"><b>Food-Sharing Information</b></h1>
 
             <p>User: {{user}}</p>
 
@@ -146,9 +142,9 @@
     </div>
 
     {% elif user.is_user %}
-    <div class="text-uppercase" style="text-align: center;">
+    <div class="text" style="text-align: center;">
         <br>
-        <h1>Info Sharing Food</h1>
+        <h1>Food-Sharing Information</h1>
 
         <p>Your account must be verified to post something</p>
     </div>
@@ -167,9 +163,9 @@
         </div>
     </nav>
 
-    <div class="text-uppercase" style="text-align: center;">
+    <div class="text" style="text-align: center;">
         <br>
-        <h1>Info Sharing Food</h1>
+        <h1>Food-Sharing Information</h1>
 
         <p>You have to log in to post location of food sharing</p>
     </div>
