@@ -31,8 +31,8 @@ SECRET_KEY = 'django-insecure-ca)#3*i%w*amsz8_756o&_&+u^h4f^nfr45m)je(5kvy^mfme@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nutrious.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['nutrious.up.railway.app']
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://nutrious.up.railway.app/']
 
 # Application definition
 
