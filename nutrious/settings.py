@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-ca)#3*i%w*amsz8_756o&_&+u^h4f^nfr45m)je(5kvy^mfme@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.up.railway.app']
+ALLOWED_HOSTS = [f'nutrious.up.railway.app']
 
 # Application definition
 
