@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'donation',
     'foodsharing',
     'recipe',
+    'authentication',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -59,7 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'nutrious.urls'
@@ -141,3 +144,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'home.AppUser'
+
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_CREDENTIALS=True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
