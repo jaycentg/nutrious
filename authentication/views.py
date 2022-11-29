@@ -15,6 +15,7 @@ def login(request):
              return JsonResponse({
                "status": True,
                "message": "Successfully logged in!",
+               "username": request.user.username,
                "is_admin": request.user.is_admin,
                "is_verified_user": request.user.is_verified_user,
                "nickname": request.user.nickname,
