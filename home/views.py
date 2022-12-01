@@ -7,6 +7,7 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from home.models import *
 from donation.models import Donatee
+from django.views.decorators.csrf import csrf_exempt
 
 DEF_PICT_URL = 'https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png'
 
@@ -58,6 +59,7 @@ def add_message(request):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def show_profile(request):
     context = {}
     context['username'] = request.user.username
