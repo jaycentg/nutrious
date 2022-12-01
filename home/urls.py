@@ -15,4 +15,5 @@ urlpatterns = [
     path('add-message/', add_message, name='add_message'),
     path('json-message/', show_json_message, name='show_json_message'),
     path('delete-msg/<int:id>', delete_message, name='delete_message'),
+    path('json-message-name/', show_json_message_with_sender, name='show_json_message_with_sender')
 ]

@@ -127,3 +127,16 @@ def delete_message(request, id):
         return JsonResponse({'status': 'Message is deleted successfully'})
     else:
         return JsonResponse({'status': 'Invalid deletion'}, status=403)
+
+@login_required(login_url='/login/')
+def show_json_message_with_sender(request):
+    list_of_messages = []
+    messages = Message.objects.all()
+    for message in messages:
+        msg_instance = {}
+        msg_instance["pk"] = message.id
+        msg_instance["sender"] = message.user.username
+        msg_instance["message"] = message.message
+        msg_instance["time"] = message.time_sent
+        list_of_messages.append(msg_instance)
+    return JsonResponse({'data': list_of_messages})
