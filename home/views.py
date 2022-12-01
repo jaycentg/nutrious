@@ -49,6 +49,7 @@ def show_index(request):
         return render(request, 'index.html')
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def add_message(request):
     if request.POST.get('action') == 'post':
         user = request.user
