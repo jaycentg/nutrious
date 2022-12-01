@@ -32,3 +32,10 @@ def login(request):
            "status": False,
            "message": "Failed to login, check your email/password."
          }, status=401)
+
+@csrf_exempt
+def logout(request):
+  logout(request)
+  return JsonResponse({
+    "status": "Successfully logged out!"
+  }, status = 200)
