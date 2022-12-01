@@ -51,7 +51,7 @@ def show_index(request):
 @login_required(login_url='/login/')
 @csrf_exempt
 def add_message(request):
-    if request.POST.get('action') == 'post':
+    if request.method == 'POST':
         user = request.user
         message = request.POST.get('message')
         Message.objects.create(user=user, message=message)
