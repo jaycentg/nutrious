@@ -7,7 +7,6 @@ from home.models import AppUser
 
 class Calorie(models.Model):
     description = models.TextField()
-    
     category = models.CharField(max_length = 300, default='')
     user = models.ForeignKey(AppUser, on_delete= models.CASCADE)
     calorie= models.IntegerField(default=0,null=True,blank=True)
