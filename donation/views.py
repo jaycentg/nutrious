@@ -137,3 +137,11 @@ def show_json_verified(request):
         donation_instance["isVerified"] = donation.is_verified
         list_of_donations.append(donation_instance)
     return JsonResponse({"data": list_of_donations})
+
+@csrf_exempt
+def donate_flutter(request, id):
+    if request.POST.get('action') == 'post':
+        donatee = Donatee.objects.get(id=id)
+        donatee.collectedFunds = donatee.collectedFunds + int(request.POST.get('amount'))
+        donatee.save()
+        return JsonResponse({"data": "success"})

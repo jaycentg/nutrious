@@ -16,4 +16,5 @@ urlpatterns = [
     path('change-status/<int:id>', change_status_donatee, name='change_status_donatee'),
     path('json-with-name/', show_json_with_opener, name='show_json_with_opener'),
     path('json-verified/', show_json_verified, name='show_json_verified'),
+    path('donate/<int:id>', donate_flutter, name='donate_flutter'),
 ]
