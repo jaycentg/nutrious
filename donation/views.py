@@ -152,7 +152,7 @@ def add_donatee(request):
     if (request.method == 'POST'):
         name = request.POST.get('name')
         description = request.POST.get('description')
-        amountNeeded = request.POST.get('amountNeeded')
+        amountNeeded = int(request.POST.get('amountNeeded'))
         user = request.user
         obj_baru = Donatee(opener = user, name = name, description = description, amountNeeded = amountNeeded)
         obj_baru.save()
