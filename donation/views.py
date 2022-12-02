@@ -121,3 +121,19 @@ def show_json_with_opener(request):
         donation_instance["isVerified"] = donation.is_verified
         list_of_donations.append(donation_instance)
     return JsonResponse({"data": list_of_donations})
+
+@login_required(login_url='/login/')
+def show_json_verified(request):
+    list_of_donations = []
+    donations = Donatee.objects.filter(is_verified = True)
+    for donation in donations:
+        donation_instance = {}
+        donation_instance["pk"] = donation.id
+        donation_instance["opener"] = donation.getAuthorName()
+        donation_instance["name"] = donation.name
+        donation_instance["description"] = donation.description
+        donation_instance["amountNeeded"] = donation.amountNeeded
+        donation_instance["collectedFunds"] = donation.collectedFunds
+        donation_instance["isVerified"] = donation.is_verified
+        list_of_donations.append(donation_instance)
+    return JsonResponse({"data": list_of_donations})
