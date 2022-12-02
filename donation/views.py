@@ -138,6 +138,22 @@ def show_json_verified(request):
         list_of_donations.append(donation_instance)
     return JsonResponse({"data": list_of_donations})
 
+@login_required(login_url='/login/')
+def show_json_by_user(request):
+    list_of_donations = []
+    donations = Donatee.objects.filter(opener = request.user)
+    for donation in donations:
+        donation_instance = {}
+        donation_instance["pk"] = donation.id
+        donation_instance["opener"] = donation.getAuthorName()
+        donation_instance["name"] = donation.name
+        donation_instance["description"] = donation.description
+        donation_instance["amountNeeded"] = donation.amountNeeded
+        donation_instance["collectedFunds"] = donation.collectedFunds
+        donation_instance["isVerified"] = donation.is_verified
+        list_of_donations.append(donation_instance)
+    return JsonResponse({"data": list_of_donations})
+
 @csrf_exempt
 def donate_flutter(request):
     if (request.method == 'POST'):
@@ -158,3 +174,10 @@ def add_donatee(request):
         obj_baru.save()
 
         return JsonResponse({'status': 'berhasil dibuka'}, status=200)
+
+@csrf_exempt
+def donation_close(request):
+    if (request.method == 'POST'):
+        id = request.POST.get('id')
+        Donatee.objects.get(pk=int(id)).delete()
+        return JsonResponse({'status': 'berhasil ditutup'}, status=200)

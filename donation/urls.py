@@ -18,4 +18,6 @@ urlpatterns = [
     path('json-verified/', show_json_verified, name='show_json_verified'),
     path('donate/', donate_flutter, name='donate_flutter'),
     path('add-donatee/', add_donatee, name='add_donatee'),
+    path('json-by-user/', show_json_by_user, name='show_json_by_user'),
+    path('close/', donation_close, name='donation_close'),
 ]
