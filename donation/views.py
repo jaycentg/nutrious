@@ -139,7 +139,7 @@ def show_json_verified(request):
     return JsonResponse({"data": list_of_donations})
 
 @csrf_exempt
-def donate_flutter(request, id):
+def donate_flutter(request):
     if (request.method == 'POST'):
         id = request.POST.get('id')
         donatee = Donatee.objects.get(pk=int(id))
@@ -148,7 +148,7 @@ def donate_flutter(request, id):
         return JsonResponse({"data": "success"})
 
 @csrf_exempt
-def add_donatee(request, id):
+def add_donatee(request):
     if (request.method == 'POST'):
         name = request.POST.get('name')
         description = request.POST.get('description')
