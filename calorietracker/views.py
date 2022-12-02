@@ -8,8 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 @login_required(login_url='/login/')
 def show_caloriepage(request):
-
-    
 	data = Calorie.objects.order_by('-date')
 	if request.user.is_authenticated:
 		context = {
@@ -17,7 +15,7 @@ def show_caloriepage(request):
 			'nickname' : request.user.nickname,
 			'user_profile' : request.user.profile_pict_url,
 			'data' : data,
-		}
+	}
 	else:
 		context = {
 			'user' : request.user,
