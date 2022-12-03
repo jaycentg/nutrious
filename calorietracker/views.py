@@ -101,6 +101,6 @@ def add_calorief(request):
 		description = request.POST.get("description")
 		category = request.POST.get("category")
 		user = request.user
-		obj_baru = Calorie(opener = user, calorie=calorie, description = description, category = category,is_increasing = True)
+		obj_baru = Calorie(user = user, calorie=calorie, description = description, category = category,is_increasing = True)
 		obj_baru.save()
 		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
