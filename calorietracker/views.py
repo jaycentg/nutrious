@@ -97,10 +97,14 @@ def delete(request, id):
 @csrf_exempt
 def calorief(request):
 	if (request.method == 'POST'):
-		calorie = request.POST.get("calorie")
+		calorie =int(request.POST.get("calorie")) 
 		description = request.POST.get("description")
 		category = request.POST.get("category")
-		is_increasing = request.POST.get("is_increasing")
+		is_increasing_ = request.POST.get("is_increasing")
+		if(is_increasing_ =="false"):
+			is_increasing = False
+		else:
+			is_increasing = True
 		user = request.user
 		obj_baru = Calorie(user = user, calorie=calorie, description = description, category = category,is_increasing = is_increasing)
 		obj_baru.save()
@@ -109,7 +113,7 @@ def calorief(request):
 @login_required(login_url='/login/')
 def show_json_verified(request):
     list_of_calorie = []
-    calories= Calorie.objects.all()
+    calories= Calorie.objects.filter(user=request.user)
     for calorie in calories:
         calorie_instance = {}
         calorie_instance["pk"] = calorie.id
