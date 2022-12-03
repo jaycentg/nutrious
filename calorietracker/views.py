@@ -1,7 +1,7 @@
 
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from calorietracker.models import Calorie
 from django.views.decorators.csrf import csrf_exempt
@@ -92,3 +92,15 @@ def delete(request, id):
 	edit = Calorie.objects.get(pk = id)
 	edit.delete()
 	return redirect('calorietracker:show_caloriepage')
+
+
+@csrf_exempt
+def add_calorief(request):
+	if (request.method == 'POST'):
+		calorie = request.POST.get("calorie")
+		description = request.POST.get("description")
+		category = request.POST.get("category")
+		user = request.user
+		obj_baru = Calorie(opener = user, calorie=calorie, description = description, category = category,is_increasing = True)
+		obj_baru.save()
+		return JsonResponse({'status': 'berhasil dibuka'}, status=200)

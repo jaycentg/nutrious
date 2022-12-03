@@ -1,6 +1,6 @@
 from django.urls import path
 from calorietracker.views import show_caloriepage, add_calorie, show_json
-from calorietracker.views import reduce_calorie,edit_add,edit_reduce,edit_reduce_save, edit_add_save,delete
+from calorietracker.views import reduce_calorie,edit_add,edit_reduce,edit_reduce_save, edit_add_save,delete, add_calorief
 app_name = 'calorietracker'
 
 urlpatterns = [
@@ -13,4 +13,5 @@ urlpatterns = [
     path('edit_reduce_save/<int:id>', edit_reduce_save, name='edit_reduce_save'),
     path('edit_add_save/<int:id>', edit_add_save, name='edit_add_save'),
     path('delete/<int:id>', delete, name='delete'),
+    path('add-calorie/', add_calorief, name='add-calorie'),
 ]
