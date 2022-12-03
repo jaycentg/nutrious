@@ -95,12 +95,27 @@ def delete(request, id):
 
 
 @csrf_exempt
-def add_calorief(request):
+def calorief(request):
 	if (request.method == 'POST'):
 		calorie = request.POST.get("calorie")
 		description = request.POST.get("description")
 		category = request.POST.get("category")
+		is_increasing = request.POST.get("is_increasing")
 		user = request.user
-		obj_baru = Calorie(user = user, calorie=calorie, description = description, category = category,is_increasing = True)
+		obj_baru = Calorie(user = user, calorie=calorie, description = description, category = category,is_increasing = is_increasing)
 		obj_baru.save()
 		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
+
+@login_required(login_url='/login/')
+def show_json_verified(request):
+    list_of_calorie = []
+    calories= Calorie.objects.all()
+    for calorie in calories:
+        calorie_instance = {}
+        calorie_instance["pk"] = calorie.id
+        calorie_instance["calorie"] = calorie.calorie
+        calorie_instance["description"] = calorie.description
+        calorie_instance["category"] = calorie.category
+        calorie_instance["is_increasing"] = calorie.is_increasing
+        list_of_calorie.append(calorie_instance)
+    return JsonResponse({"data": list_of_calorie})
