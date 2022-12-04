@@ -12,7 +12,6 @@ from django.contrib.auth.decorators import login_required
 def show_post(request):
     
     data_post = Post.objects.order_by('-created_on')
-    # data_post.fields.tag
     postarr = []
     for user in data_post:
         splitArr = user.tag.split(" ")
@@ -214,3 +213,14 @@ def addDownvote(request, id):
         }
         
     return JsonResponse(result)
+
+@csrf_exempt
+def add_post(request):
+    if (request.method == 'POST'):
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        tag = (request.POST.get('tag'))
+        post = Post(title=title, author=request.user.nickname, content=content, created_on=datetime.datetime.now(), upvote=0, downvote=0, vote_state=2, tag=tag)
+        post.save()
+
+        return JsonResponse({'status': 'berhasil dibuka'}, status=200)
