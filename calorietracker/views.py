@@ -130,3 +130,26 @@ def deletef(request):
         id = request.POST.get('id')
         Calorie.objects.get(pk=int(id)).delete()
         return JsonResponse({'status': 'berhasil ditutup'}, status=200)
+
+@csrf_exempt
+def edit_reduce_savef(request, id):
+	if (request.method == 'POST'):
+		id = request.POST.get('id')
+		x = Calorie.objects.get(pk=int(id))
+		x.calorie = int(request.POST.get("calorie")) 
+		x.description = request.POST.get("description")
+		
+		x.save()
+		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
+
+@csrf_exempt
+def edit_add_savef(request, id):
+	if (request.method == 'POST'):
+		id = request.POST.get('id')
+		x = Calorie.objects.get(pk=int(id))
+		x.calorie = int(request.POST.get("calorie")) 
+		x.description = request.POST.get("description")
+		x.category = request.POST.get("category")
+		x.save()
+		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
+
