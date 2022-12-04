@@ -140,7 +140,7 @@ def edit_reduce_savef(request):
 		x.description = request.POST.get("description")
 		
 		x.save()
-		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
+		return JsonResponse({"data": "success"})
 
 @csrf_exempt
 def edit_add_savef(request):
@@ -151,5 +151,5 @@ def edit_add_savef(request):
 		x.description = request.POST.get("description")
 		x.category = request.POST.get("category")
 		x.save()
-		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
+		return JsonResponse({"data": "success"})
 
