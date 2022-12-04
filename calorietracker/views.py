@@ -123,3 +123,10 @@ def show_jsonf(request):
         calorie_instance["is_increasing"] = calorie.is_increasing
         list_of_calorie.append(calorie_instance)
     return JsonResponse({"data": list_of_calorie})
+
+@csrf_exempt
+def deletef(request):
+    if (request.method == 'POST'):
+        id = request.POST.get('id')
+        Calorie.objects.get(pk=int(id)).delete()
+        return JsonResponse({'status': 'berhasil ditutup'}, status=200)

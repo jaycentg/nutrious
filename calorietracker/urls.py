@@ -1,6 +1,7 @@
 from django.urls import path
 from calorietracker.views import show_caloriepage, add_calorie, show_json
-from calorietracker.views import reduce_calorie,edit_add,edit_reduce,edit_reduce_save, edit_add_save,delete, calorief, show_jsonf
+from calorietracker.views import reduce_calorie,edit_add,edit_reduce,edit_reduce_save, edit_add_save,delete
+from calorietracker.views import calorief, show_jsonf, deletef
 app_name = 'calorietracker'
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path('delete/<int:id>', delete, name='delete'),
     path('calorief/', calorief, name='show_jsonf'),
     path('show_jsonf/', show_jsonf, name='show_jsonf'),
+    path('deletef/', deletef, name='deletef'),
 ]
