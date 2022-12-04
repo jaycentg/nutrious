@@ -111,7 +111,7 @@ def calorief(request):
 		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
 
 @login_required(login_url='/login/')
-def show_json_verified(request):
+def show_jsonf(request):
     list_of_calorie = []
     calories= Calorie.objects.filter(user=request.user)
     for calorie in calories:
