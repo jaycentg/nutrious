@@ -101,28 +101,32 @@ def calorief(request):
 		description = request.POST.get("description")
 		category = request.POST.get("category")
 		is_increasing_ = request.POST.get("is_increasing")
+		date = request.POST.get("date")
+		time =  request.POST.get("time")
 		if(is_increasing_ =="false"):
 			is_increasing = False
 		else:
 			is_increasing = True
 		user = request.user
-		obj_baru = Calorie(user = user, calorie=calorie, description = description, category = category,is_increasing = is_increasing)
+		obj_baru = Calorie(user = user, calorie=calorie, description = description, category = category,is_increasing = is_increasing, time=time, date=date)
 		obj_baru.save()
 		return JsonResponse({'status': 'berhasil dibuka'}, status=200)
 
 @login_required(login_url='/login/')
 def show_jsonf(request):
-    list_of_calorie = []
-    calories= Calorie.objects.filter(user=request.user)
-    for calorie in calories:
-        calorie_instance = {}
-        calorie_instance["pk"] = calorie.id
-        calorie_instance["calorie"] = calorie.calorie
-        calorie_instance["description"] = calorie.description
-        calorie_instance["category"] = calorie.category
-        calorie_instance["is_increasing"] = calorie.is_increasing
-        list_of_calorie.append(calorie_instance)
-    return JsonResponse({"data": list_of_calorie})
+	list_of_calorie = []
+	calories= Calorie.objects.filter(user=request.user)
+	for calorie in calories:
+		calorie_instance = {}
+		calorie_instance["pk"] = calorie.id
+		calorie_instance["calorie"] = calorie.calorie
+		calorie_instance["description"] = calorie.description
+		calorie_instance["category"] = calorie.category
+		calorie_instance["is_increasing"] = calorie.is_increasing
+		calorie_instance["date"] = calorie.date
+		calorie_instance["time"] = calorie.time 
+		list_of_calorie.append(calorie_instance)
+	return JsonResponse({"data": list_of_calorie})
 
 @csrf_exempt
 def deletef(request):
