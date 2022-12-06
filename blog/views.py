@@ -244,4 +244,19 @@ def show_post_by_tag(request, tag):
         }
         list_of_posts.append(result)
     return JsonResponse({"data": list_of_posts})
-    # return JsonResponse(query)
+
+@csrf_exempt
+def show_tag(request):
+    
+    data_post = Post.objects.all()
+    postarr = []
+    for user in data_post:
+        splitArr = user.tag.split(" ")
+        for i in splitArr:
+            if (i not in postarr):
+                postarr.append(i)
+
+    context = {
+        'taglist' : postarr
+    }
+    return JsonResponse(context)

@@ -1,5 +1,5 @@
 from django.urls import path
-from blog.views import show_post, post_detail, upload, show_json, addUpvote, addDownvote, show_json_by_tag, show_json_by_id, add_post, show_post_by_tag
+from blog.views import show_post, post_detail, upload, show_json, addUpvote, addDownvote, show_json_by_tag, show_json_by_id, add_post, show_post_by_tag, show_tag
 
 app_name = 'blog'
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path('add-post-flutter/', add_post, name='add_post'),
     path('show-tag-flutter/<str:tag>', show_post_by_tag, name='show_post_by_tag'),
     path('json/', show_json, name='show_json'),
+    path('jsontag/', show_tag, name='show_tag'),
     path('json/<str:tag>', show_json_by_tag, name='show_json_by_tag'),
     path('json/id/<int:id>', show_json_by_id, name='show_json_by_id'),
     path('updateUpvote/<int:id>', addUpvote, name='addUpvote'),
