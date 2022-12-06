@@ -209,7 +209,7 @@ def addDownvote(request, id):
                 'upvote': post_detail.upvote,
                 'downvote': post_detail.downvote,
                 'tag': post_detail.tag,
-                }
+            }
         }
         
     return JsonResponse(result)
@@ -227,8 +227,24 @@ def add_post(request):
 
 
 @csrf_exempt
-def show_post_by_tag(request):
-    if (request.method == 'POST'):
-        tag = request.POST.get('tag')
-        query = Post.objects.filter(Q(tag__icontains=tag))
-        return JsonResponse(query)
+def show_post_by_tag(request, tag):
+    list_of_posts = []
+    query = Post.objects.filter(
+        Q(tag__icontains=tag)
+    )
+    for post in query:
+        result = {
+            'pk': post.pk,
+            'fields':{
+                'title': post.title,
+                'author': post.author,
+                'content': post.content,
+                'created_on': post.created_on,
+                'upvote': post.upvote,
+                'downvote': post.downvote,
+                'tag': post.tag,
+            }
+        }
+        list_of_posts.append(result)
+    return JsonResponse({"data": list_of_posts})
+    # return JsonResponse(query)
