@@ -224,3 +224,11 @@ def add_post(request):
         post.save()
 
         return JsonResponse({'status': 'berhasil dibuka'}, status=200)
+
+
+@csrf_exemptg
+def show_post_by_tag(request):
+    if (request.method == 'POST'):
+        tag = request.POST.get('tag')
+        query = Post.objects.filter(Q(tag__icontains=tag))
+        return JsonResponse(query)
