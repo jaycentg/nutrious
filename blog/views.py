@@ -233,18 +233,15 @@ def show_post_by_tag(request, tag):
         Q(tag__icontains=tag)
     )
     for post in query:
-        result = {
-            'pk': post.pk,
-            'fields':{
-                'title': post.title,
-                'author': post.author,
-                'content': post.content,
-                'created_on': post.created_on,
-                'upvote': post.upvote,
-                'downvote': post.downvote,
-                'tag': post.tag,
-            }
-        }
-        list_of_posts.append(result)
+        post_instance = {}
+        post_instance["pk"] = post.pk
+        post_instance["fields"]["title"] = post.title
+        post_instance["fields"]["author"] = post.author
+        post_instance["fields"]["content"] = post.content
+        post_instance["fields"]["created_on"] = post.created_on
+        post_instance["fields"]["upvote"] = post.upvote
+        post_instance["fields"]["downvote"] = post.downvote
+        post_instance["fields"]["tag"] = post.tag
+        list_of_posts.append(post_instance)
     return JsonResponse({"data": list_of_posts})
     # return JsonResponse(query)
