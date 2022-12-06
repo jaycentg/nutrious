@@ -71,147 +71,143 @@ def show_json_by_id(request, id):
 @csrf_exempt
 @login_required(login_url='/login/')
 def addUpvote(request, id):
-    if request.method == 'PATCH':
+    post_detail = get_object_or_404(Post, pk = id)
+    voted = False
+    downvoted = False
+    upvoted = False
 
-        post_detail = get_object_or_404(Post, pk = id)
-        voted = False
-        downvoted = False
-        upvoted = False
-
-        for post in request.user.post.all():         
-            # cari dia udah pernah vote atau belum post tersebut
-            if (post.pk == post_detail.pk):
-                voted = True
-                # kalo user udah downvoted postnya sebelumnya
-                if(post.vote_state == 1):
-                    downvoted = True
-                    upvoted = False
-                    break
-                # kalo user udah upvoted postnya sebelumnya
-                elif(post.vote_state == 0):
-                    upvoted = True
-                    downvoted = False
-                    break
-                # kalau state nya 2 berarti belum di vote lagi walaupun udah ada
-                else:
-                    voted = False
-                    break
-            # kalo belum pernah vote post tersebut
+    for post in request.user.post.all():         
+        # cari dia udah pernah vote atau belum post tersebut
+        if (post.pk == post_detail.pk):
+            voted = True
+            # kalo user udah downvoted postnya sebelumnya
+            if(post.vote_state == 1):
+                downvoted = True
+                upvoted = False
+                break
+            # kalo user udah upvoted postnya sebelumnya
+            elif(post.vote_state == 0):
+                upvoted = True
+                downvoted = False
+                break
+            # kalau state nya 2 berarti belum di vote lagi walaupun udah ada
             else:
                 voted = False
-
-        # jika pernah vote
-        if (voted):
-            # pernah downvote terus mencet upvote
-            if (downvoted):
-                post_detail.downvote = post_detail.downvote - 1
-                post_detail.upvote = post_detail.upvote + 1
-                post_detail.vote_state = 0 #nyimpen kalo dia jadi upvote
-                post_detail.save()
-
-            # pernah upvote terus upvote lagi
-            elif (upvoted):
-                post_detail.upvote = post_detail.upvote - 1
-                post_detail.vote_state = 2
-                post_detail.save()
-                request.user.post.remove(post_detail)
-                request.user.save()
-
+                break
+        # kalo belum pernah vote post tersebut
         else:
+            voted = False
+
+    # jika pernah vote
+    if (voted):
+        # pernah downvote terus mencet upvote
+        if (downvoted):
+            post_detail.downvote = post_detail.downvote - 1
             post_detail.upvote = post_detail.upvote + 1
-            post_detail.vote_state = 0
+            post_detail.vote_state = 0 #nyimpen kalo dia jadi upvote
             post_detail.save()
-            request.user.post.add(post_detail)
+
+        # pernah upvote terus upvote lagi
+        elif (upvoted):
+            post_detail.upvote = post_detail.upvote - 1
+            post_detail.vote_state = 2
+            post_detail.save()
+            request.user.post.remove(post_detail)
             request.user.save()
 
-        result = {
-            'pk': post_detail.pk,
-            'fields':{
-                'title': post_detail.title,
-                'author': post_detail.author,
-                'content': post_detail.content,
-                'created_on': post_detail.created_on,
-                'upvote': post_detail.upvote,
-                'downvote': post_detail.downvote,
-                'tag': post_detail.tag,
-                }
-        }
+    else:
+        post_detail.upvote = post_detail.upvote + 1
+        post_detail.vote_state = 0
+        post_detail.save()
+        request.user.post.add(post_detail)
+        request.user.save()
+
+    result = {
+        'pk': post_detail.pk,
+        'fields':{
+            'title': post_detail.title,
+            'author': post_detail.author,
+            'content': post_detail.content,
+            'created_on': post_detail.created_on,
+            'upvote': post_detail.upvote,
+            'downvote': post_detail.downvote,
+            'tag': post_detail.tag,
+            }
+    }
         
     return JsonResponse(result)
 
 @csrf_exempt
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def addDownvote(request, id):
-    if request.method == 'PATCH':
+    post_detail = get_object_or_404(Post, pk = id)
+    voted = False
+    downvoted = False
+    upvoted = False
 
-        post_detail = get_object_or_404(Post, pk = id)
-        voted = False
-        downvoted = False
-        upvoted = False
-
-        for post in request.user.post.all():
-            # cari dia udah pernah vote atau belum post tersebut
-            if (post.pk == post_detail.pk):
-                voted = True
-                # kalo user udah downvoted postnya sebelumnya
-                if(post.vote_state == 1):
-                    downvoted = True
-                    upvoted = False
-                    break
-                # kalo user udah upvoted postnya sebelumnya
-                elif(post.vote_state == 0):
-                    upvoted = True
-                    downvoted = False
-                    break
-                # kalau state nya 2 berarti belum di vote lagi walaupun udah ada
-                else:
-                    voted = False
-                    break
-            # kalo belum pernah vote post tersebut
+    for post in request.user.post.all():
+        # cari dia udah pernah vote atau belum post tersebut
+        if (post.pk == post_detail.pk):
+            voted = True
+            # kalo user udah downvoted postnya sebelumnya
+            if(post.vote_state == 1):
+                downvoted = True
+                upvoted = False
+                break
+            # kalo user udah upvoted postnya sebelumnya
+            elif(post.vote_state == 0):
+                upvoted = True
+                downvoted = False
+                break
+            # kalau state nya 2 berarti belum di vote lagi walaupun udah ada
             else:
                 voted = False
-
-        # jika pernah vote
-        if (voted):
-            # pernah downvote terus mencet downvote
-            if (downvoted):
-                request.user.post.remove(post_detail)
-                post_detail.downvote = post_detail.downvote - 1
-                post_detail.vote_state = 2
-                post_detail.save()
-                request.user.post.add(post_detail)
-                request.user.save()
-                
-            # pernah upvote terus downvote
-            elif (upvoted):
-                request.user.post.remove(post_detail)
-                post_detail.upvote = post_detail.upvote - 1
-                post_detail.downvote = post_detail.downvote + 1
-                post_detail.vote_state = 1 #nyimpen kalo dia jadi downvote
-                post_detail.save()
-                request.user.post.add(post_detail)
-                request.user.save()
-                
+                break
+        # kalo belum pernah vote post tersebut
         else:
-            post_detail.downvote = post_detail.downvote + 1
-            post_detail.vote_state = 1
+            voted = False
+
+    # jika pernah vote
+    if (voted):
+        # pernah downvote terus mencet downvote
+        if (downvoted):
+            request.user.post.remove(post_detail)
+            post_detail.downvote = post_detail.downvote - 1
+            post_detail.vote_state = 2
             post_detail.save()
             request.user.post.add(post_detail)
             request.user.save()
+            
+        # pernah upvote terus downvote
+        elif (upvoted):
+            request.user.post.remove(post_detail)
+            post_detail.upvote = post_detail.upvote - 1
+            post_detail.downvote = post_detail.downvote + 1
+            post_detail.vote_state = 1 #nyimpen kalo dia jadi downvote
+            post_detail.save()
+            request.user.post.add(post_detail)
+            request.user.save()
+            
+    else:
+        post_detail.downvote = post_detail.downvote + 1
+        post_detail.vote_state = 1
+        post_detail.save()
+        request.user.post.add(post_detail)
+        request.user.save()
 
-        result = {
-            'pk': post_detail.pk,
-            'fields':{
-                'title': post_detail.title,
-                'author': post_detail.author,
-                'content': post_detail.content,
-                'created_on': post_detail.created_on,
-                'upvote': post_detail.upvote,
-                'downvote': post_detail.downvote,
-                'tag': post_detail.tag,
-            }
+    result = {
+        'pk': post_detail.pk,
+        'fields':{
+            'title': post_detail.title,
+            'author': post_detail.author,
+            'content': post_detail.content,
+            'created_on': post_detail.created_on,
+            'upvote': post_detail.upvote,
+            'downvote': post_detail.downvote,
+            'tag': post_detail.tag,
         }
-        
+    }
+    
     return JsonResponse(result)
 
 @csrf_exempt
