@@ -235,13 +235,13 @@ def show_post_by_tag(request, tag):
     for post in query:
         post_instance = {}
         post_instance["pk"] = post.pk
-        post_instance["fields"]["title"] = post.title
-        post_instance["fields"]["author"] = post.author
-        post_instance["fields"]["content"] = post.content
-        post_instance["fields"]["created_on"] = post.created_on
-        post_instance["fields"]["upvote"] = post.upvote
-        post_instance["fields"]["downvote"] = post.downvote
-        post_instance["fields"]["tag"] = post.tag
+        post_instance["title"] = post.title
+        post_instance["author"] = post.author
+        post_instance["content"] = post.content
+        post_instance["created_on"] = post.created_on
+        post_instance["upvote"] = post.upvote
+        post_instance["downvote"] = post.downvote
+        post_instance["tag"] = post.tag
         list_of_posts.append(post_instance)
     return JsonResponse({"data": list_of_posts})
     # return JsonResponse(query)
