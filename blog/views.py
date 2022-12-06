@@ -242,6 +242,7 @@ def show_post_by_tag(request, tag):
                 'created_on': post_detail.created_on,
                 'upvote': post_detail.upvote,
                 'downvote': post_detail.downvote,
+                'vote_state': post_detail.vote_state,
                 'tag': post_detail.tag,
             }
         }
