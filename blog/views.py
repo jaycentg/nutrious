@@ -226,7 +226,7 @@ def add_post(request):
         return JsonResponse({'status': 'berhasil dibuka'}, status=200)
 
 
-@csrf_exemptg
+@csrf_exempt
 def show_post_by_tag(request):
     if (request.method == 'POST'):
         tag = request.POST.get('tag')
