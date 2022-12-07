@@ -136,9 +136,11 @@ def deletef(request):
         return JsonResponse({'status': 'berhasil ditutup'}, status=200)
 @csrf_exempt
 def deleteAllf(request):
-    if (request.method == 'POST'):
-        Calorie.objects.all().delete()
-        return JsonResponse({'status': 'berhasil ditutup'}, status=200)
+	if (request.method == 'POST'):
+		calories = Calorie.objects.all()
+		for calorie in calories:
+			calorie.delete()
+		return JsonResponse({'status': 'berhasil ditutup'}, status=200)
 
 @csrf_exempt
 def edit_reduce_savef(request):
