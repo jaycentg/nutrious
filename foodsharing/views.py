@@ -90,3 +90,53 @@ def delete(request, id):
     if(request.user == edit.author):
         edit.delete()
     return redirect('foodsharing:show_location')
+
+@csrf_exempt
+def foodsharingf(request):
+    if (request.method == "POST"):
+        location = request.POST.get('location')
+        description = request.POST.get('description')
+        img = request.POST.get('img')
+        now = datetime.datetime.now()
+        date = now.strftime("%d-%m-%Y, %H:%M:%S")
+        update_date = date
+        obj = Sharing(update_date = update_date, author=request.user, date = date, img = img, location = location, description=description)
+        obj.save()
+        return JsonResponse({'status': 'berhasil dibuka'}, status= 200)
+
+@login_required(login_url='/login/')
+def show_jsonf(request):
+    list_foodsharing = []
+    foodsharings = Sharing.objects.filter()
+    for foodsharing in foodsharings:
+        foodsharing_instance = {}
+        foodsharing_instance['pk'] = foodsharing.id
+        foodsharing_instance['location'] = foodsharing.location 
+        foodsharing_instance['description'] = foodsharing.description
+        foodsharing_instance['img'] = foodsharing.img
+        foodsharing_instance['date'] = foodsharing.date
+        foodsharing_instance['update_date'] = foodsharing.update_date
+    return JsonResponse({'data':list_foodsharing})
+
+
+
+@csrf_exempt
+def deletef(request):
+    if (request.method == 'POST'):
+        id = request.POST.get('id')
+        if  (request.user == id.author):
+            Sharing.objects.get(pk=int(id)).delete()
+            return JsonResponse({'status':'berhasil delete'}, status = 200)
+
+@csrf_exempt
+def edit_add_savef(request):
+    if (request.method == 'POST'):
+        id = request.POST.get('id')
+        if  (request.user == id.author):
+            x = Sharing.objects.get(pk=int(id))
+            x.location = request.POST.get('location')
+            x.description = request.POST.get('description')
+            x.img = request.POST.get('img')
+            x.update_date =  datetime.datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
+            x.save
+            return JsonResponse({'data':'edit success'})
