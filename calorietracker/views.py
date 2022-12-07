@@ -142,7 +142,8 @@ def edit_reduce_savef(request):
 		x = Calorie.objects.get(pk=int(id))
 		x.calorie = int(request.POST.get("calorie")) 
 		x.description = request.POST.get("description")
-		
+		x.date = request.POST.get("date")
+		x.time = request.POST.get("time")
 		x.save()
 		return JsonResponse({"data": "success"})
 
@@ -154,6 +155,8 @@ def edit_add_savef(request):
 		x.calorie = int(request.POST.get("calorie")) 
 		x.description = request.POST.get("description")
 		x.category = request.POST.get("category")
+		x.date = request.POST.get("date")
+		x.time = request.POST.get("time")
 		x.save()
 		return JsonResponse({"data": "success"})
 
