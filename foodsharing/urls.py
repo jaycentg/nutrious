@@ -1,5 +1,6 @@
 from django.urls import path
-from foodsharing.views import delete, show_location, add_location, show_json
+from calorietracker.views import deletef, edit_add_savef, show_jsonf
+from foodsharing.views import delete, foodsharingf, show_location, add_location, show_json
 from foodsharing.views import edit_add, edit_add_save, delete
 app_name = 'foodsharing'
 
@@ -10,4 +11,9 @@ urlpatterns = [
     path('edit_add/<int:id>', edit_add, name='edit_add'),
     path('edit_add_save/<int:id>', edit_add_save, name='edit_add_save'),
     path('delete/<int:id>', delete, name='delete'),
+    path('foodsharingf', foodsharingf, name='foodsharingf'),
+    path('show_jsonf',show_jsonf , name='show_jsonf'),
+    path('deletef', deletef, name='deletef'),
+    path('edit_add_savef', edit_add_savef, name='edit_add_savef'),
+
 ]
