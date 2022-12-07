@@ -136,9 +136,8 @@ def deletef(request):
         return JsonResponse({'status': 'berhasil ditutup'}, status=200)
 @csrf_exempt
 def deleteAllf(request):
-	calories= Calorie.objects.filter(user=request.user)
-	for calorie in calories:
-		calorie.delete()
+	Calorie.objects.filter(user=request.user).delete()
+	
 	return JsonResponse({'status': 'berhasil ditutup'}, status=200)
 
 @csrf_exempt
