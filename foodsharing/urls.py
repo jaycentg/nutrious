@@ -15,5 +15,6 @@ urlpatterns = [
     path('show_jsonf',show_jsonf , name='show_jsonf'),
     path('deletef', deletef, name='deletef'),
     path('edit_add_savef', edit_add_savef, name='edit_add_savef'),
+    path('show_json_by_user', show_json_by_user, name='show_json_by_user'),
 
 ]
