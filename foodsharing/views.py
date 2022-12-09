@@ -107,7 +107,7 @@ def foodsharingf(request):
 @login_required(login_url='/login/')
 def show_jsonf(request):
     list_foodsharing = []
-    foodsharings = Sharing.objects.filter()
+    foodsharings = Sharing.objects.all()
     for foodsharing in foodsharings:
         foodsharing_instance = {}
         foodsharing_instance['pk'] = foodsharing.id
