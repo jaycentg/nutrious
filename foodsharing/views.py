@@ -140,3 +140,19 @@ def edit_add_savef(request):
             x.update_date =  datetime.datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
             x.save
             return JsonResponse({'data':'edit success'})
+
+@login_required(login_url='/login')
+def show_json_by_user(request):
+    list_foodsharings = []
+    foodsharings = Sharing.objects.filter(opener = request.user)
+    for foodsharing in foodsharings:
+        foodsharing_instance = {}
+        foodsharing_instance['pk']= foodsharing.id
+        foodsharing_instance['opener']= foodsharing.getAuthorName()
+        foodsharing_instance['location'] = foodsharing.location 
+        foodsharing_instance['description'] = foodsharing.description
+        foodsharing_instance['img'] = foodsharing.img
+        foodsharing_instance['date'] = foodsharing.date
+        foodsharing_instance['update_date'] = foodsharing.update_date
+        list_foodsharings.append(foodsharing_instance)
+    return JsonResponse({'data':list_foodsharings})
