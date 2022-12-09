@@ -117,6 +117,7 @@ def show_jsonf(request):
         foodsharing_instance['img'] = foodsharing.img
         foodsharing_instance['date'] = foodsharing.date
         foodsharing_instance['updateDate'] = foodsharing.update_date
+        list_foodsharing.append(foodsharing_instance)
     return JsonResponse({'data':list_foodsharing})
 
 
