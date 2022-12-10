@@ -145,7 +145,7 @@ def edit_add_savef(request):
 @login_required(login_url='/login')
 def show_json_by_user(request):
     list_foodsharings = []
-    foodsharings = Sharing.objects.filter(opener = request.user)
+    foodsharings = Sharing.objects.filter(author = request.user)
     for foodsharing in foodsharings:
         foodsharing_instance = {}
         foodsharing_instance['pk']= foodsharing.id
