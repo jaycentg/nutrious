@@ -111,7 +111,7 @@ def show_jsonf(request):
     for foodsharing in foodsharings:
         foodsharing_instance = {}
         foodsharing_instance['pk'] = foodsharing.id
-        foodsharing_instance['author'] = foodsharing.getAuthorName()
+        foodsharing_instance['author'] = foodsharing.author.username
         foodsharing_instance['location'] = foodsharing.location 
         foodsharing_instance['description'] = foodsharing.description
         foodsharing_instance['img'] = foodsharing.img
@@ -150,7 +150,7 @@ def show_json_by_user(request):
     for foodsharing in foodsharings:
         foodsharing_instance = {}
         foodsharing_instance['pk']= foodsharing.id
-        foodsharing_instance['author']= foodsharing.getAuthorName()
+        foodsharing_instance['author']= foodsharing.author.username
         foodsharing_instance['location'] = foodsharing.location 
         foodsharing_instance['description'] = foodsharing.description
         foodsharing_instance['img'] = foodsharing.img
