@@ -1,5 +1,5 @@
 from django.urls import path
-from calorietracker.views import deletef, edit_add_savef, show_jsonf, show_json_by_user
+from foodsharing.views import deletef, edit_add_savef, show_jsonf, show_json_by_user
 from foodsharing.views import delete, foodsharingf, show_location, add_location, show_json
 from foodsharing.views import edit_add, edit_add_save, delete
 app_name = 'foodsharing'
