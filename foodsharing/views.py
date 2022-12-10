@@ -97,9 +97,8 @@ def foodsharingf(request):
         location = request.POST.get('location')
         description = request.POST.get('description')
         img = request.POST.get('img')
-        now = datetime.datetime.now()
-        date = now.strftime("%d-%m-%Y, %H:%M:%S")
-        update_date = date
+        date = request.POST.get("date")
+        update_date = request.POST.get("update_date")
         obj = Sharing(update_date = update_date, author=request.user, date = date, img = img, location = location, description=description)
         obj.save()
         return JsonResponse({'status': 'berhasil dibuka'}, status= 200)
@@ -116,7 +115,7 @@ def show_jsonf(request):
         foodsharing_instance['description'] = foodsharing.description
         foodsharing_instance['img'] = foodsharing.img
         foodsharing_instance['date'] = foodsharing.date
-        foodsharing_instance['updateDate'] = foodsharing.update_date
+        foodsharing_instance['update_date'] = foodsharing.update_date
         list_foodsharing.append(foodsharing_instance)
     return JsonResponse({'data':list_foodsharing})
 
@@ -155,6 +154,6 @@ def show_json_by_user(request):
         foodsharing_instance['description'] = foodsharing.description
         foodsharing_instance['img'] = foodsharing.img
         foodsharing_instance['date'] = foodsharing.date
-        foodsharing_instance['updateDate'] = foodsharing.update_date
+        foodsharing_instance['update_date'] = foodsharing.update_date
         list_foodsharings.append(foodsharing_instance)
     return JsonResponse({'data':list_foodsharings})
