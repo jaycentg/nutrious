@@ -125,22 +125,22 @@ def show_jsonf(request):
 def deletef(request):
     if (request.method == 'POST'):
         id = request.POST.get('id')
-        if  (request.user == id.author):
-            Sharing.objects.get(pk=int(id)).delete()
-            return JsonResponse({'status':'berhasil delete'}, status = 200)
+        # if  (request.user == id.author):
+        Sharing.objects.get(pk=int(id)).delete()
+        return JsonResponse({'status':'berhasil delete'}, status = 200)
 
 @csrf_exempt
 def edit_add_savef(request):
     if (request.method == 'POST'):
         id = request.POST.get('id')
-        if  (request.user == id.author):
-            x = Sharing.objects.get(pk=int(id))
-            x.location = request.POST.get('location')
-            x.description = request.POST.get('description')
-            x.img = request.POST.get('img')
-            x.update_date =  datetime.datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
-            x.save()
-            return JsonResponse({'data':'edit success'})
+        # if  (request.user == id.author):
+        x = Sharing.objects.get(pk=int(id))
+        x.location = request.POST.get('location')
+        x.description = request.POST.get('description')
+        x.img = request.POST.get('img')
+        x.update_date =  datetime.datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
+        x.save()
+        return JsonResponse({'data':'edit success'})
 
 @login_required(login_url='/login')
 def show_json_by_user(request):
