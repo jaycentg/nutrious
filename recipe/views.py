@@ -46,7 +46,7 @@ def delete(request, id):
         food.delete()
     return redirect('recipe:show_recipe')
 
-
+@csrf_exempt
 def add_recipe_flutter(request):
     if request.method == 'POST':
         food_name = request.POST.get('food_name')
