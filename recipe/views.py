@@ -50,8 +50,8 @@ def delete(request, id):
 def add_recipe_flutter(request):
     if request.method == 'POST':
         food_name = request.POST.get('food_name')
-        ingredients = request.POST.get('ingredients').strip()
-        method = request.POST.get('method').strip()
+        ingredients = request.POST.get('ingredients').strip().replace("\n", "</li> <li>" )
+        method = request.POST.get('method').strip().replace("\n", "</li> <li>" )
         date = datetime.datetime.now()
         formatted_date = date.strftime("%d") + " " + date.strftime("%B") + " " + date.strftime("%Y")
 
